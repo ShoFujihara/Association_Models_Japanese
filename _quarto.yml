@@ -1,0 +1,22 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "『カテゴリカルデータのための連関モデル』"
+  author: "藤原翔（東京大学社会科学研究所）"
+  date: last-modified
+  chapters:
+    - index.qmd
+
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    
+crossref:
+  fig-title: 図     # (default is "Figure")
+  tbl-title: 表     # (default is "Table")
+  title-delim: "："     # (default is ":")
