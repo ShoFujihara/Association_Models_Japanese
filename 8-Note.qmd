@@ -735,7 +735,7 @@ d <- d |>  mutate(mu = mu_score,
 
 # Canonical correlation
 library(wCorr)
-with(d, weightedCorr(mu, nu, weights = Freq))
+with(d, weightedCorr(mu, x = nu, weights = Freq, method="polychoric"))
 
 summary(fit)
 phi <- fit$coefficients["Mult(., Row, Col)."] %>% abs()

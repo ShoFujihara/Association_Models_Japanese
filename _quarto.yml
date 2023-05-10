@@ -17,7 +17,6 @@ book:
     - 7-Chapter_6.qmd
     - 8-Note.qmd
     - 9-R.qmd
-    
 
 format:
   html:
