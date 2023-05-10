@@ -4,6 +4,7 @@
 
 
 ```{r}
+#| message: false
 library(tidyverse)
 library(magrittr)
 library(gnm)
