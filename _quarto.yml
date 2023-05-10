@@ -9,9 +9,6 @@ book:
   chapters:
     - index.qmd
 
-
-bibliography: references.bib
-
 format:
   html:
     theme: cosmo
