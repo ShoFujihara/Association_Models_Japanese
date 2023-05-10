@@ -13,14 +13,12 @@ Raymond Wong著・藤原翔訳．2021．『カテゴリカルデータの連関�
 
 なおこのサポートページの内容は英語版のサポートページ https://studysites.sagepub.com/wongstudy/ が元になっています．そちらもぜひ参考にしてください．
 
-
 ## Rのスクリプト {-}
 
 本サポートページのスクリプトはそのままコピー・アンド・ペーストすることが可能です．
 スクリプトを選択してコピーしても良いですし，各スクリプトの右上の図をクリックしてもコピーされます．
 
 <img src="figures/copy_and_paste2.png"/>
-
 
 なおRのスクリプトについては https://github.com/ShoFujihara/Association_Models_Japanese の scripts というフォルダに保存されているので，そちらを参照してください．Googleドライブにもスクリプトを保存しておきます．
  https://drive.google.com/drive/folders/1oP0EURmoD8-dIkC6MCqDS3_0ysOz7t-0?usp=sharing 
@@ -30,4 +28,4 @@ Raymond Wong著・藤原翔訳．2021．『カテゴリカルデータの連関�
 
 ## サポートページバージョン情報 {-}
 
-2022年4月25日
+- 2023年5月1日: version 0.1.
