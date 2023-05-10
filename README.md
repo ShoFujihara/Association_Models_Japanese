@@ -64,5 +64,5 @@ Duncan (1979) については`uniform_association_model.R`で，Yamaguchi (1987)
 ここでは本書で十分に説明されなかった部分を中心にフォローしたいと思います．
 
 以下のサイトにRのコードと結果をまとめています．
-https://shofujihara.github.io/Association_Models/index.html
+[https://shofujihara.github.io/Association_Models/index.html](https://shofujihara.github.io/Association_Models_Japanese/index.html)
 
