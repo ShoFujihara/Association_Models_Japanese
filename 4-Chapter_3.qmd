@@ -1,0 +1,1043 @@
+# 第3章
+
+第3章は3元表に対する部分連関モデルを扱う．パッケージは`tidyverse`（データセットの処理のため），`magrittr`（パイプ演算子），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`broom`（回帰係数の整理），`gnm`（連関分析の処理のため）を使用する．
+
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(gnm)
+```
+
+
+
+またモデル適合度を表示するための関数をここでも準備しておく．すべて`gnm`によって推定を行う．
+
+```{r}
+# 引数となるobjはgnmの結果
+model.summary <- function(obj, Model = NULL){
+  if (sum(class(obj) == "gnm") != 1)
+    stop("estimate with gnm")
+  aic <- obj$deviance - obj$df * 2 # AIC(L2)
+  bic <- obj$deviance - obj$df * log(sum(obj$y)) #BIC(L2)
+  delta <- 100 * sum(abs(obj$y - obj$fitted.values)) / (2 * sum(obj$y))
+  p <- pchisq(obj$deviance, obj$df, lower.tail = FALSE)     #p<-ifelse(p<0.001,"<0.001",p)
+  result <- matrix(0, 1, 7)
+  if (is.null(Model)){ 
+  Model <- deparse(substitute(obj))
+  }
+  result <- tibble(
+    "Model Description" = Model,
+    "df" = obj$df,
+    "L2" = obj$deviance,
+    #"AIC(L2)" = aic,
+    "BIC" = bic,
+    "Delta" = delta,
+    "p" = p
+  )
+  return(result)
+}
+```
+
+
+## 表3.1A
+
+表3.1Aをまずベクトルとして入力する．
+
+```{r}
+library(gnm)
+
+# 表3.1
+Freq <- c(  9, 5, 5, 1,    1, 6, 5, 1,    2, 2, 2, 1,
+           17,13, 7, 4,   13,22, 9, 1,    7,13, 6, 2,
+            8,14, 6, 0,   10,29,10, 0,    5,14, 6, 2,
+           20,38,24, 8,   23,72,34,10,   17,67,36,12,
+            4,21,12, 4,    7,30, 9, 1,    9,19,14, 2,
+            2, 9, 8, 3,    1,16,19, 2,   11,28,28,11,
+            0, 1, 5, 0,    2, 3, 3, 2,    2, 7, 6, 6)
+```
+
+
+次に行変数，列変数，層変数を入力する．`gl(n = 水準数, k = 繰り返しの数, length = 長さ)`を注意しながら設定する．
+
+```{r}
+polviews <- gl(n = 7, k = 4*3, length = length(Freq))
+fefam <- gl(n = 4, k = 1, length = length(Freq))
+natfare <- gl(n = 3, k = 4, length = length(Freq))
+```
+
+対応しているのかを確認したければ，matrix形式で示すとよい．
+
+```{r}
+matrix(polviews, nrow = 7, ncol = 12, byrow = TRUE)
+matrix(fefam, nrow = 7, ncol = 12, byrow = TRUE)
+matrix(natfare, nrow = 7, ncol = 12, byrow = TRUE)
+```
+
+tableのデータ（`tab_3.1`）とセルを単位としたデータ（`freq_tab_3.1`）を作成する．
+
+```{r}
+tab_3.1 <- xtabs(Freq ~ polviews + fefam + natfare)
+freq_tab_3.1 <- tibble(Freq, polviews, fefam, natfare)
+```
+
+
+表3.2のモデルで推定を行う．モデル6から8まではスコアパラメータの正則化が必要であるが，適合度については問題なく求めることができる．
+
+```{r}
+# Model 1 - 独立モデル
+M1 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ polviews + fefam + natfare,
+    family = poisson,
+    data = .,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+# Model 2 - 完全2元交互作用モデル
+M2 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ polviews * fefam + fefam * natfare + polviews * natfare,
+    family = poisson,
+    data = .,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+# Model 3 - 条件付き独立 (polviews)
+M3 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ polviews * fefam + polviews * natfare,
+    family = poisson,
+    data = .,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+# Model 4 - 条件付き独立 (fefam)
+M4 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ polviews * fefam + fefam * natfare,
+    family = poisson,
+    data = .,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+# Model 5 - 条件付き独立 (natfare)
+M5 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ fefam * natfare + polviews * natfare,
+    family = poisson,
+    data = .,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+# Model 6 - RC(1)+RL(1) 部分連関
+# 値の正則化が必要
+M6 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ polviews + fefam + natfare + 
+      Mult(1, polviews, fefam) + 
+      Mult(1, polviews, natfare),
+    data = .,
+    family = poisson,
+    tolerance = 1e-12
+  )
+
+# Model 7 - RC(1)+RL(1) 部分連関 (一貫した行スコア - polviews)
+# 値の正則化が必要
+M7 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ polviews + fefam + natfare + 
+      Mult(1, polviews, fefam + natfare),
+    data = .,
+    family = poisson,
+    tolerance = 1e-12
+  )
+
+# Model 8 - RC(1)+RL(1) 部分連関 (一貫した行スコア - polviews)
+# 行スコアへの等値制約
+# 値の正則化が必要
+
+# 等値制約をかけたいセルの水準を同じにする
+freq_tab_3.1 <- freq_tab_3.1 %>% 
+  mutate(polviews.c = case_when(polviews == 1 ~ 1,  # mu1 = mu2
+                                polviews == 2 ~ 1,  # mu1 = mu2
+                                polviews == 3 ~ 2,
+                                polviews == 4 ~ 3,  # mu4 = mu5
+                                polviews == 5 ~ 3,  # mu4 = mu5
+                                polviews == 6 ~ 4,
+                                polviews == 7 ~ 5) %>%
+           factor())
+
+M8 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ polviews + fefam + natfare + 
+      Mult(1, polviews.c, fefam + natfare),
+    data = .,
+    family = poisson,
+    tolerance = 1e-12
+  )
+```
+
+
+## 表3.2
+
+表3.2を再現する．
+
+```{r}
+## 表3.2
+
+# リストを作成
+M <- list()
+# モデルの適合度をリストに順に格納
+M[[1]] <- model.summary(M1, "1. Complete independence") 
+M[[2]] <- model.summary(M2, "2. Full two-way interaction") 
+M[[3]] <- model.summary(M3, "3. Conditional independence on POLVIEWS") 
+M[[4]] <- model.summary(M4, "4. Conditional independence on FEFAM")
+M[[5]] <- model.summary(M5, "5. Conditional independence on NATFARE")
+M[[6]] <- model.summary(M6, "6. RC(1) + RL(1) partial association")
+M[[7]] <- model.summary(M7, "7. Model 6 plus consisitent row (POLVIEWS) score restrictions")
+M[[8]] <- model.summary(M8, "8. Model 6 plus consisitent and equality restrictions on row (POLVIEWS) scores (mu_1 = mu_2, mu_4 = mu_5)")
+# リストを行方向に合併する
+M %>% bind_rows()
+```
+
+## 表3.3
+
+表3.3を再現するために，モデル6から8までのスコアパラメータの正則化を行う．
+
+まずはモデル6である．
+
+```{r}
+# Estimating standard error
+# Model 6
+
+# 変数と係数と係数の順番を表示
+pickCoef(M6, "[.]polviews")
+pickCoef(M6, "[.]fefam")
+pickCoef(M6, "[.]natfare")
+data.frame(var = names(M6$coefficients),
+           estimate = M6$coefficients) %>% 
+  mutate(estimate = estimate,
+         number = row_number())
+```
+
+各スコアの両端のカテゴリ，つまり上記推定値のリストの
+14,20,21,24,26,32,33,35番目の8つの値についてスコアを求め，固定する．
+
+
+```{r}
+# R POLVIEWS mu1[i], i = 1 to 7
+mu1 <- getContrasts(M6, pickCoef(M6, "fefam)[.]polviews"),
+                    ref = "mean",
+                    scaleRef = "mean", 
+                    scaleWeights = "unit")
+# C FEFAM nu[j], j = 1 to 4
+nu <- getContrasts(M6, pickCoef(M6, "[.]fefam"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+# R POLVIEWS mu2[i], i = 1 to 7
+mu2 <- getContrasts(M6, pickCoef(M6, "natfare)[.]polviews"), 
+                    ref = "mean",
+                    scaleRef = "mean", 
+                    scaleWeights = "unit")
+# L NATFARE eta[k], k = 1 to 3
+eta <- getContrasts(M6, pickCoef(M6, "[.]natfare"), 
+                    ref = "mean",
+                    scaleRef = "mean", 
+                    scaleWeights = "unit")
+
+# 確認 
+list(mu1 = mu1, nu = nu, mu2 = mu2, eta = eta)
+```
+
+正則化したスコアを求めることができたので，
+各スコアの両端のカテゴリを取り出し，`con`とする．
+
+```{r}
+con <- c(mu1$qvframe[,1][c(1,7)], 
+         nu$qvframe[,1][c(1,4)],
+         mu2$qvframe[,1][c(1,7)], 
+         eta$qvframe[,1][c(1,3)])
+```
+
+`con`を用いて制約を課す．制約のあるパラメータは`constrain`で指定する．
+
+```{r}
+M6_SE <- freq_tab_3.1 %>%
+  gnm(Freq ~ polviews + fefam + natfare + 
+        Mult(1, polviews, fefam) + Mult(1, polviews, natfare),
+      constrain = c(14,20,21,24,26,32,33,35), 
+      constrainTo = con,
+      data = ., 
+      family = poisson, 
+      tolerance = 1e-12)
+
+M6_SE_coef <- summary(M6_SE) %>%
+  coefficients() %>%
+  data.frame() %>%
+  rownames_to_column(var = "Variable")
+M6_SE_coef
+```
+
+
+モデル7はすこし難しい．モデル7は一貫した制約を課している．このモデルからまず一貫した`polviews`について正則化した場合の値を求める．これが求まったら，次は一貫した制約を課していないモデルに，先ほどの正則化したスコアをRCとRLのそれぞれの部分に適用する．
+
+```{r}
+# Model 7
+
+# 変数と係数と係数の順番を表示
+pickCoef(M7, "[.]polviews")
+pickCoef(M7, "[.]fefam")
+pickCoef(M7, "[.]natfare")
+data.frame(var = names(M7$coefficients),
+           estimate = M7$coefficients) %>% 
+  mutate(estimate = estimate,
+         number = row_number())
+
+# mu[i], i = 1 to 7
+mu <- getContrasts(M7, pickCoef(M7, "[.]polviews")[1:7], 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+
+con <- c(mu$qvframe[,1][c(1:7)], 
+         mu$qvframe[,1][c(1:7)])
+```
+
+
+ここでは一貫した制約を課さないモデルを用い，制約で一貫したスコアを割り当てる．そして，制約のない列スコアと層スコアを正則化する．
+
+```{r}
+M7_SE <- freq_tab_3.1 %>%
+  gnm(Freq ~ polviews + fefam + natfare + 
+        Mult(1, polviews, fefam) + 
+        Mult(1, polviews, natfare),
+      constrain = c(14:20, 26:32), 
+      constrainTo = con,
+      data = ., 
+      family = poisson, 
+      tolerance = 1e-12)
+
+# nu[j], j = 1 to 4
+nu <- getContrasts(M7_SE, 
+                   pickCoef(M7_SE, "[.]fefam"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+# eta[k], k = 1 to 3
+eta <- getContrasts(M7_SE, 
+                    pickCoef(M7_SE, "[.]natfare"), 
+                    ref = "mean",
+                    scaleRef = "mean", 
+                    scaleWeights = "unit")
+
+con <- c(mu$qvframe[,1][c(1:7)], 
+         nu$qvframe[,1][c(1,4)],
+         mu$qvframe[,1][c(1:7)], 
+         eta$qvframe[,1][c(1,3)])
+```
+
+最後に一貫したスコア（行）と正則化したスコア（列と層）を用いて再度推定を行う．
+
+```{r}
+M7_SE <- freq_tab_3.1 %>%
+  gnm(Freq ~ polviews + fefam + natfare + 
+        Mult(1, polviews, fefam) + 
+        Mult(1, polviews, natfare),
+      constrain = c(14:20,21,24,26:32,33,35), 
+      constrainTo = con,
+      data = ., 
+      family = poisson, 
+      trace = T, 
+      tolerance = 1e-12)
+
+M7_SE_coef <- summary(M7_SE) %>%
+  coefficients() %>%
+  data.frame() %>%
+  rownames_to_column(var = "Variable")
+M7_SE_coef
+```
+
+
+モデル8は`1,1,2,3,3,4,5`という制約があり，結局は`1,2,3,4,5`の5つのパラメータを推定することになる．しかし，あくまで`1,1,2,3,3,4,5`という7つのパラメータにウェイトをかける必要がある．そこで`c(2,1,2,1,1)/7`とすることで，等値制約をかけている部分は平均を2倍にし，`c(2,1,2,1,1)`とすることでウェイトも2倍にしている．
+
+
+```{r}
+# Model 8
+# mu[i], i = 1 to 7
+mu <- getContrasts(M8, 
+                   pickCoef(M8, "[.]polviews.c"),
+                   ref = c(2,1,2,1,1)/7, 
+                   scaleRef =c(2,1,2,1,1)/7,
+                   scaleWeights=c(2,1,2,1,1))
+
+mu <- getContrasts(M8,
+                   pickCoef(M8, "[.]polviews.c"),
+                   ref = c(2,1,2,1,1)/7, 
+                   scaleRef =c(2,1,2,1,1)/7,
+                   scaleWeights=c(2,1,2,1,1))
+mu;mu
+
+con <- c(mu$qvframe[,1][c(1,1,2,3,3,4,5)], mu$qvframe[,1][c(1,1,2,3,3,4,5)])
+```
+
+一貫した行スコア（等値制約あり）を指定して再推定．
+
+```{r}
+M8 <- freq_tab_3.1 %>% 
+  gnm(Freq ~ polviews + fefam + natfare + 
+        Mult(1, polviews, fefam) + 
+        Mult(1, polviews, natfare),
+      constrain = c(14:20,26:32),
+      constrainTo = con,
+      data = ., 
+      family = poisson, 
+      tolerance = 1e-12)
+summary(M8)
+```
+
+次は列スコアと層スコアの正則化をおこなう．
+
+```{r}
+# nu[j], j = 1 to 4
+nu <- getContrasts(M8, 
+                   pickCoef(M8, "[.]fefam"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+
+# eta[k], k = 1 to 3
+eta <- getContrasts(M8, 
+                    pickCoef(M8, "[.]natfare"), 
+                    ref = "mean",
+                    scaleRef = "mean", 
+                    scaleWeights = "unit")
+
+con <- c(mu$qvframe[,1][c(1,1,2,3,3,4,5)], 
+         nu$qvframe[,1][c(1,4)],
+         mu$qvframe[,1][c(1,1,2,3,3,4,5)], 
+         eta$qvframe[,1][c(1,3)])
+```
+
+一貫した行スコア（等値制約あり）のすべて，列スコア（最初と最後），層スコア（最初と最後）を指定して再推定．
+
+
+```{r}
+M8_SE <- freq_tab_3.1 %>% 
+  gnm(Freq ~ polviews + fefam + natfare + 
+        Mult(1, polviews, fefam) + 
+        Mult(1, polviews, natfare),
+      constrain = c(14:20,21,24,26:32,33,35), 
+      constrainTo = con,
+      data = ., 
+      family = poisson, 
+      tolerance = 1e-12)
+
+M8_SE_coef <- summary(M8_SE) %>%
+  coefficients() %>%
+  data.frame() %>%
+  rownames_to_column(var = "Variable")
+M8_SE_coef
+```
+
+
+
+すべてのスコアを列方向に合併し，表3.3を再現．
+
+```{r}
+bind_cols(
+M6_SE_coef %>% dplyr::select(Variable, Model6 = Estimate),
+M7_SE_coef %>% dplyr::select(Model7 = Estimate),
+M8_SE_coef %>% dplyr::select(Model8 = Estimate)) %>%
+  dplyr::filter(grepl("Mult",Variable))
+```
+
+
+## 表3.4
+
+表3.4のデータを入力する．
+
+```{r}
+# 表3.1
+Freq <- c(76, 14, 15,  4,
+        32, 17,  7,  3,
+        64, 23, 28, 15,
+        41, 11, 27, 16,
+        15,  2,  7,  4,
+        27, 20,  9,  5,
+        57, 31, 24, 15,
+        27,  9, 22, 16,
+        13,  6, 13,  5,
+        12, 13, 10,  6,
+        46, 32, 75, 20,
+        54, 26, 58, 55,
+        7,  6,  7,  6,
+        7,  2,  3,  6,
+        12, 11, 31, 15,
+        52, 36, 80,101)
+```
+
+行，列，層のカテゴリを入力し，`matrix`で確認する．
+
+```{r}
+L <- gl(4, 16, 64)
+R <- gl(4, 4, 64)
+C <- gl(4, 1, 64)
+
+# 確認する
+L %>% matrix(nrow = 16, ncol = 4, byrow = TRUE)
+R %>% matrix(nrow = 16, ncol = 4, byrow = TRUE)
+C %>% matrix(nrow = 16, ncol = 4, byrow = TRUE)
+```
+
+
+以上を`tibble`でまとめ，データを作成する．
+
+```{r}
+freq_tab_3.1 <- tibble(Freq, L, R, C) %>% arrange(L, R, C)
+freq_tab_3.1
+```
+
+行，列，層について整数スコアを作成する．
+
+```{r}
+freq_tab_3.1 <- freq_tab_3.1 %>% 
+  mutate(Rscore = as.numeric(R),
+         Cscore = as.numeric(C),
+         Lscore = as.numeric(L))
+freq_tab_3.1
+```
+
+
+それではモデル1から15までを用いた推定を行う．ただし`gnm`ではモデル3と5の推定はできない．
+また
+
+```{r}
+# Model 1 - Complete Independence
+model1 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R + C + L,
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+# Model 2 - Unrestricted RC(1)+RL(1)+CL(1)
+model2 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R + C + L + Mult(1, R, C) + Mult(1, R, L) + Mult(1, C, L),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+# Model 3 - Restricted RC(1)+RL(1)+CL(1) with consistent score
+# It may not be fitted with gnm package!
+
+# Model 4 - Model 2 with consistent cells fitted exactly
+freq_tab_3.1 <- freq_tab_3.1 %>%
+  mutate(consistent.cells = factor(ifelse((R == C) & (C == L), R, 0)))
+model4 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R + C + L + consistent.cells +
+      Mult(1, R, C) + Mult(1, R, L) + Mult(1, C, L),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+# Model 5 - Model 3 with consistent cells fitted exactly
+# It may not be fitted with gnm package!
+
+# Model 6 - Full Two-way interaction
+model6 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R * C + R * L + C * L,
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model6)
+
+# Model 7 - Model 6 with consistent cells fitted exactly
+model7 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R * C + R * L + C * L + consistent.cells,
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model7)
+
+
+# Model 8 - Unrestricted uniform and log-multiplicative association in all partial
+# association
+model8 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R + C + L +
+      Rscore:Cscore +
+      Mult(1, R, C) +
+      Rscore:Lscore +
+      Mult(1, R, L) +
+      Cscore:Lscore +
+      Mult(1, C, L),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model8)
+
+pickCoef(model8, "[.]R")
+pickCoef(model8, "[.]C")
+pickCoef(model8, "[.]L")
+data.frame(var = names(model8$coefficients),
+           estimate = model8$coefficients) %>% 
+  mutate(estimate = estimate,
+         number = row_number())
+
+
+# mu1: 13-16
+mu1 <- getContrasts(
+  model8,
+  pickCoef(model8, "[.]R")[1:4],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+mu1
+
+# nu1: 17-20
+nu1 <- getContrasts(
+  model8,
+  pickCoef(model8, "[.]C")[1:4],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+nu1
+
+# mu2: 23-26
+mu2 <- getContrasts(
+  model8,
+  pickCoef(model8, "[.]R")[5:8],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+mu2
+
+# eta1: 27-30
+eta1 <- getContrasts(
+  model8,
+  pickCoef(model8, "[.]L")[1:4],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+eta1
+
+# nu2: 33-36
+nu2 <- getContrasts(
+  model8,
+  pickCoef(model8, "[.]C")[5:8],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+nu2
+
+# eta2: 37-40
+eta2 <- getContrasts(
+  model8,
+  pickCoef(model8, "[.]L")[5:8],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+eta2
+
+con <- c(mu1$qvframe[, 1][c(1,4)],
+         nu1$qvframe[, 1][c(1,4)],
+         mu2$qvframe[, 1][c(1,4)],
+         eta1$qvframe[, 1][c(1,4)],
+         nu2$qvframe[, 1][c(1,4)],
+         eta2$qvframe[, 1][c(1,4)])
+
+
+model8_se <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R + C + L +
+      Rscore:Cscore +
+      Mult(1, R, C) +
+      Rscore:Lscore +
+      Mult(1, R, L) +
+      Cscore:Lscore +
+      Mult(1, C, L),
+#    constrain = c(13,16,17,20,23,26,27,30,33,36,37,40),
+#    constrainTo = con,
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-15
+  )
+summary(model8_se)
+
+
+
+
+
+
+
+
+
+
+options(contrasts = c(factor="contr.treatment",
+                      ordered="contr.treatment"))
+# Model 9 - Model 8 with consistent row scores
+model9 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R + C + L +
+      Rscore:Cscore +
+      Mult(1, R, C + L) +
+      Rscore:Lscore +
+      Cscore:Lscore +
+      Mult(1, C, L),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model9)
+
+mu <- getContrasts(
+  model9,
+  pickCoef(model9, "[.]R"),
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+nu2 <- getContrasts(
+  model9,
+  pickCoef(model9, "[.]C")[5:8],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+eta2 <- getContrasts(
+  model9,
+  pickCoef(model9, "[.]L")[4:7],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+model9.extended <-
+  freq_tab_3.1 %>% gnm(
+    Freq ~ R + C + L +
+      Rscore:Cscore +
+      Mult(1, R, C) +
+      Rscore:Lscore +
+      Mult(1, R, L) +
+      Cscore:Lscore +
+      Mult(1, C, L),
+    constrain = c(13:16, 23:26),
+    constrainTo = c(mu$qvframe[, 1], mu$qvframe[, 1]),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model9.extended)
+
+nu1 <- getContrasts(
+  model9.extended,
+  pickCoef(model9.extended, "[.]C")[1:4],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+eta1 <- getContrasts(
+    model9.extended,
+    pickCoef(model9.extended, "[.]L")[1:4],
+    ref = "mean",
+    scaleRef = "mean",
+    scaleWeights = "unit"
+  )
+
+model9.phis <-
+  freq_tab_3.1 %>%  gnm(
+    Freq ~ R + C + L + 
+      Rscore:Cscore + 
+      Mult(1, R, C) +
+      Rscore:Lscore + 
+      Mult(1, R, L) + 
+      Cscore:Lscore + 
+      Mult(1, C, L),
+    constrain = c(13:20, 23:30, 33:40),
+    constrainTo = c(
+      mu$qvframe[, 1],
+      nu1$qvframe[, 1],
+      mu$qvframe[, 1],
+      eta1$qvframe[, 1],
+      nu2$qvframe[, 1],
+      eta2$qvframe[, 1]
+    ),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+summary(model9.phis)
+mu
+nu1
+eta1
+nu2
+eta2
+model.summary(model9)
+
+# Model 10 - Model 8 with consistent col scores
+model10 <-
+  freq_tab_3.1 %>% gnm(
+    Freq ~ R + C + L + 
+      Rscore:Cscore + 
+      Mult(1, C, R + L) +
+      Rscore:Lscore + 
+      Mult(1, R, L) + 
+      Cscore:Lscore,
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+model.summary(model10)
+
+# Model 11 - Model 8 with consistent layer scores
+model11 <-
+  freq_tab_3.1 %>% gnm(
+    Freq ~ R + C + L + 
+      Rscore:Cscore + 
+      Mult(1, L, R + C) +
+      Rscore:Lscore +
+      Mult(1, R, C) +
+      Cscore:Lscore,
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+model.summary(model11)
+
+# Model 12 - Modek 9 + U(RL)=U(CL)
+# To impose equality constraint on U(RL) & U(CL),
+# a covariate is created in following manner:
+
+freq_tab_3.1 <- freq_tab_3.1%>% 
+  mutate(cov_rcl = Rscore * Lscore + Cscore * Lscore)
+model12 <-
+  freq_tab_3.1 %>% gnm(
+    Freq ~ R + C + L + 
+      Rscore:Cscore + 
+      Mult(1, R, C + L) +
+      cov_rcl + 
+      Mult(1, C, L),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+#summary(model12)
+model.summary(model12)
+
+mu <- getContrasts(
+  model12,
+  pickCoef(model12, "[.]R"),
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+nu2 <-
+  getContrasts(
+    model12,
+    pickCoef(model12, "[.]C")[5:8],
+    ref = "mean",
+    scaleRef = "mean",
+    scaleWeights = "unit"
+  )
+
+eta2 <-
+  getContrasts(
+    model12,
+    pickCoef(model12, "[.]L")[4:7],
+    ref = "mean",
+    scaleRef = "mean",
+    scaleWeights = "unit"
+  )
+
+model12.extended <-
+  freq_tab_3.1 %>%
+  gnm(Freq ~ R + C + L + 
+        Rscore:Cscore + 
+        Mult(1, R, C) +
+        cov_rcl + 
+        Mult(1, R, L) + 
+        Mult(1, C, L),
+      constrain = c(13:16, 23:26),
+      constrainTo = c(mu$qvframe[, 1], mu$qvframe[, 1]),
+      data = .,
+      family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model12.extended)
+
+nu1 <- getContrasts(
+  model12.extended,
+  pickCoef(model12.extended, "[.]C")[1:4],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+eta1 <-
+  getContrasts(
+    model12.extended,
+    pickCoef(model12.extended, "[.]L")[1:4],
+    ref = "mean",
+    scaleRef = "mean",
+    scaleWeights = "unit"
+  )
+
+model12.phis <-
+  freq_tab_3.1 %>% gnm(
+    Freq ~ R + C + L + Rscore:Cscore + Mult(1, R, C) +
+      cov_rcl + Mult(1, R, L) + Mult(1, C, L),
+    constrain = c(13:20, 23:30, 32:39),
+    constrainTo = c(mu$qvframe[, 1], nu1$qvframe[, 1],
+                    mu$qvframe[, 1], eta1$qvframe[, 1], 
+                    nu2$qvframe[, 1], eta2$qvframe[, 1]),
+    data = .,
+    family = poisson, 
+    trace = F, 
+    tolerance = 1e-12)
+summary(model12.phis)
+mu
+nu1
+eta1
+nu2
+eta2
+model.summary(model12)
+
+# Model 15
+
+
+freq_tab_3.1 <-
+  freq_tab_3.1 %>% mutate(cov_rcl = Rscore * Lscore + Cscore * Lscore)
+model15 <- freq_tab_3.1 %>%
+  gnm(
+    Freq ~ R + C + L + Rscore:Cscore + Mult(1, R, C + L) + cov_rcl,
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model15)
+model.summary(model15)
+
+mu <- getContrasts(
+  model15,
+  pickCoef(model15, "[.]R"),
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+nu <- getContrasts(
+  model15,
+  pickCoef(model15, "[.]C"),
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+model15.extended <-
+  freq_tab_3.1 %>% gnm(
+    Freq ~ R + C + L + 
+      Rscore:Cscore + 
+      Mult(1, R, C) +
+      cov_rcl + 
+      Mult(1, R, L),
+    constrain = c(13:16, 23:26),
+    constrainTo = c(mu$qvframe[, 1], mu$qvframe[, 1]),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model15.extended)
+
+eta <-
+  getContrasts(
+    model15.extended,
+    pickCoef(model15.extended, "[.]L"),
+    ref = "mean",
+    scaleRef = "mean",
+    scaleWeights = "unit"
+  )
+
+model15.phis <-
+  freq_tab_3.1 %>% gnm(
+    Freq ~ R + C + L + 
+      Rscore:Cscore + 
+      Mult(1, R, C) + 
+      cov_rcl + 
+      Mult(1, R, L),
+    constrain = c(13:20, 23:30),
+    constrainTo = c(mu$qvframe[, 1], 
+                    nu$qvframe[, 1], 
+                    mu$qvframe[, 1], 
+                    eta$qvframe[, 1]),
+    data = .,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+
+summary(model15.phis)
+mu
+nu
+eta
+model.summary(model15)
+```
+
+
+```{r}
+bind_rows(model.summary(model1),
+model.summary(model2),
+model.summary(model4),
+model.summary(model6),
+model.summary(model7),
+model.summary(model8),
+model.summary(model9),
+model.summary(model10),
+model.summary(model11),
+model.summary(model12),
+model.summary(model15))
+```
+

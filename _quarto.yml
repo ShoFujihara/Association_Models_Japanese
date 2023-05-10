@@ -8,7 +8,16 @@ book:
   date: last-modified
   chapters:
     - index.qmd
-    - Chapter_1.qmd
+    - 1-Introduction.qmd
+    - 2-Chapter_1.qmd
+    - 3-Chapter_2.qmd
+    - 4-Chapter_3.qmd
+    - 5-Chapter_4.qmd
+    - 6-Chapter_5.qmd
+    - 7-Chapter_6.qmd
+    - 8-Note.qmd
+    - 9-R.qmd
+    
 
 format:
   html:

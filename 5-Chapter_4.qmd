@@ -1,0 +1,502 @@
+# 第4章
+
+
+第4章では
+
+```{r, message = FALSE}
+library(tidyverse)
+library(magrittr)
+library(gnm)
+```
+
+
+モデル適合度を表示するための関数を準備する．すべて`gnm`によって推定を行う．
+
+```{r}
+# 引数となるobjはgnmの結果
+model.summary <- function(obj, Model = NULL){
+  if (sum(class(obj) == "gnm") != 1)
+    stop("estimate with gnm")
+  aic <- obj$deviance - obj$df * 2 # AIC(L2)
+  bic <- obj$deviance - obj$df * log(sum(obj$y)) #BIC(L2)
+  delta <- 100 * sum(abs(obj$y - obj$fitted.values)) / (2 * sum(obj$y))
+  p <- pchisq(obj$deviance, obj$df, lower.tail = FALSE)     #p<-ifelse(p<0.001,"<0.001",p)
+  result <- matrix(0, 1, 7)
+  if (is.null(Model)){ 
+  Model <- deparse(substitute(obj))
+  }
+  result <- tibble(
+    "Model Description" = Model,
+    "df" = obj$df,
+    "L2" = obj$deviance,
+    #"AIC(L2)" = aic,
+    "BIC" = bic,
+    "Delta" = delta,
+    "p" = p
+  )
+  return(result)
+}
+```
+
+
+## 表4.3
+
+
+
+```{r}
+# Table 4.3
+Freq <- c(201,  29,   8,  13,   5,     152,  29,   2,   8,   0,
+        18,   6,   3,   6,   0,      17,  12,   0,   3,   0,
+        109,  74, 164,  89,  16,     101, 336,   9, 134,   2,
+        7,   6,  45,  30,   6,       7,  41,   7,  63,   0,
+        247,  58,  20,  23,   2,     288,  51,   1,  17,   3,
+        48,  11,  16,  13,   1,      47,  38,   2,  18,   0,
+        157,  68, 178, 116,  27,     165, 321,  27, 168,   1,
+        7,   7,  50,  42,   5,      12,  25,   5,  29,   6)
+
+Educ <- gl(4, 10, 4 * 5 * 2 * 2)
+Occ <- gl(5, 1, 4 * 5 * 2 * 2)
+Sex <- gl(2, 5, 4 * 5 * 2 * 2)
+Year <- gl(2, 40, 4 * 5 * 2 * 2)
+L <- Year:Sex
+levels(L) <- factor(1:4)
+
+Rscore <- as.numeric(Educ)
+Cscore <- as.numeric(Occ)
+
+
+# Model 1 - RC(0)-L(homogeneous)
+model1 <-
+  gnm(
+    Freq ~ Educ + Occ + L + Educ:L + Occ:L,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+summary(model1)
+model.summary(model1)
+
+
+# Model 2 - RC(1)-L(homogeneous)
+model2 <- gnm(
+  Freq ~ Educ + Occ + L + Educ:L + Occ:L + Mult(1, Educ, Occ),
+  family = poisson,
+  trace = F,
+  tolerance = 1e-12
+)
+model.summary(model2)
+
+# Model 3 - RC(1)-L(heterogeneous)
+model3 <- gnm(
+  Freq ~ Educ + Occ + L + Educ:L + Occ:L + Mult(L, L:Educ, L:Occ),
+  family = poisson,
+  trace = F,
+  tolerance = 1e-12
+)
+model.summary(model3)
+
+# Model 4 - RC(2)-L(homogeneous)
+model4 <-
+  gnm(
+    Freq ~ Educ + Occ + L + Educ:L + Occ:L + instances(Mult(1, Educ, Occ), 2)
+    ,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-8
+  )
+model.summary(model4)
+
+# Model 4 - RC(2)-L(heterogeneous)
+model5 <-
+  gnm(
+    Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+      instances(Mult(L, L:Educ, L:Occ), 2),
+    family = poisson,
+    trace = F,
+    tolerance = 1e-10,
+    iterStart = 5,
+    iterMax = 1e6,
+    verbose = F
+  )
+model.summary(model5)
+
+
+
+# Model 6 - RC(3)-L(homogeneous)
+model6 <-
+  gnm(
+    Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+      instances(Mult(1, Educ, Occ), 3)
+    ,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+model.summary(model6)
+
+
+
+# Model 7 - RC(3)-L(heterogeneous)
+model7 <-
+  gnm(
+    Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+      instances(Mult(L, L:Educ, L:Occ), 3),
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12
+  )
+model.summary(model7)
+
+
+# Model 8- U+RC(homogeneous)
+model8 <-
+  gnm(
+    Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+      Rscore:Cscore + 
+      Mult(1, Educ, Occ),
+    family = poisson,
+    trace = F,
+    tolerance = 1e-6,
+    iterStart = 20,
+    iterMax = 100000
+  )
+model.summary(model8)
+
+model8$deviance - model8$df * log(4078)
+
+
+# Model 8 - U+RC(heterogeneous)
+Rscore <- as.numeric(Educ)
+Cscore <- as.numeric(Occ)
+model9 <-
+  gnm(
+    Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+      Rscore:Cscore:L + 
+      Mult(L, L:Educ, L:Occ),
+    family = poisson,
+    trace = F,
+    tolerance = 1e-6,
+    iterStart = 20,
+    iterMax = 100000,
+    verbose = F
+  )
+model.summary(model9)
+model9$deviance - model9$df * log(4078)
+model9$deviance - 20 * log(4078)
+model9$deviance - 22 * log(4078)
+
+pchisq(27.47, 20, lower.tail = FALSE)
+
+pchisq(27.47, 22, lower.tail = FALSE)
+```
+
+
+
+
+
+
+
+
+
+
+
+## 表4.6
+
+```{r}
+# Table 4.6
+Freq <- c(201, 29, 8,13, 5, 152,29, 2, 8, 0,
+          18, 6, 3, 6, 0,17,12, 0, 3, 0,
+          109,74, 164,89,16, 101, 336, 9, 134, 2,
+          7, 6,45,30, 6, 7,41, 7,63, 0,
+          247,58,20,23, 2, 288,51, 1,17, 3,
+          48,11,16,13, 1,47,38, 2,18, 0,
+          157,68, 178, 116,27, 165, 321,27, 168, 1,
+          7, 7,50,42, 5,12,25, 5,29, 6)
+
+Educ <- gl(4, 10, 4 * 5 * 2 * 2)
+Occ <- gl(5, 1, 4 * 5 * 2 * 2)
+Sex <- gl(2, 5, 4 * 5 * 2 * 2)
+Year <- gl(2, 40, 4 * 5 * 2 * 2)
+L <- Year:Sex
+levels(L) <- factor(1:4)
+Rscore <- as.numeric(Educ)
+Cscore <- as.numeric(Occ)
+
+# Model 1
+model1.un <- gnm(
+  Freq ~ Educ + Occ + L + Educ:L + Occ:L +
+    Mult(L, L:Educ, Occ, inst = 1) +
+    Mult(L, L:Educ, Occ, inst = 2),
+  family = poisson,
+  trace = F,
+  tolerance = 1e-8,
+  iterStart = 20,
+  iterMax = 100000,
+  verbose = F)
+model.summary(model1.un)
+
+
+
+# Model 2
+model2.un <- gnm(
+  Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+    Mult(L, Educ, L:Occ, inst = 1) + 
+    Mult(L, Educ, L:Occ, inst = 2),
+    family = poisson,
+    trace = F,
+    tolerance = 1e-8,
+    iterStart = 20,
+    iterMax = 100000,
+    verbose = F
+  )
+model.summary(model2.un)
+
+# Model 3
+# it might not be fitted with gnm!
+
+# Model 4
+# it might not be fitted with gnm!
+
+# Model 5
+# it might not be fitted with gnm!
+
+# Model 6
+# it might not be fitted with gnm!
+
+# Model 7
+# it might not be fitted with gnm!
+
+# Model 8
+# it might not be fitted with gnm!
+
+# Model 9
+model9.un <- gnm(
+  Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+    Mult(L, Educ, Occ, inst = 1) + 
+    Mult(L, Educ, Occ, inst = 2),
+  family = poisson,
+  trace = F,
+  tolerance = 1e-12,
+  iterStart = 20,
+  iterMax = 100000
+)
+model.summary(model9.un)
+
+
+mu1 <- getContrasts(
+  model9.un,
+  pickCoef(model9.un, "[.]Educ")[1:4],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+nu1 <- getContrasts(
+  model9.un,
+  pickCoef(model9.un, "[.]Occ")[1:5],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+mu2 <- getContrasts(
+  model9.un,
+  pickCoef(model9.un, "[.]Educ")[5:8],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+nu2 <- getContrasts(
+  model9.un,
+  pickCoef(model9.un, "[.]Occ")[6:10],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+con <- c(mu1$qvframe[, 1][c(1, 4)], 
+         nu1$qvframe[, 1][c(1, 5)],
+         mu2$qvframe[, 1][c(1, 4)], 
+         nu2$qvframe[, 1][c(1, 5)])
+
+
+set.seed(123456)
+model9 <- gnm(
+  Freq ~ Educ + Occ + L + Educ:L + Occ:L +
+    Mult(L, Educ, Occ, inst = 1) + 
+    Mult(L, Educ, Occ, inst = 2),
+  constrain = c(37, 40, 41, 45, 50, 53, 54, 58),
+  constrainTo = con,
+  family = poisson,
+  tolerance = 1e-12,
+  iterStart = 20,
+  iterMax = 100000
+)
+
+summary(model9)
+mu1
+nu1
+mu2
+nu2
+model.summary(model9.un)
+
+
+# Model 10
+Lc <- L
+levels(Lc) <- c(1, 1, 2, 2)
+model10.un <- gnm(
+  Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+    Mult(Lc, Educ, Occ) + 
+    Mult(L, Educ, Occ),
+  family = poisson,
+  trace = F,
+  tolerance = 1e-8,
+  iterStart = 20,
+  iterMax = 100000,
+  verbose = F
+)
+model.summary(model10.un)
+
+
+# Model 11
+set.seed(1234)
+model11.un <- gnm(
+  Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+    Mult(1, Educ, Occ) + 
+    Mult(L, Educ, Occ),
+  family = poisson,
+  trace = F,
+  tolerance = 1e-8,
+  iterStart = 20,
+  iterMax = 100000,
+  verbose = F
+)
+model.summary(model11.un)
+
+# Model 12
+L.c <- L
+levels(L.c) <- factor(c(1, 2, 3, 2))
+
+set.seed(1234)
+model12.un <-
+  gnm(Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+        Mult(1, Educ, Occ) + 
+        Mult(L.c, Educ, Occ),
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12,
+    iterStart = 20,
+    iterMax = 100000
+  )
+model.summary(model12.un)
+
+mu1 <- getContrasts(
+  model12.un,
+  pickCoef(model12.un, "[.]Educ")[1:4],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+nu1 <- getContrasts(
+  model12.un,
+  pickCoef(model12.un, "[.]Occ")[1:5],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+mu2 <- getContrasts(
+  model12.un,
+  pickCoef(model12.un, "[.]Educ")[5:8],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+nu2 <- getContrasts(
+  model12.un,
+  pickCoef(model12.un, "[.]Occ")[6:10],
+  ref = "mean",
+  scaleRef = "mean",
+  scaleWeights = "unit"
+)
+
+con <- c(mu1$qvframe[, 1][c(1, 4)], nu1$qvframe[, 1][c(1, 5)],
+         mu2$qvframe[, 1][c(1, 4)], nu2$qvframe[, 1][c(1, 5)])
+
+model12 <-
+  gnm(Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+        Mult(1, Educ, Occ) + 
+        Mult(L.c, Educ, Occ),
+    constrain = c(34, 37, 38, 42, 46, 49, 50, 54),
+    constrainTo = con,
+    family = poisson,
+    trace = F,
+    tolerance = 1e-12,
+    iterStart = 20,
+    iterMax = 100000
+  )
+summary(model12)
+mu1
+nu1
+mu2
+nu2
+model.summary(model12.un)
+
+# Model 13
+model13.un <-
+  gnm(Freq ~ Educ + Occ + L + Educ:L + Occ:L + 
+        Mult(1, Educ, Occ, inst = 1) + 
+        Mult(1, Educ, Occ, inst = 2),
+    family = poisson,
+    trace = F,
+    tolerance = 1e-8,
+    iterStart = 20,
+    iterMax = 100000,
+    verbose = F
+  )
+model.summary(model13.un)
+```
+
+
+
+
+```{r}
+library(logmult)
+d <- tibble(Freq, Educ, Occ, Sex, Year, L, Rscore, Cscore)
+tab <- xtabs(Freq ~ Educ + Occ + L, data = d)
+
+
+# Model 2
+fit <- rcL(tab, nd = 1,
+    layer.effect = "none")
+fit
+
+# Model 3
+fit <- rcL(tab, nd = 1,
+    layer.effect = "heterogeneous")
+fit
+
+# Model 4
+fit <- rcL(tab, nd = 2,
+    layer.effect = "none")
+fit
+
+# Model 5
+fit <- rcL(tab, nd = 2,
+    layer.effect = "heterogeneous")
+fit
+
+# Model 6
+fit <- rcL(tab, nd = 3,
+    layer.effect = "none")
+fit
+
+# Model 7
+fit <- rcL(tab, nd = 3,
+    layer.effect = "heterogeneous")
+fit
+```
+

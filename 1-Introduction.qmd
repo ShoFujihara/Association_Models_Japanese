@@ -1,0 +1,484 @@
+
+# シリーズ編者による序文 {-}
+
+
+- 「シリーズ編者による序文」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．
+
+- パッケージは`tidyverse`（データセットの処理のため），`magrittr`（パイプ演算子），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`gnm`（連関分析の処理のため）を使用する．
+
+```{r}
+#| message: false
+# パッケージの読み込み
+library(tidyverse)
+library(magrittr)
+library(DescTools)
+library(vcd)
+library(gnm)
+```
+
+### 独立性の検定 {-}
+
+
+- 使用するデータは精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）
+- 元データについて，ここではクロス表（のようにみえる）形式で入力する．これを`Freq`とする．
+
+```{r}
+# 元データの入力
+Freq <- c( 64,  94, 58, 46,
+           57,  94, 54, 40,
+           57, 105, 65, 60,
+           72, 141, 77, 94,
+           36,  97, 54, 78,
+           21,  71, 54, 71)
+```
+
+- 実際は横に長い一行のベクトルとなる．
+
+```{r}
+# 確認
+Freq
+```
+
+- このベクトルを`matrix`関数を用いて，行列に変換する．これを`tab`とする（名前は何でもよい）．`nrow`は行カテゴリ数，`ncol`は列カテゴリ数である．`byrow = TRUE`を忘れないように注意すること．また`dimnames`で行と列のそれぞれの変数名とカテゴリ名を指定することも可能である．この指定は特に無くてもよい．
+
+```{r}
+# データを表形式に変換
+tab <- matrix(
+  Freq,
+  nrow = 6,
+  ncol = 4,
+  byrow = TRUE,
+  dimnames = list(
+    SES = LETTERS[1:6],
+    MHS = c("well",
+            "mild",
+            "modelrate",
+            "impared")
+  )
+)
+```
+
+- これで表を再現することができた．
+
+```{r}
+# 確認
+tab
+```
+
+- 初歩的なクロス表の分析はここで作成された`tab`に対して行う．
+- `as.table`によってクラスを`matrix`から`table`に変えることもできる．分析はどちらであっても問題ないが，周辺分布を`Margins`によって確認したいときはクラスを`table`に変換しておく必要がある．
+
+```{r}
+# クラスを確認
+class(tab)
+str(tab)
+# クラスをmatrixからtableに変える
+tab <- as.table(tab)
+# クラスを確認
+class(tab)
+str(tab)
+```
+
+- クロス表の周辺分布を確認しておく．ここでは`DescTools`パッケージの`Margins`を用いる．
+
+```{r}
+# 注：tabのクラスはtableに変換が必要
+Margins(tab)
+```
+
+- 次に`vcd`パッケージの`mosaic`を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を読み解き，解釈する際に参考すると良い．
+
+```{r}
+mosaic(tab, shade = TRUE, keep_aspect_ratio = FALSE)
+```
+
+- `chisq.test`関数を用いて，`tab`に対してカイ2乗検定を行う．ピアソンのカイ2乗値`X-squared`，自由度`df`，p値`p-value`が得られる．
+- `vcd`パッケージの`assocstats`ではピアソンのカイ2乗値だけではなく尤度比統計量も出力される．本書と同じ結果になっているのかを確認してほしい．
+
+```{r}
+# 表に対してカイ2乗検定を行う
+chisq.test(tab)
+# ピアソンのカイ2乗統計量と尤度比統計量
+assocstats(tab)
+summary(assocstats(tab))
+```
+
+- `chisq.test(tab)`からは他にもいろいろな情報が得られる．
+- ヘルプ`?chisq.test`か`names`関数で確認してみよう．
+
+```{r, eval = FALSE}
+# ヘルプの方法
+?chisq.test
+```
+
+- `names`関数で確認．
+
+```{r}
+# chisq.test(tab)に含まれるオブジェクトの名前を確認
+names(chisq.test(tab))
+```
+
+- せっかくなので全部確認してみたい．
+
+```{r}
+# カイ2乗統計量
+chisq.test(tab)$statistic
+# 自由度
+chisq.test(tab)$parameter
+# p値
+chisq.test(tab)$p.value
+# 方法
+chisq.test(tab)$method
+# データ名
+chisq.test(tab)$data.name
+# 観測度数
+chisq.test(tab)$observed
+# 期待度数
+chisq.test(tab)$expected
+# ピアソンの残差 (observed - expected) / sqrt(expected)
+chisq.test(tab)$residuals
+# 標準化残差 (observed - expected) / sqrt(V)
+chisq.test(tab)$stdres
+```
+
+
+- 期待度数は`chisq.test(tab)$expected`とすればよい．これを`tab_expected`というオブジェクトとする．
+
+```{r}
+# ixページの期待度数
+tab_expected <- chisq.test(tab)$expected
+tab_expected
+```
+
+- ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．
+- 自由度についても`nrow`と`ncol`を用いて計算（`prod(dim(tab) -1)`でもよい）．
+- `list`関数は様々なもの（値，ベクトル，データ，リスト等）をまとめ，並べて表示するときに用いる．
+
+```{r}
+# 適合度（X2とL2）
+X2 <- ((tab - tab_expected)^2 / tab_expected) %>% sum()
+L2 <- (tab * log(tab / tab_expected)) %>% sum() %>% "*"(2)
+# L2 <- 2*sum((tab * log(tab / tab_expected))) としてもよい
+# 自由度
+df <- (nrow(tab) - 1) * (ncol(tab) - 1)
+# df <- prod(dim(tab) -1)
+# 結果をリストで表示
+list("自由度" = df,
+     "ピアソンのカイ2乗統計量" = X2, 
+     "尤度比統計量" = L2)
+```
+
+
+### 一様連関モデル {-}
+- ページixの一様連関モデルを再現する．
+
+#### データの準備 {-}
+- 多元表の分析は表形式（table form）ではなく，度数，行変数，列変数からなる集計データを作成して行うことが多い．このデータの形式は度数形式（frequency form）と呼ばれる．
+- 先程のデータについてもクロス表ではなく，次のような集計データを作成する．
+
+
+```{r, results = FALSE, echo = FALSE}
+# 度数のベクトル
+Freq
+# 行変数
+PSES <- gl(n = 6, k = 4)
+PSES
+# 列変数
+MHS  <- gl(n = 4, k = 1, length = 24)
+MHS
+# 度数，行変数，列変数からなるデータを作成
+d <- tibble(Freq, PSES, MHS)
+```
+
+- データを表示して確認する．
+
+```{r, results = FALSE, echo = FALSE}
+# データの確認
+d
+```
+
+```{r, echo = FALSE}
+knitr::kable(d, 
+             align = c('r', 'r', 'r'), 
+             table.attr = "style='width:30%;'", 
+             format = "html", 
+             caption = "精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ") %>%
+  kableExtra::kable_styling(position = "center")
+```
+
+- 度数については先程作成した`Freq`を使う．
+- `gl`（Generate Factor Levels）によって度数に対応するカテゴリを作成する．数値で作成してもよいが，その場合は最後に`factor`に変換しておく．
+
+```{r}
+# 度数のベクトル
+Freq
+# 行変数
+PSES <- gl(n = 6, k = 4)
+PSES
+# 列変数
+MHS  <- gl(n = 4, k = 1, length = 24)
+MHS
+```
+
+- 以上で作成した度数（`Freq`），行変数（`PSES`），列変数（`MHS`）のベクトルを用いてデータを作成する．
+
+```{r}
+# 度数，行変数，列変数からなる度数形式データを作成
+d <- tibble(Freq, PSES, MHS)
+# データの確認
+d
+```
+
+- このような形式のデータにすることで柔軟なモデリングを行うことができる．
+- なお`gnm`パッケージには`mentalHealth`というデータがそもそも存在するのでそれを用いてもよい．
+- 表形式データからこのような度数形式データを作成する場合は`data.frame`を用いれば簡単である．
+
+```{r}
+data.frame(tab)
+```
+
+- 逆に度数形式データから表形式データを作成するためには`xtabs`を用いる．
+
+```{r}
+xtabs(Freq ~ SES + MHS, data = data.frame(tab))
+```
+
+
+
+#### 独立モデル {-}
+- この形式のデータ（`Freq`）に対して，独立モデルによる分析を行う．これは先程の独立性の検定と同じ結果となる．
+- `%>%`はパイプ演算子であり，パイプ演算子を使うと`function(x)`を`x %>% function()`とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば`function(x, y)`）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，`function(x, y)`は`x %>% function(y)`とすればよい．では`y %>%`とする場合は，`y %>% function(x, .)`とすることで`function(x, y)`と同じ結果を得ることができる．
+- `d`というデータに対して，`gnm`を適用する．`度数 ~ 行変数 + 列変数`といった形で関連を指定する．`glm`を使ってもよいが，最終的には`gnm`を使うことになるので，ここでは
+- モデルの分布族（family）は`poisson`（ポワソン分布）とする．これを忘れると`gaussian`（正規分布）が適用され，異なる結果が出力されるので注意する
+．`gnm`内で`data = .`となっているが`.`にはパイプ演算子の左辺にある`d`が入る．つまりこれは`data = d`とすることに等しい．
+- こうして得られた分析の結果を`O`としている．
+
+```{r}
+# 独立モデル
+O <- d %>%
+  gnm(Freq ~ PSES + MHS, 
+      family = poisson, 
+      tolerance = 1e-12,
+      data = .)
+```
+
+
+- 結果は`O`（係数と最小限の適合度のみ）あるいは`summary(O)`（標準誤差やp値を含んだモデルの結果の要約）で確認できる．
+
+```{r}
+# 結果の表示
+O
+summary(O)
+```
+
+- 他にもどのような情報があるのかをヘルプか`names`で確認する．
+
+```{r}
+names(O)
+names(summary(O))
+```
+
+
+- 結果には期待度数`fitted.values`があるので，これを用いて適合度を計算してみる．
+- 観測度数については`Freq`の変わりに`O$y`を用いてもよい．これはモデル`O`で使用された従属変数`y`であり，`Freq`そのものである．
+
+```{r}
+# 期待度数をexpected_Oとする
+observed <- O$y
+expected_O <- O$fitted.values
+
+# 行と列のカテゴリ数
+I <- d$PSES %>% unique() %>% length()
+J <- d$MHS %>% unique() %>% length()
+
+# 自由度
+df_O <- (I - 1) * (J - 1) 
+
+# 適合度（X2とL2）
+X2_O <- ((observed - expected_O)^2 / expected_O) %>% sum()
+L2_O <- (observed * log(observed / expected_O)) %>% sum() * 2
+
+# リストでまとめて表示
+list("自由度" = df_O,
+     "ピアソンのカイ2乗統計量" = X2_O,
+     "尤度比統計量" = L2_O)
+```
+
+- `summary(O)`では`Residual deviance: 47.418 on 15 degrees of freedom`となっており，先程の分析と適合度は一致する．
+
+
+#### 一様連関モデル {-}
+
+- 次に一様連関モデル（Uniform association model）による分析を行う．
+- `PSES`を`as.integer`関数で整数にしたものを`Rscore`，`MHS`を`as.integer`関数で整数にしたものを`Cscore`として，`mutate`関数でデータに新たに変数を作成している．`d <- d %>%`は`mutate`変数を追加して元のデータに上書きをしている．
+- 変数の追加された`d`データに対して，一様連関モデルによる分析を`gnm`パッケージで行う．
+- 独立モデルとの違いは，作成した整数スコアの積`Rscore:Cscore`がモデルに追加されているだけである．`Rscore*Cscore`とすると`Rscore`と`Cscore`も表示されるが結果は変わらない．
+
+```{r}
+# 行変数と列変数を連続した整数値とする
+d <- d %>% 
+  mutate(Rscore = as.integer(PSES),
+         Cscore = as.integer(MHS))
+# 一様連関モデル
+U <- d %>% 
+  gnm(Freq ~ PSES + MHS + Rscore:Cscore, 
+      family = poisson, 
+      tolerance = 1e-12,
+      data = .)
+# 結果の表示
+summary(U)
+# 適合度（X2とL2）
+observed <- U$y
+expected_U <- U$fitted.values
+
+df_U <- (I - 1)*(J - 1) - 1
+X2_U <- ((observed - expected_U)^2 / expected_U) %>% sum()
+L2_U <- (observed * log(observed / expected_U)) %>% sum() * 2
+list("自由度" = df_U,
+     "ピアソンのカイ2乗統計量" = X2_U, 
+     "尤度比統計量" = L2_U)
+```
+
+- 結果がixページと一致することを確認してほしい．
+
+
+- なお，尤度比統計量$L^2$と自由度は次のように求めることができる．
+
+```{r}
+# 独立モデルのL
+O$deviance
+# 独立モデルのdf
+O$df.residual
+# 一様連関モデルのL
+U$deviance
+# 一様連関モデルのdf
+U$df.residual
+```
+
+
+- 尤度比統計量$L^2$と自由度の差を求める場合`anova`関数を用いる．
+
+```{r}
+anova(O,U)
+```
+
+
+- 以上で本書の序文の再現は終了である．
+
+## 度数，行変数，列変数のデータからクロス表を作成 {-}
+- 度数，行変数，列変数のデータからクロス表を作成するには`xtabs`関数を用いる．
+
+```{r}
+d %>% xtabs(Freq ~ PSES + MHS, data = .)
+```
+
+- Rに初めから準備されている`Titanic`データは，多少特殊な集計がされているが，これに`data.frame`関数を適用すると，集計データになる．これに対して`xtabs`関数を用いればクロス表を簡単に作成できる．
+
+```{r}
+data.frame(Titanic) %>% xtabs(Freq ~ Class + Survived, data = .)
+data.frame(Titanic) %>% xtabs(Freq ~ Sex + Survived, data = .)
+data.frame(Titanic) %>% xtabs(Freq ~ Age + Survived, data = .)
+```
+
+
+## 個票データから集計データを作成
+
+- 個票データから集計データを作成する方法はいくつか考えられるが，ここでは`count`関数を用いる．
+
+```{r}
+# スターウォーズデータ
+starwars
+
+# 1つの変数にcount関数を適用
+starwars %>% 
+  count(sex)
+
+# 2つの変数にcount関数を適用し，集計レベルのデータを作成
+starwars %>% 
+  count(sex, gender)
+
+# 欠損値を処理し，nをFreqと名前を変更し，df_dstarwarsとしてデータを保存
+df_dstarwars <- starwars %>% 
+  count(sex, gender) %>% 
+  drop_na() %>%
+  rename(Freq = n)
+
+# 確認
+df_dstarwars
+```
+
+
+## 集計データを個票データに変換
+
+集計データを個票データに変換したいときには`vcdExtra`パッケージの`expand.dft`を用いる．
+
+```{r, message =  FALSE}
+library(vcdExtra)
+d_ind <- expand.dft(d, dreq = "Freq")
+d_ind
+```
+
+
+## 3元クロス分類表の入力
+
+
+```{r}
+data <- c(2,5,1,
+  2,4,7,
+  
+  4,7,5,
+  8,0,1,
+  
+  10,11,5,
+  1,3,4,
+  
+  1,1,1,
+  2,3,4)
+
+array(data, dim = c(2,3,4))
+
+
+tab1 <- c(2,5,1,
+          2,4,7) %>% matrix(nrow = 2, ncol = 3, byrow =TRUE)
+
+
+tab2 <- c(4,7,5,
+          8,0,1) %>% matrix(nrow = 2, ncol = 3, byrow =TRUE)
+
+tab3 <- c(10,11,5,
+          1,3,4) %>% matrix(nrow = 2, ncol = 3, byrow =TRUE)
+
+tab4 <- c(1,1,1,
+          2,3,4) %>% matrix(nrow = 2, ncol = 3, byrow =TRUE)
+
+tab_merge <- array(c(tab1,tab2,tab3,tab4), dim = c(2,3,4))
+tab_merge
+dimnames(tab_merge) <- list(R = c("men","women"),
+                            C = c("blue","red","green"),
+                            L = c("north","south","east","west"))
+tab_merge
+# フラットな形式で3元表を表示
+ftable(tab_merge)
+```
+
+
+Friendly and Meyer (2016) を参考に表を作成．
+
+|元のデータ形式|変換後のデータ形式|方法|
+|:---|:---|:---|
+|ケース形式|度数形式|`data.frame(table(d$A,d$B))`|
+|ケース形式|表形式|`table(d$A,d$B)`|
+|度数形式|ケース形式|`expand.dfr(X)`|
+|度数形式|表形式| `xtabs(Freq ~ A + B)`|
+|表形式|ケース形式|`expand.dfr(X)`|
+|表形式|度数形式|`data.frame(tab)`|
+
+
+## 練習問題 {-}
+- せっかくデータを入力したので，このデータを使ってGoodman（1979）の表5A，表5B，表5Cの結果を再現しよう．
+- 分析方法については第2章のプログラムを参考にしてほしい．
+
+## 参考文献 {-}
+- Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.” *Journal of the American Statistical Association* 74(367):537–52.
+
+
