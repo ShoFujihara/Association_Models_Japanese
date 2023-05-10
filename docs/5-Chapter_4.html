@@ -375,7 +375,7 @@ Number of iterations: 6</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations............................................
+Running main iterations...........................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -396,7 +396,7 @@ Done</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-........................
+................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -418,7 +418,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations................
+Running main iterations.....................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -460,7 +460,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations......
+Running main iterations.....
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -501,7 +501,7 @@ Use exitInfo() for numerical details of last iteration.</code></pre>
 <pre><code># A tibble: 1 × 6
   `Model Description`    df       L2      BIC         Delta     p
   &lt;chr&gt;               &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;
-1 model7                  0 3.54e-11 3.54e-11 0.00000000838     0</code></pre>
+1 model7                  0 3.28e-11 3.28e-11 0.00000000495     0</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 8- U+RC(homogeneous)</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>model8 <span class="ot">&lt;-</span></span>
@@ -668,7 +668,7 @@ Done</code></pre>
 <pre><code>Initialising
 Running start-up iterations....................
 Running main iterations.........................................................
-............................................................
+...............................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model9.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -731,7 +731,8 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations....................
-Running main iterations.........................................................</code></pre>
+Running main iterations.........................................................
+.............................</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -748,36 +749,36 @@ Deviance is not finite</code></pre>
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>mu1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                  Estimate Std. Error
-Mult(L, ., Occ, inst = 1).Educ1  0.7309442 0.07862794
-Mult(L, ., Occ, inst = 1).Educ2 -0.2168538 0.14103742
-Mult(L, ., Occ, inst = 1).Educ3 -0.6355624 0.08287906
-Mult(L, ., Occ, inst = 1).Educ4  0.1214720 0.17120754</code></pre>
+Mult(L, ., Occ, inst = 1).Educ1  0.6402222 0.02882211
+Mult(L, ., Occ, inst = 1).Educ2  0.2386164 0.03949527
+Mult(L, ., Occ, inst = 1).Educ3 -0.1683115 0.03139203
+Mult(L, ., Occ, inst = 1).Educ4 -0.7105272 0.02071164</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>nu1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                   Estimate Std. Error
-Mult(L, Educ, ., inst = 1).Occ1  0.07059438 0.10141736
-Mult(L, Educ, ., inst = 1).Occ2 -0.48030206 0.07332532
-Mult(L, Educ, ., inst = 1).Occ3 -0.19772154 0.10545108
-Mult(L, Educ, ., inst = 1).Occ4 -0.21626011 0.06608227
-Mult(L, Educ, ., inst = 1).Occ5  0.82368933 0.03866984</code></pre>
+<pre><code>                                  Estimate Std. Error
+Mult(L, Educ, ., inst = 1).Occ1 -0.7654028 0.02524700
+Mult(L, Educ, ., inst = 1).Occ2 -0.2501417 0.04589839
+Mult(L, Educ, ., inst = 1).Occ3  0.3979180 0.05170619
+Mult(L, Educ, ., inst = 1).Occ4  0.2733327 0.04831936
+Mult(L, Educ, ., inst = 1).Occ5  0.3442938 0.08637688</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>mu2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                  Estimate Std. Error
-Mult(L, ., Occ, inst = 2).Educ1  0.6402222 0.02882211
-Mult(L, ., Occ, inst = 2).Educ2  0.2386164 0.03949527
-Mult(L, ., Occ, inst = 2).Educ3 -0.1683115 0.03139203
-Mult(L, ., Occ, inst = 2).Educ4 -0.7105272 0.02071164</code></pre>
+Mult(L, ., Occ, inst = 2).Educ1  0.7309442 0.07862794
+Mult(L, ., Occ, inst = 2).Educ2 -0.2168538 0.14103742
+Mult(L, ., Occ, inst = 2).Educ3 -0.6355624 0.08287906
+Mult(L, ., Occ, inst = 2).Educ4  0.1214720 0.17120754</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>nu2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                  Estimate Std. Error
-Mult(L, Educ, ., inst = 2).Occ1 -0.7654028 0.02524700
-Mult(L, Educ, ., inst = 2).Occ2 -0.2501417 0.04589839
-Mult(L, Educ, ., inst = 2).Occ3  0.3979180 0.05170619
-Mult(L, Educ, ., inst = 2).Occ4  0.2733327 0.04831936
-Mult(L, Educ, ., inst = 2).Occ5  0.3442938 0.08637688</code></pre>
+<pre><code>                                   Estimate Std. Error
+Mult(L, Educ, ., inst = 2).Occ1  0.07059438 0.10141736
+Mult(L, Educ, ., inst = 2).Occ2 -0.48030206 0.07332532
+Mult(L, Educ, ., inst = 2).Occ3 -0.19772154 0.10545108
+Mult(L, Educ, ., inst = 2).Occ4 -0.21626011 0.06608227
+Mult(L, Educ, ., inst = 2).Occ5  0.82368933 0.03866984</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model9.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">

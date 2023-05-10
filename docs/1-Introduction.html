@@ -249,10 +249,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<ul>
-<li><p>「シリーズ編者による序文」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．</p></li>
-<li><p>パッケージは<code>tidyverse</code>（データセットの処理のため），<code>magrittr</code>（パイプ演算子），<code>DescTools</code>（記述統計を求めるため），<code>vcd</code>パッケージ（カテゴリカルデータの分析のため），<code>gnm</code>（連関分析の処理のため）を使用する．</p></li>
-</ul>
+<p>「シリーズ編者による序文」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．</p>
+<p>パッケージは<code>tidyverse</code>（データセットの処理のため），<code>DescTools</code>（記述統計を求めるため），<code>vcd</code>パッケージ（カテゴリカルデータの分析のため），<code>gnm</code>（連関分析の処理のため）を使用する．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># パッケージの読み込み</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -263,10 +261,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="独立性の検定" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="独立性の検定">独立性の検定</h3>
-<ul>
-<li>使用するデータは精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）</li>
-<li>元データについて，ここではクロス表（のようにみえる）形式で入力する．これを<code>Freq</code>とする．</li>
-</ul>
+<p>使用するデータは精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）である．元データについて，ここではクロス表（のようにみえる）形式で入力する．これを<code>Freq</code>とする．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 元データの入力</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Freq <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">64</span>,  <span class="dv">94</span>, <span class="dv">58</span>, <span class="dv">46</span>,</span>
@@ -276,9 +271,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>           <span class="dv">36</span>,  <span class="dv">97</span>, <span class="dv">54</span>, <span class="dv">78</span>,</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>           <span class="dv">21</span>,  <span class="dv">71</span>, <span class="dv">54</span>, <span class="dv">71</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ul>
-<li>実際は横に長い一行のベクトルとなる．</li>
-</ul>
+<p>実際は横に長い一行のベクトルとなる．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 確認</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Freq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -287,9 +280,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 [20]  78  21  71  54  71</code></pre>
 </div>
 </div>
-<ul>
-<li>このベクトルを<code>matrix</code>関数を用いて，行列に変換する．これを<code>tab</code>とする（名前は何でもよい）．<code>nrow</code>は行カテゴリ数，<code>ncol</code>は列カテゴリ数である．<code>byrow = TRUE</code>を忘れないように注意すること．また<code>dimnames</code>で行と列のそれぞれの変数名とカテゴリ名を指定することも可能である．この指定は特に無くてもよい．</li>
-</ul>
+<p>このベクトルを<code>matrix</code>関数を用いて，行列に変換する．これを<code>tab</code>とする（名前は何でもよい）．<code>nrow</code>は行カテゴリ数，<code>ncol</code>は列カテゴリ数である．<code>byrow = TRUE</code>を忘れないように注意すること．また<code>dimnames</code>で行と列のそれぞれの変数名とカテゴリ名を指定することも可能である．この指定は特に無くてもよい．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># データを表形式に変換</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
@@ -306,9 +297,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ul>
-<li>これで表を再現することができた．</li>
-</ul>
+<p>これで表を再現することができた．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 確認</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -323,10 +312,7 @@ SES well mild modelrate impared
   F   21   71        54      71</code></pre>
 </div>
 </div>
-<ul>
-<li>初歩的なクロス表の分析はここで作成された<code>tab</code>に対して行う．</li>
-<li><code>as.table</code>によってクラスを<code>matrix</code>から<code>table</code>に変えることもできる．分析はどちらであっても問題ないが，周辺分布を<code>Margins</code>によって確認したいときはクラスを<code>table</code>に変換しておく必要がある．</li>
-</ul>
+<p>初歩的なクロス表の分析はここで作成された<code>tab</code>に対して行う． <code>as.table</code>によってクラスを<code>matrix</code>から<code>table</code>に変えることもできる．分析はどちらであっても問題ないが，周辺分布を<code>Margins</code>によって確認したいときはクラスを<code>table</code>に変換しておく必要がある．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># クラスを確認</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -355,9 +341,7 @@ SES well mild modelrate impared
   ..$ MHS: chr [1:4] "well" "mild" "modelrate" "impared"</code></pre>
 </div>
 </div>
-<ul>
-<li>クロス表の周辺分布を確認しておく．ここでは<code>DescTools</code>パッケージの<code>Margins</code>を用いる．</li>
-</ul>
+<p>クロス表の周辺分布を確認しておく．ここでは<code>DescTools</code>パッケージの<code>Margins</code>を用いる．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 注：tabのクラスはtableに変換が必要</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Margins</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -379,9 +363,7 @@ $MHS
 4    impared   389  23.4%    1'660   100.0%</code></pre>
 </div>
 </div>
-<ul>
-<li>次に<code>vcd</code>パッケージの<code>mosaic</code>を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を読み解き，解釈する際に参考すると良い．</li>
-</ul>
+<p>次に<code>vcd</code>パッケージの<code>mosaic</code>を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を読み解き，解釈する際に参考すると良い．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaic</span>(tab, <span class="at">shade =</span> <span class="cn">TRUE</span>, <span class="at">keep_aspect_ratio =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -553,16 +535,15 @@ SES     well      mild modelrate  impared
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 適合度（X2とL2）</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> ((tab <span class="sc">-</span> tab_expected)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> tab_expected) <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>L2 <span class="ot">&lt;-</span> (tab <span class="sc">*</span> <span class="fu">log</span>(tab <span class="sc">/</span> tab_expected)) <span class="sc">%&gt;%</span> <span class="fu">sum</span>() <span class="sc">%&gt;%</span> <span class="st">"*"</span>(<span class="dv">2</span>)</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># L2 &lt;- 2*sum((tab * log(tab / tab_expected))) としてもよい</span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 自由度</span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> (<span class="fu">nrow</span>(tab) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="fu">ncol</span>(tab) <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># df &lt;- prod(dim(tab) -1)</span></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果をリストで表示</span></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"自由度"</span> <span class="ot">=</span> df,</span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>     <span class="st">"ピアソンのカイ2乗統計量"</span> <span class="ot">=</span> X2, </span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>     <span class="st">"尤度比統計量"</span> <span class="ot">=</span> L2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(((tab <span class="sc">-</span> tab_expected)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> tab_expected))</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>L2 <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">sum</span>((tab <span class="sc">*</span> <span class="fu">log</span>(tab <span class="sc">/</span> tab_expected)))</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 自由度</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> (<span class="fu">nrow</span>(tab) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="fu">ncol</span>(tab) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co"># df &lt;- prod(dim(tab) -1)</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果をリストで表示</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"自由度"</span> <span class="ot">=</span> df,</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>     <span class="st">"ピアソンのカイ2乗統計量"</span> <span class="ot">=</span> X2, </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>     <span class="st">"尤度比統計量"</span> <span class="ot">=</span> L2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$自由度
 [1] 15
@@ -840,18 +821,18 @@ SES well mild modelrate impared
 <h4 class="unnumbered anchored" data-anchor-id="独立モデル">独立モデル</h4>
 <ul>
 <li>この形式のデータ（<code>Freq</code>）に対して，独立モデルによる分析を行う．これは先程の独立性の検定と同じ結果となる．</li>
-<li><code>%&gt;%</code>はパイプ演算子であり，パイプ演算子を使うと<code>function(x)</code>を<code>x %&gt;% function()</code>とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば<code>function(x, y)</code>）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，<code>function(x, y)</code>は<code>x %&gt;% function(y)</code>とすればよい．では<code>y %&gt;%</code>とする場合は，<code>y %&gt;% function(x, .)</code>とすることで<code>function(x, y)</code>と同じ結果を得ることができる．</li>
+<li><code>|&gt;</code>はパイプ演算子であり，パイプ演算子を使うと<code>function(x)</code>を<code>x |&gt; function()</code>とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば<code>function(x, y)</code>）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，<code>function(x, y)</code>は<code>x |&gt; function(y)</code>とすればよい．では<code>y |&gt;</code>とする場合は，<code>y |&gt; function(x, .)</code>とすることで<code>function(x, y)</code>と同じ結果を得ることができる．</li>
 <li><code>d</code>というデータに対して，<code>gnm</code>を適用する．<code>度数 ~ 行変数 + 列変数</code>といった形で関連を指定する．<code>glm</code>を使ってもよいが，最終的には<code>gnm</code>を使うことになるので，ここでは</li>
-<li>モデルの分布族（family）は<code>poisson</code>（ポワソン分布）とする．これを忘れると<code>gaussian</code>（正規分布）が適用され，異なる結果が出力されるので注意する ．<code>gnm</code>内で<code>data = .</code>となっているが<code>.</code>にはパイプ演算子の左辺にある<code>d</code>が入る．つまりこれは<code>data = d</code>とすることに等しい．</li>
+<li>モデルの分布族（family）は<code>poisson</code>（ポワソン分布）とする．これを忘れると<code>gaussian</code>（正規分布）が適用され，異なる結果が出力されるので注意する ．<code>gnm</code>内で<code>data = _</code>となっているが<code>.</code>にはパイプ演算子の左辺にある<code>d</code>が入る．つまりこれは<code>data = d</code>とすることに等しい．</li>
 <li>こうして得られた分析の結果を<code>O</code>としている．</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 独立モデル</span></span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>O <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>O <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span></span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS, </span>
 <span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson, </span>
 <span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>,</span>
-<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>結果は<code>O</code>（係数と最小限の適合度のみ）あるいは<code>summary(O)</code>（標準誤差やp値を含んだモデルの結果の要約）で確認できる．</li>
@@ -862,7 +843,7 @@ SES well mild modelrate impared
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-gnm(formula = Freq ~ PSES + MHS, family = poisson, data = ., 
+gnm(formula = Freq ~ PSES + MHS, family = poisson, data = d, 
     tolerance = 1e-12)
 
 Coefficients:
@@ -879,7 +860,7 @@ Residual df:         15 </code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-gnm(formula = Freq ~ PSES + MHS, family = poisson, data = ., 
+gnm(formula = Freq ~ PSES + MHS, family = poisson, data = d, 
     tolerance = 1e-12)
 
 Deviance Residuals: 
@@ -941,15 +922,15 @@ Number of iterations: 5</code></pre>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>expected_O <span class="ot">&lt;-</span> O<span class="sc">$</span>fitted.values</span>
 <span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 行と列のカテゴリ数</span></span>
-<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>I <span class="ot">&lt;-</span> d<span class="sc">$</span>PSES <span class="sc">%&gt;%</span> <span class="fu">unique</span>() <span class="sc">%&gt;%</span> <span class="fu">length</span>()</span>
-<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> d<span class="sc">$</span>MHS <span class="sc">%&gt;%</span> <span class="fu">unique</span>() <span class="sc">%&gt;%</span> <span class="fu">length</span>()</span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>I <span class="ot">&lt;-</span> d<span class="sc">$</span>PSES <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()</span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> d<span class="sc">$</span>MHS <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()</span>
 <span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 自由度</span></span>
 <span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a>df_O <span class="ot">&lt;-</span> (I <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (J <span class="sc">-</span> <span class="dv">1</span>) </span>
 <span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 適合度（X2とL2）</span></span>
-<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a>X2_O <span class="ot">&lt;-</span> ((observed <span class="sc">-</span> expected_O)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> expected_O) <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
-<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a>L2_O <span class="ot">&lt;-</span> (observed <span class="sc">*</span> <span class="fu">log</span>(observed <span class="sc">/</span> expected_O)) <span class="sc">%&gt;%</span> <span class="fu">sum</span>() <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a>X2_O <span class="ot">&lt;-</span> ((observed <span class="sc">-</span> expected_O)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> expected_O) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span>
+<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a>L2_O <span class="ot">&lt;-</span> (observed <span class="sc">*</span> <span class="fu">log</span>(observed <span class="sc">/</span> expected_O)) <span class="sc">|&gt;</span> <span class="fu">sum</span>() <span class="sc">*</span> <span class="dv">2</span></span>
 <span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a><span class="co"># リストでまとめて表示</span></span>
 <span id="cb71-17"><a href="#cb71-17" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"自由度"</span> <span class="ot">=</span> df_O,</span>
@@ -974,28 +955,28 @@ $尤度比統計量
 <h4 class="unnumbered anchored" data-anchor-id="一様連関モデル-1">一様連関モデル</h4>
 <ul>
 <li>次に一様連関モデル（Uniform association model）による分析を行う．</li>
-<li><code>PSES</code>を<code>as.integer</code>関数で整数にしたものを<code>Rscore</code>，<code>MHS</code>を<code>as.integer</code>関数で整数にしたものを<code>Cscore</code>として，<code>mutate</code>関数でデータに新たに変数を作成している．<code>d &lt;- d %&gt;%</code>は<code>mutate</code>変数を追加して元のデータに上書きをしている．</li>
+<li><code>PSES</code>を<code>as.integer</code>関数で整数にしたものを<code>Rscore</code>，<code>MHS</code>を<code>as.integer</code>関数で整数にしたものを<code>Cscore</code>として，<code>mutate</code>関数でデータに新たに変数を作成している．<code>d &lt;- d |&gt;</code>は<code>mutate</code>変数を追加して元のデータに上書きをしている．</li>
 <li>変数の追加された<code>d</code>データに対して，一様連関モデルによる分析を<code>gnm</code>パッケージで行う．</li>
 <li>独立モデルとの違いは，作成した整数スコアの積<code>Rscore:Cscore</code>がモデルに追加されているだけである．<code>Rscore*Cscore</code>とすると<code>Rscore</code>と<code>Cscore</code>も表示されるが結果は変わらない．</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 行変数と列変数を連続した整数値とする</span></span>
-<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> </span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> </span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rscore =</span> <span class="fu">as.integer</span>(PSES),</span>
 <span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Cscore =</span> <span class="fu">as.integer</span>(MHS))</span>
 <span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 一様連関モデル</span></span>
-<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> </span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> </span>
 <span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS <span class="sc">+</span> Rscore<span class="sc">:</span>Cscore, </span>
 <span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson, </span>
 <span id="cb73-9"><a href="#cb73-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>,</span>
-<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> .)</span>
+<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> _)</span>
 <span id="cb73-11"><a href="#cb73-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果の表示</span></span>
 <span id="cb73-12"><a href="#cb73-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
 gnm(formula = Freq ~ PSES + MHS + Rscore:Cscore, family = poisson, 
-    data = ., tolerance = 1e-12)
+    data = d, tolerance = 1e-12)
 
 Deviance Residuals: 
     Min       1Q   Median       3Q      Max  
@@ -1028,8 +1009,8 @@ Number of iterations: 4</code></pre>
 <span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>expected_U <span class="ot">&lt;-</span> U<span class="sc">$</span>fitted.values</span>
 <span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>df_U <span class="ot">&lt;-</span> (I <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">*</span>(J <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>X2_U <span class="ot">&lt;-</span> ((observed <span class="sc">-</span> expected_U)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> expected_U) <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span>
-<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>L2_U <span class="ot">&lt;-</span> (observed <span class="sc">*</span> <span class="fu">log</span>(observed <span class="sc">/</span> expected_U)) <span class="sc">%&gt;%</span> <span class="fu">sum</span>() <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>X2_U <span class="ot">&lt;-</span> ((observed <span class="sc">-</span> expected_U)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> expected_U) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>L2_U <span class="ot">&lt;-</span> (observed <span class="sc">*</span> <span class="fu">log</span>(observed <span class="sc">/</span> expected_U)) <span class="sc">|&gt;</span> <span class="fu">sum</span>() <span class="sc">*</span> <span class="dv">2</span></span>
 <span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"自由度"</span> <span class="ot">=</span> df_U,</span>
 <span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a>     <span class="st">"ピアソンのカイ2乗統計量"</span> <span class="ot">=</span> X2_U, </span>
 <span id="cb75-10"><a href="#cb75-10" aria-hidden="true" tabindex="-1"></a>     <span class="st">"尤度比統計量"</span> <span class="ot">=</span> L2_U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1096,7 +1077,7 @@ Model 2: Freq ~ PSES + MHS + Rscore:Cscore
 <li>度数，行変数，列変数のデータからクロス表を作成するには<code>xtabs</code>関数を用いる．</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS, <span class="at">data =</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    MHS
 PSES   1   2   3   4
@@ -1112,7 +1093,7 @@ PSES   1   2   3   4
 <li>Rに初めから準備されている<code>Titanic</code>データは，多少特殊な集計がされているが，これに<code>data.frame</code>関数を適用すると，集計データになる．これに対して<code>xtabs</code>関数を用いればクロス表を簡単に作成できる．</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">%&gt;%</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Class <span class="sc">+</span> Survived, <span class="at">data =</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">|&gt;</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Class <span class="sc">+</span> Survived, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      Survived
 Class   No Yes
@@ -1121,14 +1102,14 @@ Class   No Yes
   3rd  528 178
   Crew 673 212</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">%&gt;%</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Sex <span class="sc">+</span> Survived, <span class="at">data =</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">|&gt;</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Sex <span class="sc">+</span> Survived, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Survived
 Sex        No  Yes
   Male   1364  367
   Female  126  344</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">%&gt;%</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Age <span class="sc">+</span> Survived, <span class="at">data =</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">|&gt;</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Age <span class="sc">+</span> Survived, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Survived
 Age       No  Yes
@@ -1164,7 +1145,7 @@ Age       No  Yes
 #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1つの変数にcount関数を適用</span></span>
-<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
 <span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 2
@@ -1177,7 +1158,7 @@ Age       No  Yes
 5 &lt;NA&gt;               4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2つの変数にcount関数を適用し，集計レベルのデータを作成</span></span>
-<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
 <span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sex, gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
@@ -1191,9 +1172,9 @@ Age       No  Yes
 6 &lt;NA&gt;           &lt;NA&gt;          4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 欠損値を処理し，nをFreqと名前を変更し，df_dstarwarsとしてデータを保存</span></span>
-<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>df_dstarwars <span class="ot">&lt;-</span> starwars <span class="sc">%&gt;%</span> </span>
-<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sex, gender) <span class="sc">%&gt;%</span> </span>
-<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>df_dstarwars <span class="ot">&lt;-</span> starwars <span class="sc">|&gt;</span> </span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sex, gender) <span class="sc">|&gt;</span> </span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
 <span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Freq =</span> n)</span>
 <span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 確認</span></span>
@@ -1277,17 +1258,17 @@ Age       No  Yes
 [2,]    1    2    4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>tab1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">1</span>,</span>
-<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">7</span>) <span class="sc">%&gt;%</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">7</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
 <span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>tab2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">5</span>,</span>
-<span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a>          <span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
+<span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a>          <span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
 <span id="cb107-7"><a href="#cb107-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb107-8"><a href="#cb107-8" aria-hidden="true" tabindex="-1"></a>tab3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">5</span>,</span>
-<span id="cb107-9"><a href="#cb107-9" aria-hidden="true" tabindex="-1"></a>          <span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
+<span id="cb107-9"><a href="#cb107-9" aria-hidden="true" tabindex="-1"></a>          <span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
 <span id="cb107-10"><a href="#cb107-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb107-11"><a href="#cb107-11" aria-hidden="true" tabindex="-1"></a>tab4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,</span>
-<span id="cb107-12"><a href="#cb107-12" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
+<span id="cb107-12"><a href="#cb107-12" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
 <span id="cb107-13"><a href="#cb107-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb107-14"><a href="#cb107-14" aria-hidden="true" tabindex="-1"></a>tab_merge <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(tab1,tab2,tab3,tab4), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
 <span id="cb107-15"><a href="#cb107-15" aria-hidden="true" tabindex="-1"></a>tab_merge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

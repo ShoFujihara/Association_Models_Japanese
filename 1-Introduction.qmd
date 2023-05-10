@@ -1,10 +1,9 @@
 
 # シリーズ編者による序文 {-}
 
+「シリーズ編者による序文」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．
 
-- 「シリーズ編者による序文」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．
-
-- パッケージは`tidyverse`（データセットの処理のため），`magrittr`（パイプ演算子），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`gnm`（連関分析の処理のため）を使用する．
+パッケージは`tidyverse`（データセットの処理のため），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`gnm`（連関分析の処理のため）を使用する．
 
 ```{r}
 #| message: false
@@ -19,8 +18,7 @@ library(gnm)
 ### 独立性の検定 {-}
 
 
-- 使用するデータは精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）
-- 元データについて，ここではクロス表（のようにみえる）形式で入力する．これを`Freq`とする．
+使用するデータは精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）である．元データについて，ここではクロス表（のようにみえる）形式で入力する．これを`Freq`とする．
 
 ```{r}
 # 元データの入力
@@ -32,14 +30,14 @@ Freq <- c( 64,  94, 58, 46,
            21,  71, 54, 71)
 ```
 
-- 実際は横に長い一行のベクトルとなる．
+実際は横に長い一行のベクトルとなる．
 
 ```{r}
 # 確認
 Freq
 ```
 
-- このベクトルを`matrix`関数を用いて，行列に変換する．これを`tab`とする（名前は何でもよい）．`nrow`は行カテゴリ数，`ncol`は列カテゴリ数である．`byrow = TRUE`を忘れないように注意すること．また`dimnames`で行と列のそれぞれの変数名とカテゴリ名を指定することも可能である．この指定は特に無くてもよい．
+このベクトルを`matrix`関数を用いて，行列に変換する．これを`tab`とする（名前は何でもよい）．`nrow`は行カテゴリ数，`ncol`は列カテゴリ数である．`byrow = TRUE`を忘れないように注意すること．また`dimnames`で行と列のそれぞれの変数名とカテゴリ名を指定することも可能である．この指定は特に無くてもよい．
 
 ```{r}
 # データを表形式に変換
@@ -58,15 +56,15 @@ tab <- matrix(
 )
 ```
 
-- これで表を再現することができた．
+これで表を再現することができた．
 
 ```{r}
 # 確認
 tab
 ```
 
-- 初歩的なクロス表の分析はここで作成された`tab`に対して行う．
-- `as.table`によってクラスを`matrix`から`table`に変えることもできる．分析はどちらであっても問題ないが，周辺分布を`Margins`によって確認したいときはクラスを`table`に変換しておく必要がある．
+初歩的なクロス表の分析はここで作成された`tab`に対して行う．
+`as.table`によってクラスを`matrix`から`table`に変えることもできる．分析はどちらであっても問題ないが，周辺分布を`Margins`によって確認したいときはクラスを`table`に変換しておく必要がある．
 
 ```{r}
 # クラスを確認
@@ -79,14 +77,14 @@ class(tab)
 str(tab)
 ```
 
-- クロス表の周辺分布を確認しておく．ここでは`DescTools`パッケージの`Margins`を用いる．
+クロス表の周辺分布を確認しておく．ここでは`DescTools`パッケージの`Margins`を用いる．
 
 ```{r}
 # 注：tabのクラスはtableに変換が必要
 Margins(tab)
 ```
 
-- 次に`vcd`パッケージの`mosaic`を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を読み解き，解釈する際に参考すると良い．
+次に`vcd`パッケージの`mosaic`を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を読み解き，解釈する際に参考すると良い．
 
 ```{r}
 mosaic(tab, shade = TRUE, keep_aspect_ratio = FALSE)
@@ -156,9 +154,8 @@ tab_expected
 
 ```{r}
 # 適合度（X2とL2）
-X2 <- ((tab - tab_expected)^2 / tab_expected) %>% sum()
-L2 <- (tab * log(tab / tab_expected)) %>% sum() %>% "*"(2)
-# L2 <- 2*sum((tab * log(tab / tab_expected))) としてもよい
+X2 <- sum(((tab - tab_expected)^2 / tab_expected))
+L2 <- 2*sum((tab * log(tab / tab_expected)))
 # 自由度
 df <- (nrow(tab) - 1) * (ncol(tab) - 1)
 # df <- prod(dim(tab) -1)
@@ -202,7 +199,7 @@ knitr::kable(d,
              align = c('r', 'r', 'r'), 
              table.attr = "style='width:30%;'", 
              format = "html", 
-             caption = "精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ") %>%
+             caption = "精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ") |>
   kableExtra::kable_styling(position = "center")
 ```
 
@@ -247,19 +244,19 @@ xtabs(Freq ~ SES + MHS, data = data.frame(tab))
 
 #### 独立モデル {-}
 - この形式のデータ（`Freq`）に対して，独立モデルによる分析を行う．これは先程の独立性の検定と同じ結果となる．
-- `%>%`はパイプ演算子であり，パイプ演算子を使うと`function(x)`を`x %>% function()`とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば`function(x, y)`）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，`function(x, y)`は`x %>% function(y)`とすればよい．では`y %>%`とする場合は，`y %>% function(x, .)`とすることで`function(x, y)`と同じ結果を得ることができる．
+- `|>`はパイプ演算子であり，パイプ演算子を使うと`function(x)`を`x |> function()`とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば`function(x, y)`）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，`function(x, y)`は`x |> function(y)`とすればよい．では`y |>`とする場合は，`y |> function(x, .)`とすることで`function(x, y)`と同じ結果を得ることができる．
 - `d`というデータに対して，`gnm`を適用する．`度数 ~ 行変数 + 列変数`といった形で関連を指定する．`glm`を使ってもよいが，最終的には`gnm`を使うことになるので，ここでは
 - モデルの分布族（family）は`poisson`（ポワソン分布）とする．これを忘れると`gaussian`（正規分布）が適用され，異なる結果が出力されるので注意する
-．`gnm`内で`data = .`となっているが`.`にはパイプ演算子の左辺にある`d`が入る．つまりこれは`data = d`とすることに等しい．
+．`gnm`内で`data = _`となっているが`.`にはパイプ演算子の左辺にある`d`が入る．つまりこれは`data = d`とすることに等しい．
 - こうして得られた分析の結果を`O`としている．
 
 ```{r}
 # 独立モデル
-O <- d %>%
+O <- d |>
   gnm(Freq ~ PSES + MHS, 
       family = poisson, 
       tolerance = 1e-12,
-      data = .)
+      data = _)
 ```
 
 
@@ -288,15 +285,15 @@ observed <- O$y
 expected_O <- O$fitted.values
 
 # 行と列のカテゴリ数
-I <- d$PSES %>% unique() %>% length()
-J <- d$MHS %>% unique() %>% length()
+I <- d$PSES |> unique() |> length()
+J <- d$MHS |> unique() |> length()
 
 # 自由度
 df_O <- (I - 1) * (J - 1) 
 
 # 適合度（X2とL2）
-X2_O <- ((observed - expected_O)^2 / expected_O) %>% sum()
-L2_O <- (observed * log(observed / expected_O)) %>% sum() * 2
+X2_O <- ((observed - expected_O)^2 / expected_O) |> sum()
+L2_O <- (observed * log(observed / expected_O)) |> sum() * 2
 
 # リストでまとめて表示
 list("自由度" = df_O,
@@ -310,21 +307,21 @@ list("自由度" = df_O,
 #### 一様連関モデル {-}
 
 - 次に一様連関モデル（Uniform association model）による分析を行う．
-- `PSES`を`as.integer`関数で整数にしたものを`Rscore`，`MHS`を`as.integer`関数で整数にしたものを`Cscore`として，`mutate`関数でデータに新たに変数を作成している．`d <- d %>%`は`mutate`変数を追加して元のデータに上書きをしている．
+- `PSES`を`as.integer`関数で整数にしたものを`Rscore`，`MHS`を`as.integer`関数で整数にしたものを`Cscore`として，`mutate`関数でデータに新たに変数を作成している．`d <- d |>`は`mutate`変数を追加して元のデータに上書きをしている．
 - 変数の追加された`d`データに対して，一様連関モデルによる分析を`gnm`パッケージで行う．
 - 独立モデルとの違いは，作成した整数スコアの積`Rscore:Cscore`がモデルに追加されているだけである．`Rscore*Cscore`とすると`Rscore`と`Cscore`も表示されるが結果は変わらない．
 
 ```{r}
 # 行変数と列変数を連続した整数値とする
-d <- d %>% 
+d <- d |> 
   mutate(Rscore = as.integer(PSES),
          Cscore = as.integer(MHS))
 # 一様連関モデル
-U <- d %>% 
+U <- d |> 
   gnm(Freq ~ PSES + MHS + Rscore:Cscore, 
       family = poisson, 
       tolerance = 1e-12,
-      data = .)
+      data = _)
 # 結果の表示
 summary(U)
 # 適合度（X2とL2）
@@ -332,8 +329,8 @@ observed <- U$y
 expected_U <- U$fitted.values
 
 df_U <- (I - 1)*(J - 1) - 1
-X2_U <- ((observed - expected_U)^2 / expected_U) %>% sum()
-L2_U <- (observed * log(observed / expected_U)) %>% sum() * 2
+X2_U <- ((observed - expected_U)^2 / expected_U) |> sum()
+L2_U <- (observed * log(observed / expected_U)) |> sum() * 2
 list("自由度" = df_U,
      "ピアソンのカイ2乗統計量" = X2_U, 
      "尤度比統計量" = L2_U)
@@ -369,15 +366,15 @@ anova(O,U)
 - 度数，行変数，列変数のデータからクロス表を作成するには`xtabs`関数を用いる．
 
 ```{r}
-d %>% xtabs(Freq ~ PSES + MHS, data = .)
+d |> xtabs(Freq ~ PSES + MHS, data = _)
 ```
 
 - Rに初めから準備されている`Titanic`データは，多少特殊な集計がされているが，これに`data.frame`関数を適用すると，集計データになる．これに対して`xtabs`関数を用いればクロス表を簡単に作成できる．
 
 ```{r}
-data.frame(Titanic) %>% xtabs(Freq ~ Class + Survived, data = .)
-data.frame(Titanic) %>% xtabs(Freq ~ Sex + Survived, data = .)
-data.frame(Titanic) %>% xtabs(Freq ~ Age + Survived, data = .)
+data.frame(Titanic) |> xtabs(Freq ~ Class + Survived, data = _)
+data.frame(Titanic) |> xtabs(Freq ~ Sex + Survived, data = _)
+data.frame(Titanic) |> xtabs(Freq ~ Age + Survived, data = _)
 ```
 
 
@@ -390,17 +387,17 @@ data.frame(Titanic) %>% xtabs(Freq ~ Age + Survived, data = .)
 starwars
 
 # 1つの変数にcount関数を適用
-starwars %>% 
+starwars |> 
   count(sex)
 
 # 2つの変数にcount関数を適用し，集計レベルのデータを作成
-starwars %>% 
+starwars |> 
   count(sex, gender)
 
 # 欠損値を処理し，nをFreqと名前を変更し，df_dstarwarsとしてデータを保存
-df_dstarwars <- starwars %>% 
-  count(sex, gender) %>% 
-  drop_na() %>%
+df_dstarwars <- starwars |> 
+  count(sex, gender) |> 
+  drop_na() |>
   rename(Freq = n)
 
 # 確認
@@ -439,17 +436,17 @@ array(data, dim = c(2,3,4))
 
 
 tab1 <- c(2,5,1,
-          2,4,7) %>% matrix(nrow = 2, ncol = 3, byrow =TRUE)
+          2,4,7) |> matrix(nrow = 2, ncol = 3, byrow =TRUE)
 
 
 tab2 <- c(4,7,5,
-          8,0,1) %>% matrix(nrow = 2, ncol = 3, byrow =TRUE)
+          8,0,1) |> matrix(nrow = 2, ncol = 3, byrow =TRUE)
 
 tab3 <- c(10,11,5,
-          1,3,4) %>% matrix(nrow = 2, ncol = 3, byrow =TRUE)
+          1,3,4) |> matrix(nrow = 2, ncol = 3, byrow =TRUE)
 
 tab4 <- c(1,1,1,
-          2,3,4) %>% matrix(nrow = 2, ncol = 3, byrow =TRUE)
+          2,3,4) |> matrix(nrow = 2, ncol = 3, byrow =TRUE)
 
 tab_merge <- array(c(tab1,tab2,tab3,tab4), dim = c(2,3,4))
 tab_merge
