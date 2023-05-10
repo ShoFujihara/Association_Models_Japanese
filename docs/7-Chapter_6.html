@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="藤原翔（東京大学社会科学研究所）">
-<meta name="dcterms.date" content="2023-05-11">
 
-<title>『カテゴリカルデータのための連関モデル』</title>
+<title>『カテゴリカルデータのための連関モデル』 - 6&nbsp; 第6章</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,7 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./1-Introduction.html" rel="next">
+<link href="./8-Note.html" rel="next">
+<link href="./6-Chapter_5.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -71,7 +70,7 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">『カテゴリカルデータのための連関モデル』</h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">第6章</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -96,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">はじめに</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">はじめに</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -131,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./7-Chapter_6.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">第6章</span></a>
+  <a href="./7-Chapter_6.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">第6章</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -149,77 +148,30 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#はじめに" id="toc-はじめに" class="nav-link active" data-scroll-target="#はじめに">はじめに</a>
-  <ul class="collapse">
-  <li><a href="#目的" id="toc-目的" class="nav-link" data-scroll-target="#目的">目的</a></li>
-  <li><a href="#rのスクリプト" id="toc-rのスクリプト" class="nav-link" data-scroll-target="#rのスクリプト">Rのスクリプト</a></li>
-  <li><a href="#正誤表" id="toc-正誤表" class="nav-link" data-scroll-target="#正誤表">正誤表</a></li>
-  <li><a href="#サポートページバージョン情報" id="toc-サポートページバージョン情報" class="nav-link" data-scroll-target="#サポートページバージョン情報">サポートページバージョン情報</a></li>
-  </ul></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">『カテゴリカルデータのための連関モデル』</h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">第6章</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>藤原翔（東京大学社会科学研究所） </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">May 11, 2023</p>
-    </div>
-  </div>
     
   </div>
   
 
 </header>
 
-<section id="はじめに" class="level1 unnumbered">
-<h1 class="unnumbered">はじめに</h1>
-<section id="目的" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="目的">目的</h2>
-<p>このページは</p>
-<p>Raymond Wong著・藤原翔訳．2021．『カテゴリカルデータの連関分析』共立出版．</p>
-<p>のためのサポートページです．本書の付録や補遺とすることも検討しましたが，<em>Association Models</em>は他のQASSに比べて分量が多いため（156ページ！），そしてRのバージョンアップやパッケージの更新などに備えるため，正誤表もあわせて公開するためにオンラインで公開することにしました．本書と関連した連関モデルの適用例の情報についても，このサポートページで補うことができればと思います．</p>
-<p>このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．</p>
-<p>なおこのサポートページの内容は英語版のサポートページ https://studysites.sagepub.com/wongstudy/ が元になっています．そちらもぜひ参考にしてください．</p>
-</section>
-<section id="rのスクリプト" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="rのスクリプト">Rのスクリプト</h2>
-<p>本サポートページのスクリプトはそのままコピー・アンド・ペーストすることが可能です． スクリプトを選択してコピーしても良いですし，各スクリプトの右上の図をクリックしてもコピーされます．</p>
-<p><img src="figures/copy_and_paste2.png"></p>
-<p>なおRのスクリプトについては https://github.com/ShoFujihara/Association_Models_Japanese の scripts というフォルダに保存されているので，そちらを参照してください．Googleドライブにもスクリプトを保存しておきます． https://drive.google.com/drive/folders/1oP0EURmoD8-dIkC6MCqDS3_0ysOz7t-0?usp=sharing</p>
-</section>
-<section id="正誤表" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="正誤表">正誤表</h2>
-</section>
-<section id="サポートページバージョン情報" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="サポートページバージョン情報">サポートページバージョン情報</h2>
-<p>2022年4月25日</p>
+<p>特になし</p>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -322,10 +274,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./6-Chapter_5.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">第5章</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./1-Introduction.html" class="pagination-link">
-        <span class="nav-page-text">シリーズ編者による序文</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./8-Note.html" class="pagination-link">
+        <span class="nav-page-text">補足のノート</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
