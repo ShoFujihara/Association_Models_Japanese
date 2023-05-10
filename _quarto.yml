@@ -8,6 +8,7 @@ book:
   date: last-modified
   chapters:
     - index.qmd
+    - Chapter_1.qmd
 
 format:
   html:
