@@ -2054,7 +2054,7 @@ Number of iterations: 4</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations...................................
+Running main iterations...............................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb157"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果</span></span>
@@ -2070,36 +2070,36 @@ Deviance Residuals:
 -1.07428  -0.27239   0.03038   0.36792   1.03721  
 
 Coefficients:
-                            Estimate Std. Error z value Pr(&gt;|z|)
-(Intercept)                  2.91395         NA      NA       NA
-polviews2                    1.39080         NA      NA       NA
-polviews3                    1.42773         NA      NA       NA
-polviews4                    2.58770         NA      NA       NA
-polviews5                    1.68731         NA      NA       NA
-polviews6                    1.62798         NA      NA       NA
-polviews7                   -0.11146         NA      NA       NA
-fefam2                       0.87859         NA      NA       NA
-fefam3                       0.39538         NA      NA       NA
-fefam4                      -0.79025         NA      NA       NA
-Mult(., polviews, fefam).   -0.79275         NA      NA       NA
-Mult(1, ., fefam).polviews1 -1.89323         NA      NA       NA
-Mult(1, ., fefam).polviews2 -1.45576         NA      NA       NA
-Mult(1, ., fefam).polviews3 -0.87154         NA      NA       NA
-Mult(1, ., fefam).polviews4  0.02985         NA      NA       NA
-Mult(1, ., fefam).polviews5  0.41751         NA      NA       NA
-Mult(1, ., fefam).polviews6  1.68524         NA      NA       NA
-Mult(1, ., fefam).polviews7  2.76888         NA      NA       NA
-Mult(1, polviews, .).fefam1  0.50733         NA      NA       NA
-Mult(1, polviews, .).fefam2  0.06751         NA      NA       NA
-Mult(1, polviews, .).fefam3 -0.27534         NA      NA       NA
-Mult(1, polviews, .).fefam4 -0.43797         NA      NA       NA
+                             Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept)                   2.88990         NA      NA       NA
+polviews2                     1.38958         NA      NA       NA
+polviews3                     1.42488         NA      NA       NA
+polviews4                     2.58235         NA      NA       NA
+polviews5                     1.68088         NA      NA       NA
+polviews6                     1.61801         NA      NA       NA
+polviews7                    -0.12444         NA      NA       NA
+fefam2                        0.90419         NA      NA       NA
+fefam3                        0.44093         NA      NA       NA
+fefam4                       -0.73523         NA      NA       NA
+Mult(., polviews, fefam).     0.02772         NA      NA       NA
+Mult(1, ., fefam).polviews1  17.86551         NA      NA       NA
+Mult(1, ., fefam).polviews2  13.89142         NA      NA       NA
+Mult(1, ., fefam).polviews3   8.58422         NA      NA       NA
+Mult(1, ., fefam).polviews4   0.39575         NA      NA       NA
+Mult(1, ., fefam).polviews5  -3.12585         NA      NA       NA
+Mult(1, ., fefam).polviews6 -14.64216         NA      NA       NA
+Mult(1, ., fefam).polviews7 -24.48620         NA      NA       NA
+Mult(1, polviews, .).fefam1   1.58609         NA      NA       NA
+Mult(1, polviews, .).fefam2   0.20146         NA      NA       NA
+Mult(1, polviews, .).fefam3  -0.87785         NA      NA       NA
+Mult(1, polviews, .).fefam4  -1.38985         NA      NA       NA
 
 Std. Error is NA where coefficient has been constrained or is unidentified
 
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 35</code></pre>
+Number of iterations: 31</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb159"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="co"># モデル適合度</span></span>
 <span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(RC.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2124,7 +2124,7 @@ Number of iterations: 35</code></pre>
 <span id="cb161-10"><a href="#cb161-10" aria-hidden="true" tabindex="-1"></a>     <span class="st">"2乗和"</span> <span class="ot">=</span> <span class="fu">sum</span>(mu<span class="sc">$</span>qvframe[,<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$和
-[1] 0
+[1] 3.330669e-16
 
 $`2乗和`
 [1] 1</code></pre>
@@ -2162,7 +2162,7 @@ $`2乗和`
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations...................................
+Running main iterations......................................
 Done</code></pre>
 </div>
 </div>
@@ -2194,14 +2194,14 @@ polviews7                    0.01648    0.21938   0.075 0.940107
 fefam2                       0.91251    0.12222   7.466 8.25e-14 ***
 fefam3                       0.45574    0.20388   2.235 0.025396 *  
 fefam4                      -0.71735    0.24913  -2.879 0.003985 ** 
-Mult(., polviews, fefam).   -2.37331    0.34813  -6.817 9.27e-12 ***
-Mult(1, ., fefam).polviews1 -0.48165         NA      NA       NA    
-Mult(1, ., fefam).polviews2 -0.37580    0.10049  -3.740 0.000184 ***
-Mult(1, ., fefam).polviews3 -0.23443    0.09461  -2.478 0.013216 *  
-Mult(1, ., fefam).polviews4 -0.01632    0.08366  -0.195 0.845376    
-Mult(1, ., fefam).polviews5  0.07749    0.09263   0.837 0.402872    
-Mult(1, ., fefam).polviews6  0.38425    0.10926   3.517 0.000437 ***
-Mult(1, ., fefam).polviews7  0.64646         NA      NA       NA    
+Mult(., polviews, fefam).    2.37331    0.34813   6.817 9.27e-12 ***
+Mult(1, ., fefam).polviews1  0.48165         NA      NA       NA    
+Mult(1, ., fefam).polviews2  0.37580    0.10049   3.740 0.000184 ***
+Mult(1, ., fefam).polviews3  0.23443    0.09461   2.478 0.013216 *  
+Mult(1, ., fefam).polviews4  0.01632    0.08366   0.195 0.845376    
+Mult(1, ., fefam).polviews5 -0.07749    0.09263  -0.837 0.402872    
+Mult(1, ., fefam).polviews6 -0.38425    0.10926  -3.517 0.000437 ***
+Mult(1, ., fefam).polviews7 -0.64646         NA      NA       NA    
 Mult(1, polviews, .).fefam1  0.74812         NA      NA       NA    
 Mult(1, polviews, .).fefam2  0.14098    0.07469   1.888 0.059090 .  
 Mult(1, polviews, .).fefam3 -0.33229    0.09162  -3.627 0.000287 ***
@@ -2216,7 +2216,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 35</code></pre>
+Number of iterations: 38</code></pre>
 </div>
 </div>
 <p>先ほどの単位標準化した解と推定の結果が一致しているのかを確認する．</p>
@@ -2226,13 +2226,13 @@ Number of iterations: 35</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>$mu
                                Estimate Std. Error
-Mult(1, ., fefam).polviews1 -0.48165420 0.06776575
-Mult(1, ., fefam).polviews2 -0.37579722 0.05016783
-Mult(1, ., fefam).polviews3 -0.23443020 0.04842778
-Mult(1, ., fefam).polviews4 -0.01631519 0.03689088
-Mult(1, ., fefam).polviews5  0.07748893 0.04931050
-Mult(1, ., fefam).polviews6  0.38424697 0.06009815
-Mult(1, ., fefam).polviews7  0.64646091 0.06145462
+Mult(1, ., fefam).polviews1  0.48165420 0.06776575
+Mult(1, ., fefam).polviews2  0.37579722 0.05016783
+Mult(1, ., fefam).polviews3  0.23443020 0.04842778
+Mult(1, ., fefam).polviews4  0.01631519 0.03689088
+Mult(1, ., fefam).polviews5 -0.07748893 0.04931050
+Mult(1, ., fefam).polviews6 -0.38424697 0.06009815
+Mult(1, ., fefam).polviews7 -0.64646091 0.06145462
 
 $nu
                               Estimate Std. Error
@@ -2320,7 +2320,7 @@ Strongly conservative
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations...........................................
+Running main iterations..............................
 Done</code></pre>
 </div>
 </div>
@@ -2350,14 +2350,14 @@ polviews7                   -0.14816    0.21832  -0.679 0.497376
 fefam2                       0.90365    0.12173   7.423 1.14e-13 ***
 fefam3                       0.43998    0.20350   2.162 0.030615 *  
 fefam4                      -0.73638    0.24896  -2.958 0.003098 ** 
-Mult(., polviews, fefam).   -0.25673    0.03766  -6.817 9.27e-12 ***
-Mult(1, ., fefam).polviews1 -1.82062         NA      NA       NA    
-Mult(1, ., fefam).polviews2 -1.41532    0.38476  -3.678 0.000235 ***
-Mult(1, ., fefam).polviews3 -0.87405    0.36224  -2.413 0.015825 *  
-Mult(1, ., fefam).polviews4 -0.03893    0.32031  -0.122 0.903253    
-Mult(1, ., fefam).polviews5  0.32022    0.35468   0.903 0.366604    
-Mult(1, ., fefam).polviews6  1.49474    0.41835   3.573 0.000353 ***
-Mult(1, ., fefam).polviews7  2.49870         NA      NA       NA    
+Mult(., polviews, fefam).    0.25673    0.03766   6.817 9.27e-12 ***
+Mult(1, ., fefam).polviews1  1.82062         NA      NA       NA    
+Mult(1, ., fefam).polviews2  1.41532    0.38476   3.678 0.000235 ***
+Mult(1, ., fefam).polviews3  0.87405    0.36224   2.413 0.015825 *  
+Mult(1, ., fefam).polviews4  0.03893    0.32031   0.122 0.903253    
+Mult(1, ., fefam).polviews5 -0.32022    0.35468  -0.903 0.366604    
+Mult(1, ., fefam).polviews6 -1.49474    0.41835  -3.573 0.000353 ***
+Mult(1, ., fefam).polviews7 -2.49870         NA      NA       NA    
 Mult(1, polviews, .).fefam1  1.65778         NA      NA       NA    
 Mult(1, polviews, .).fefam2  0.19190    0.18033   1.064 0.287244    
 Mult(1, polviews, .).fefam3 -0.95076    0.22120  -4.298 1.72e-05 ***
@@ -2372,7 +2372,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 43</code></pre>
+Number of iterations: 30</code></pre>
 </div>
 </div>
 <p>内在的連関パラメータが0.25673となっている．</p>
@@ -2696,14 +2696,14 @@ fefam4:Rscore 0.2496118 0.03429697</code></pre>
 <span id="cb219-4"><a href="#cb219-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"Mult"</span>, Variable))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                      Variable    Estimate Std..Error    z.value     Pr...z..
-1    Mult(., polviews, fefam). -2.37330693 0.34812532 -6.8173924 9.270782e-12
-2  Mult(1, ., fefam).polviews1 -0.48165420         NA         NA           NA
-3  Mult(1, ., fefam).polviews2 -0.37579722 0.10049018 -3.7396411 1.842832e-04
-4  Mult(1, ., fefam).polviews3 -0.23443020 0.09460850 -2.4778980 1.321589e-02
-5  Mult(1, ., fefam).polviews4 -0.01631519 0.08365831 -0.1950217 8.453760e-01
-6  Mult(1, ., fefam).polviews5  0.07748893 0.09263438  0.8365030 4.028720e-01
-7  Mult(1, ., fefam).polviews6  0.38424697 0.10926427  3.5166753 4.369880e-04
-8  Mult(1, ., fefam).polviews7  0.64646091         NA         NA           NA
+1    Mult(., polviews, fefam).  2.37330693 0.34812532  6.8173924 9.270782e-12
+2  Mult(1, ., fefam).polviews1  0.48165420         NA         NA           NA
+3  Mult(1, ., fefam).polviews2  0.37579722 0.10049018  3.7396411 1.842832e-04
+4  Mult(1, ., fefam).polviews3  0.23443020 0.09460850  2.4778980 1.321589e-02
+5  Mult(1, ., fefam).polviews4  0.01631519 0.08365831  0.1950217 8.453760e-01
+6  Mult(1, ., fefam).polviews5 -0.07748893 0.09263438 -0.8365030 4.028720e-01
+7  Mult(1, ., fefam).polviews6 -0.38424697 0.10926427 -3.5166753 4.369880e-04
+8  Mult(1, ., fefam).polviews7 -0.64646091         NA         NA           NA
 9  Mult(1, polviews, .).fefam1  0.74811781         NA         NA           NA
 10 Mult(1, polviews, .).fefam2  0.14097601 0.07468829  1.8875250 5.908974e-02
 11 Mult(1, polviews, .).fefam3 -0.33229365 0.09161751 -3.6269668 2.867702e-04

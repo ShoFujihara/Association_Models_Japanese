@@ -1,7 +1,15 @@
 
 
-# Rのインストールと基本的な操作方法 {-}
+# RとRStudioのインストールと基本的な操作方法 {-}
 
+## RとRStudioのインストール
 
+- Rのインストールは [CRAN（The Comprehensive R Archive Network）](https://cran.r-project.org/) から行います．
+
+- RStudioのインストールは [Posit](https://posit.co/download/rstudio-desktop/) から行います．
+   - 「2: Install RStudio」を選択してRStudioをインストールしてください．
+   
+  
+## 基本的な操作方法
 
 

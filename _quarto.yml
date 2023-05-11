@@ -21,6 +21,7 @@ book:
 format:
   html:
     theme: minty
+    toc-title: 目次
     
 crossref:
   fig-title: 図     # (default is "Figure")
