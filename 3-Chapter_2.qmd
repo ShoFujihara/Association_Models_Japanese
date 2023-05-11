@@ -3,12 +3,11 @@
 
 第2章では2元表の連関モデルが紹介されている．制約のかけかたは少し複雑なのでプログラムとテキストをみながら手順を確認して欲しい．
 
-パッケージは`tidyverse`（データセットの処理のため），`magrittr`（パイプ演算子），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`broom`（回帰係数の整理），`gnm`（連関分析の処理のため），`logmult`（連関モデルのため）を使用する．
+パッケージは`tidyverse`（データセットの処理のため），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`broom`（回帰係数の整理），`gnm`（連関分析の処理のため），`logmult`（連関モデルのため）を使用する．
 
 
 ```{r, message = FALSE}
 library(tidyverse)
-library(magrittr)
 library(broom)
 library(gnm)
 library(vcd)
@@ -52,11 +51,13 @@ contr.sum(x)
 実際に回帰分析を例に`contr.treatment`と`contr.sum`の違いを確認する．データは`mpg`（Fuel economy data from 1999 to 2008 for 38 popular models of cars）である．従属変数は`hwy`（highway miles per gallon）であり，独立変数は`class`（"type" of car）とする．
 
 ```{r}
-mpg |> count(class)
+# class別のhwyの平均値
 mpg |> 
   dplyr::summarise(n = sum(!is.na(hwy)),
                    Mean = mean(hwy, na.rm = TRUE),
-                   .by = class)
+                   .by = class) |> 
+  mutate(Diff_1 = Mean - Mean[class == "2seater"],
+         Diff_2 = Mean - mean(Mean))
 ```
 
 まずダミーコーディング（dummy coding）の結果を確認する．
@@ -126,8 +127,7 @@ summary(fit_cs2)
 
 ## 表2.1 (p.8)
 
-- p.8の表2.1を再現する．
-- クロス表に周辺度数を追加する場合は，`addmargins`を用いる．
+まずp.8の表2.1を再現する．クロス表に周辺度数を追加する場合は，`addmargins`を用いる．
 
 ```{r}
 # 度数
@@ -157,9 +157,46 @@ tab_2.1
 周辺分布とモザイクプロットも確認する．
 
 ```{r}
+# 周辺分布の表示
 Margins(tab_2.1)
-mosaic(tab_2.1, shade = TRUE, keep_aspect_ratio = FALSE)
+# モザイクプロット
+vcd::mosaic(tab_2.1, shade = TRUE, keep_aspect_ratio = FALSE)
 ```
+
+
+
+::: {.callout-tip}
+## ggplotでモザイクプロット
+図はすべて`ggplot()`を使用して描きたいという場合は，`ggmosaic`パッケージを用いる．
+その前に集計データを`vcdExtra::expand.dft()`によって個票データに変換する．
+
+```{r}
+library(ggmosaic)
+library(vcdExtra)
+# データの変換
+df_tab_2.1 <- vcdExtra::expand.dft(data.frame(tab_2.1), dreq = "Freq") |> tibble()
+df_tab_2.1
+
+df_residuals <- xtabs(data = df_tab_2.1) |> 
+  chisq.test() |> 
+  pluck("residuals") |> 
+  data.frame() |> 
+  rename(residuals = Freq) |> 
+  mutate(sig = case_when(abs(residuals) >
+                           qnorm(0.975) ~ 1,
+                         .default = 0))
+
+# ggplotでモザイクプロット
+df_tab_2.1 |> 
+  left_join(df_residuals) |> 
+  ggplot() + 
+  geom_mosaic(aes(x = product(Position, Member), fill = Position)) + 
+  scale_fill_viridis_d() + 
+  coord_flip()
+```
+:::
+
+
 
 ```{r}
 # A. 度数（周辺度数の追加）
@@ -213,7 +250,7 @@ freq_tab_2.1
 ```{r}
 # gnmで推定
 fit <- freq_tab_2.1 |> 
-  gnm(Freq ~ COMM + SUP + COMM*SUP, data = ., family = poisson)
+  gnm(Freq ~ COMM + SUP + COMM:SUP, data = _, family = poisson)
 # 結果
 summary(fit)
 ```
@@ -347,7 +384,7 @@ freq_tab_2.3A
 O <- freq_tab_2.3A |>
   gnm(Freq ~ polviews + fefam,
       family = poisson,
-      data = .,
+      data = _,
       tolerance = 1e-12
       )
 # 結果
@@ -375,7 +412,7 @@ model.summary(O, "O:Independent")
 U <- freq_tab_2.3A |>
   gnm(Freq ~ polviews + fefam + Rscore:Cscore,
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12)
 ```
 
@@ -414,7 +451,7 @@ options('contrasts')
 R <- freq_tab_2.3A |>
   gnm(Freq ~ polviews + fefam + Cscore*polviews, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 # 結果
 summary(R)
@@ -448,7 +485,7 @@ options(contrasts = c(factor = "contr.treatment",
 Ralt <- freq_tab_2.3A |>
   gnm(Freq ~ polviews + fefam + Cscore*polviews, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 ```
 
@@ -490,7 +527,7 @@ options(contrasts = c(factor = "contr.sum",
                       ordered = "contr.treatment"))
 C <- freq_tab_2.3A |> 
   gnm(Freq ~ polviews + fefam + Rscore*fefam, family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 # 結果
 summary(C)
@@ -518,7 +555,7 @@ options(contrasts = c(factor = "contr.treatment",
 Calt <- freq_tab_2.3A |> 
   gnm(Freq ~ polviews + fefam + Rscore*fefam, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 ```
 
@@ -558,7 +595,7 @@ options(contrasts = c(factor = "contr.treatment",
 RplusCno <- freq_tab_2.3A |> 
   gnm(Freq ~ polviews + fefam + Cscore:polviews + Rscore:fefam,
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 ```
 
@@ -590,7 +627,7 @@ RplusC <- freq_tab_2.3A |>
       constrain = c(11, 17, 18), 
       constrainTo = c(0, 0, 0),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 # 結果
 summary(RplusC)
@@ -608,7 +645,7 @@ RplusC_2 <- freq_tab_2.3A |>
       constrain = c(11, 18, 21), 
       constrainTo = c(0, 0, 0),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 # 結果
 summary(RplusC_2)
@@ -624,7 +661,7 @@ model.summary(RplusC_2)
 RplusCalt <- freq_tab_2.3A |> 
   gnm(Freq ~ polviews + fefam + Rscore:Cscore + Cscore:polviews + Rscore:fefam,
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 RplusCalt
 # 結果
@@ -645,7 +682,7 @@ RC(1)については`Mult(1,polviews,fefam)`を含んだモデルで推定する
 RC.un <- freq_tab_2.3A |>
   gnm(Freq ~ polviews + fefam + Mult(1,polviews,fefam),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 # 結果
 summary(RC.un)
@@ -692,7 +729,7 @@ RC <- freq_tab_2.3A |>
       constrain = c(12,18,19,22),
       constrainTo = con, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 ```
 
@@ -765,7 +802,7 @@ RC_mw <- freq_tab_2.3A |>
       constrain = c(12,18,19,22),
       constrainTo = con, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 ```
 
@@ -812,7 +849,7 @@ models |> bind_rows() |> kable(digit = 3)
 model_comparison <- function(x, y = 0) {
   models |> 
     bind_rows() |>
-    summarise(`Model Used` = 
+    dplyr::summarise(`Model Used` = 
                 ifelse(y == 0,
                        paste0(x),
                        paste0(x,"-",y)),
@@ -1030,7 +1067,7 @@ freq_tab_2.3B <- tibble(Freq, Educ, Occ)
 freq_tab_2.3B
 
 # 行変数と列変数の整数値を作成
-freq_tab_2.3B %<>% 
+freq_tab_2.3B <- freq_tab_2.3B |> 
   mutate(Rscore = as.numeric(Educ),
          Cscore = as.numeric(Occ))
 freq_tab_2.3B
@@ -1041,14 +1078,14 @@ freq_tab_2.3B
 O <- freq_tab_2.3B |> 
   gnm(Freq ~ Educ + Occ, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 U <- freq_tab_2.3B |>
   gnm(Freq ~ Educ + Occ + 
         Rscore:Cscore, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 R <- freq_tab_2.3B |>
@@ -1056,7 +1093,7 @@ R <- freq_tab_2.3B |>
         Rscore:Cscore + 
         Educ:Cscore, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 C <- freq_tab_2.3B |>
@@ -1064,7 +1101,7 @@ C <- freq_tab_2.3B |>
         Rscore:Cscore + 
         Occ:Rscore, 
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 RplusC <- freq_tab_2.3B |>
@@ -1075,14 +1112,14 @@ RplusC <- freq_tab_2.3B |>
       constrain = c(12,16), 
       constrainTo = c(0,0),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 RC <- freq_tab_2.3B |>
   gnm(Freq ~ Educ + Occ + 
         Mult(1, Educ, Occ),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 UplusRC <- freq_tab_2.3B |>
@@ -1090,7 +1127,7 @@ UplusRC <- freq_tab_2.3B |>
         Rscore:Cscore + 
         Mult(1, Educ, Occ),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 RplusRC <- freq_tab_2.3B |>
@@ -1100,7 +1137,7 @@ RplusRC <- freq_tab_2.3B |>
       constrain = c(9,12),
       constrainTo = c(0,0),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 CplusRC <- freq_tab_2.3B |>
@@ -1108,7 +1145,7 @@ CplusRC <- freq_tab_2.3B |>
         Rscore:Occ + 
         Mult(1, Educ, Occ),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 RplusCplusRC <- freq_tab_2.3B |>
@@ -1117,14 +1154,14 @@ RplusCplusRC <- freq_tab_2.3B |>
         Rscore:Occ + 
         Mult(1, Educ, Occ),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 RC2 <- freq_tab_2.3B |>
   gnm(Freq ~ Educ + Occ + 
         instances(Mult(1, Educ, Occ),2),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 ```
 
@@ -1182,7 +1219,7 @@ UplusRC <- freq_tab_2.3B |>
         Rscore:Cscore + 
         Mult(1, Educ, Occ),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 summary(UplusRC)
 
@@ -1222,7 +1259,7 @@ UplusRC <- freq_tab_2.3B |>
       constrain = c(11,14,15,19),
       constrainTo = con,
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 summary(UplusRC)$coefficients |>
@@ -1240,7 +1277,7 @@ RplusRC.un <- freq_tab_2.3B |>
         Cscore:Educ + 
         Mult(1, Educ, Occ),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 summary(RplusRC.un)
 pickCoef(RplusRC.un, "[:]Cscore")
@@ -1252,7 +1289,7 @@ RplusRC <- freq_tab_2.3B |>
       constrain = c(9,12),
       constrainTo = c(0,0),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 summary(RplusRC)
 
@@ -1285,7 +1322,7 @@ RplusRC <- freq_tab_2.3B |>
       constrain = c(9,12,14,17,18,22),
       constrainTo = con,
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 summary(RplusRC)$coefficients |>
   data.frame() |>
@@ -1303,7 +1340,7 @@ CplusRC.un <- freq_tab_2.3B |>
         Rscore:Occ + 
         Mult(1, Educ, Occ),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 summary(CplusRC.un)
 pickCoef(CplusRC.un, "[:]Rscore")
@@ -1315,7 +1352,7 @@ CplusRC <- freq_tab_2.3B |>
       constrain = c(9,13),
       constrainTo = c(0,0),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 summary(CplusRC)
 
@@ -1351,7 +1388,7 @@ CplusRC <- freq_tab_2.3B |>
       constrain = c(9,13,15,18,19,23),
       constrainTo = con,
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 summary(CplusRC)$coefficients |>
   data.frame() |>
@@ -1373,7 +1410,7 @@ RplusCplusRC.un <- freq_tab_2.3B |>
         Rscore:Occ + 
         Mult(1, Educ, Occ),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 summary(RplusCplusRC.un)
 pickCoef(RplusCplusRC.un, "[:]Cscore")
@@ -1388,7 +1425,7 @@ RplusCplusRC <- freq_tab_2.3B |>
       constrain = c(9,12,13,14,17), 
       constrainTo = c(0,0,0,0,0),
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 
 # 変数と係数と係数の順番を表示
@@ -1419,7 +1456,7 @@ RplusCplusRC <- freq_tab_2.3B |>
       constrain = c(9,12,13,14,17,19,22,23,27), 
       constrainTo = con,
       family = poisson, 
-      data = ., 
+      data = _, 
       tolerance = 1e-12)
 mu
 nu
@@ -1448,7 +1485,7 @@ $M > 1$のRC(M)を推定するためには`gnm`の`instances`を用いる．
 RC2 <- freq_tab_2.3B |>
   gnm(Freq ~ Educ + Occ + 
         instances(Mult(Educ, Occ), instances = 2),
-      family = poisson, data = ., 
+      family = poisson, data = _, 
       tolerance = 1e-12)
 summary(RC2)
 
