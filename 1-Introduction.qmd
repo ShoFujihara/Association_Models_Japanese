@@ -84,39 +84,42 @@ str(tab)
 Margins(tab)
 ```
 
-次に`vcd`パッケージの`mosaic`を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を読み解き，解釈する際に参考すると良い．
+次に`vcd`パッケージの`mosaic`を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を解釈する際に参考にすると良い．
 
 ```{r}
 mosaic(tab, shade = TRUE, keep_aspect_ratio = FALSE)
 ```
 
-- `chisq.test`関数を用いて，`tab`に対してカイ2乗検定を行う．ピアソンのカイ2乗値`X-squared`，自由度`df`，p値`p-value`が得られる．
-- `vcd`パッケージの`assocstats`ではピアソンのカイ2乗値だけではなく尤度比統計量も出力される．本書と同じ結果になっているのかを確認してほしい．
+`chisq.test`関数を用いて，`tab`に対してカイ2乗検定を行う．ピアソンのカイ2乗値`X-squared`，自由度`df`，p値`p-value`が得られる．
 
 ```{r}
 # 表に対してカイ2乗検定を行う
 chisq.test(tab)
+```
+
+`vcd`パッケージの`assocstats`ではピアソンのカイ2乗値だけではなく尤度比統計量も出力される．本書と同じ結果になっているのかを確認してほしい．
+
+```{r}
 # ピアソンのカイ2乗統計量と尤度比統計量
 assocstats(tab)
 summary(assocstats(tab))
 ```
 
-- `chisq.test(tab)`からは他にもいろいろな情報が得られる．
-- ヘルプ`?chisq.test`か`names`関数で確認してみよう．
+`chisq.test(tab)`からは他にもいろいろな情報が得られる．ヘルプ`?chisq.test`か`names`関数で確認してみよう．
 
 ```{r, eval = FALSE}
 # ヘルプの方法
 ?chisq.test
 ```
 
-- `names`関数で確認．
+`names`関数で確認する．
 
 ```{r}
 # chisq.test(tab)に含まれるオブジェクトの名前を確認
-names(chisq.test(tab))
+chisq.test(tab) |> names()
 ```
 
-- せっかくなので全部確認してみたい．
+せっかくなので全部確認してみたい．
 
 ```{r}
 # カイ2乗統計量
@@ -140,17 +143,18 @@ chisq.test(tab)$stdres
 ```
 
 
-- 期待度数は`chisq.test(tab)$expected`とすればよい．これを`tab_expected`というオブジェクトとする．
+期待度数は`chisq.test(tab)$expected`とすればよい．これを`tab_expected`というオブジェクトとする．
 
 ```{r}
 # ixページの期待度数
-tab_expected <- chisq.test(tab)$expected
+tab_expected <- chisq.test(tab)$expected |> as.table()
 tab_expected
+Margins(tab_expected)
 ```
 
-- ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．
-- 自由度についても`nrow`と`ncol`を用いて計算（`prod(dim(tab) -1)`でもよい）．
-- `list`関数は様々なもの（値，ベクトル，データ，リスト等）をまとめ，並べて表示するときに用いる．
+ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．
+自由度についても`nrow`と`ncol`を用いて計算（`prod(dim(tab) -1)`でもよい）．
+`list`関数は様々なもの（値，ベクトル，データ，リスト等）をまとめ，並べて表示するときに用いる．
 
 ```{r}
 # 適合度（X2とL2）

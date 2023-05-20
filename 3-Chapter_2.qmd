@@ -110,18 +110,18 @@ fit_cs$coefficients[2:7] |> sum()
 options(contrasts = c(factor = "contr.treatment", ordered = "contr.poly"))
 ```
 
-`lm`ではモデルの中で`contrasts`を指定することもできる．
+`lm`ではモデルの中で`contrasts`を指定することもできる．2つの方法で係数を比較してみる．
 
 ```{r}
 # 回帰分析
-fit_cs2 <- lm(hwy ~ class, data = mpg)
+fit_cs2_1 <- lm(hwy ~ class, data = mpg)
 # 回帰分析の結果
-summary(fit_cs2)
+summary(fit_cs2_1)
 # 回帰分析
-fit_cs2 <- lm(hwy ~ class, data = mpg,
+fit_cs2_2 <- lm(hwy ~ class, data = mpg,
               contrasts = list(class = "contr.sum"))
 # 回帰分析の結果
-summary(fit_cs2)
+summary(fit_cs2_2)
 ```
 
 
@@ -164,39 +164,29 @@ vcd::mosaic(tab_2.1, shade = TRUE, keep_aspect_ratio = FALSE)
 ```
 
 
-
 ::: {.callout-tip}
 ## ggplotでモザイクプロット
 図はすべて`ggplot()`を使用して描きたいという場合は，`ggmosaic`パッケージを用いる．
-その前に集計データを`vcdExtra::expand.dft()`によって個票データに変換する．
+その前に集計データを`vcdExtra::expand.dft()`によって個票データに変換し，`ggmosaic::geom_mosaic`を使用する．
 
 ```{r}
+# パッケージの呼び出し
 library(ggmosaic)
 library(vcdExtra)
 # データの変換
 df_tab_2.1 <- vcdExtra::expand.dft(data.frame(tab_2.1), dreq = "Freq") |> tibble()
 df_tab_2.1
 
-df_residuals <- xtabs(data = df_tab_2.1) |> 
-  chisq.test() |> 
-  pluck("residuals") |> 
-  data.frame() |> 
-  rename(residuals = Freq) |> 
-  mutate(sig = case_when(abs(residuals) >
-                           qnorm(0.975) ~ 1,
-                         .default = 0))
-
 # ggplotでモザイクプロット
 df_tab_2.1 |> 
-  left_join(df_residuals) |> 
   ggplot() + 
-  geom_mosaic(aes(x = product(Position, Member), fill = Position)) + 
+  ggmosaic::geom_mosaic(aes(x = product(Position, Member), fill = Position)) + 
   scale_fill_viridis_d() + 
-  coord_flip()
+  coord_flip()   # mosaicと表示をあわせる
 ```
 :::
 
-
+表に`addmargins()`で周辺度数を追加する．
 
 ```{r}
 # A. 度数（周辺度数の追加）
@@ -207,18 +197,50 @@ tab_2.1 |> addmargins()
 
 ```{r}
 # B. Odds 
-40/250
-160/3000
+x <- tab_2.1
+x[1,1]/x[1,2]
+x[2,1]/x[2,2]
 
 # C. Odds ratio
-(40 * 3000) / (250 * 160)
+OR <- (x[1,1]/x[1,2]) / (x[2,1]/x[2,2])
+OR
+```
+
+（対数）オッズ比の信頼区間をもとめる．
+
+```{r}
+# 対数オッズの標準誤差を求める
+SD <- sqrt(1/x[1,1] + 1/x[1,2] + 1/x[2,1] + 1/x[2,2]) 
+# 対数オッズ比の信頼区間を求める
+CI_log_OR <- log(OR) + qnorm(c(0.025, 0.975)) * SD
+CI_log_OR
+# オッズ比の信頼区間を求める
+exp(CI_log_OR)
 ```
 
 `DescTools`パッケージの`OddsRatio`関数を用いてオッズ比を求める．`conf.level = 0.95`とすることで信頼区間を求めることもできる．
+先程計算したものと値が一致している．
 
 ```{r}
 OddsRatio(tab_2.1, conf.level = 0.95)
 ```
+
+::: {.callout-tip}
+## 関数の中身を確認する．
+
+`OddsRatio()`がどのような処理をしているのかについては`OddsRatio`と入力し，関数の中身をみることで確認できる．
+ただし，`UseMethod("OddsRatio")`となっており，詳細が分からないことがある．その場合は，`methods()`を用いる．
+そして，`OddsRatio.default*`のように`*`がついているものについて`DescTools:::OddsRatio.default`のように入力することで中身を確認することができる．`getAnywhere(OddsRatio.default)`としてもよい．
+
+```{r}
+#| eval: false
+OddsRatio
+methods(OddsRatio)
+DescTools:::OddsRatio.default
+getAnywhere(OddsRatio.default)
+```
+::::
+
 
 さらに詳細な結果をみたければ`DescTools`パッケージの`Desc`を用いる．
 
@@ -226,7 +248,7 @@ OddsRatio(tab_2.1, conf.level = 0.95)
 Desc(tab_2.1)
 ```
 
-次にセルの組み合わせを単位とした集計データを作成し，`gnm`を適用することでオッズ比を求めてみたい．
+次にセルの組み合わせを単位とした集計データを作成し，`gnm`を適用することでオッズ比を求めてみたい．`gl()`は`n`個の水準のある因子を作成する．`k`は各水準を何度繰り返すのかを指定する．`length`でベクトルの長さを設定することで，その長さになるまで因子の作成が繰り返される．
 
 ```{r}
 # 度数のベクトル
@@ -238,7 +260,7 @@ COMM
 SUP  <- gl(n = 2, k = 1, length = 4)
 SUP
 # 度数，行変数，列変数からなるデータを作成
-freq_tab_2.1 <- tibble(Freq, COMM, SUP)
+freq_tab_2.1 <- tibble(COMM, SUP, Freq)
 # データの確認
 freq_tab_2.1
 ```
@@ -261,12 +283,13 @@ summary(fit)
 ```{r}
 # Odds ratios fit$coefficientsのCOMM2:SUP2の要素のみを取り出し，指数関数expを適用
 fit$coefficients["COMM2:SUP2"] |> exp()
+fit |> confint("COMM2:SUP2") |> exp()
 ```
 
 
 ## 表2.3A (p.32)
 
-まずは表2.3Aを作成する．値をベクトルの形で入力する．
+まずは表2.3Aを作成する．値をベクトルの形式で入力する．
 
 ```{r}
 Freq <- c( 39, 50, 18,  4,
@@ -307,8 +330,8 @@ tab_2.3A
 
 ```{r}
 # 度数，行変数，列変数からなる集計データを作成
-polviews <- gl(n = 7, k = 4)
-fefam <- gl(n = 4, k = 1, length = 28)
+polviews <- gl(n = 7, k = 4)   # 1-7までの各数字について4つ値を出す
+fefam <- gl(n = 4, k = 1, length = 28)   # 1-4までの数字の列を長さが28になるまで繰り返す
 freq_tab_2.3A <- tibble(Freq, polviews, fefam)
 freq_tab_2.3A
 ```
@@ -1561,8 +1584,6 @@ RCmodel_coef(RC2, row = Educ, col = Occ, m =  2)
 ```{r}
 anoas(tab_2.3B)
 ```
-
-
 
 
 ```{r}
