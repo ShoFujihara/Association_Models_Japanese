@@ -163,7 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1-Introduction.html" class="sidebar-item-text sidebar-link">シリーズ編者による序文</a>
+  <a href="./1-Introduction.html" class="sidebar-item-text sidebar-link">シリーズ編者による内容紹介</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -318,8 +318,8 @@ Use exitInfo() for numerical details of last iteration.</code></pre>
 <pre><code>[1] "Model Summary:"</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code> Df       L2           p  AIC(L2)   BIC(L2)    Delta
- 27 121.4957 5.97562e-14 67.49571 -76.91615 9.833593</code></pre>
+<pre><code> Df       L2            p  AIC(L2)   BIC(L2)    Delta
+ 27 121.4952 5.976962e-14 67.49515 -76.91671 9.833904</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 3 - RC(1) with equality constraints on</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># MIL=ECO=MTO, ENR=SAB=OTH and ASAF=IFAA</span></span>
@@ -343,7 +343,7 @@ Levels: 1 2 3 4</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations...................................................................
-................................
+..................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m3.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -369,8 +369,7 @@ Done</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations...................................................................
-..........................................................................................
-...............</code></pre>
+..................................................</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -419,7 +418,8 @@ Levels: 1 2 3</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.................................
+Running main iterations...................................................................
+.....
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m4.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -456,7 +456,7 @@ Use exitInfo() for numerical details of last iteration.</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Df       L2          p   AIC(L2)   BIC(L2)    Delta
- 17 29.27203 0.03209862 -4.727968 -95.65396 3.952927</code></pre>
+ 17 29.38401 0.03114517 -4.615995 -95.54198 3.923013</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 6 - RC(2) with equality constraints on</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ECO=MTO=MIL=ENR=SAB and ASAF=IFAA in both dimensions</span></span>
@@ -609,7 +609,7 @@ Done</code></pre>
  176 580146 0  579794 577749.4 34.02388</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>mu<span class="ot">&lt;-</span><span class="fu">getContrasts</span>(m5, <span class="fu">pickCoef</span>(m5, <span class="st">"[.]Occ"</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>],</span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">ref =</span> <span class="st">"mean"</span>, <span class="at">scaleRef =</span> <span class="st">"mean"</span>,<span class="at">scaleWeights =</span> <span class="st">"unit"</span>)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">ref =</span> <span class="st">"mean"</span>, <span class="at">scaleRef =</span> <span class="st">"mean"</span>, <span class="at">scaleWeights =</span> <span class="st">"unit"</span>)</span>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>mu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                   Estimate   Std. Error

@@ -185,7 +185,7 @@ m5<-gnm(Freq~Educ+Occ+Income+Mult(1,Occ,Educ+Income),
         data=Table,family=poisson,tolerance = 1e-12)
 model.summary(m5)
 mu<-getContrasts(m5, pickCoef(m5, "[.]Occ")[1:12],
-       ref = "mean", scaleRef = "mean",scaleWeights = "unit")
+       ref = "mean", scaleRef = "mean", scaleWeights = "unit")
 mu
 
 # Model 6: RC(1)+RL(1)+CL(1) partial association

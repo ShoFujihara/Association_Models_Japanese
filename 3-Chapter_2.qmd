@@ -125,9 +125,12 @@ summary(fit_cs2_2)
 ```
 
 
-## 表2.1 (p.8)
 
-まずp.8の表2.1を再現する．クロス表に周辺度数を追加する場合は，`addmargins`を用いる．
+
+
+## 表2.1 (p.11)
+
+まずp.11の表2.1を再現する．クロス表に周辺度数を追加する場合は，`addmargins`を用いる．
 
 ```{r}
 # 度数
@@ -266,7 +269,7 @@ freq_tab_2.1
 ```
 
 
-分析には通常は`glm`を用いるが，後の分析とあわせて`gnm`によって推定する．結果は異ならない．`family = poisson`という指定を忘れないようにすること．
+分析には通常は`glm`を用いるが，後の分析とあわせて`gnm`によって推定する．結果は異ならない．`family = poisson`という指定を忘れないようにすること．何も指定しないと`family = gaussian`となり，通常の線形回帰分析を行ってしまうので注意する．
 
 
 ```{r}
@@ -1593,9 +1596,10 @@ RC2 <- rc(tab_2.3B,
           se = "bootstrap",
           nreplicates = 1000, 
           ncpus = getOption("boot.ncpus"))
+summary(RC2)
 RC2 |> 
-  summary() %$% 
-  coefficients |>
+  summary() |>
+  pluck(coefficients) |>
   data.frame() |>
   rownames_to_column(var = "Parameter") |>
   arrange(Parameter)

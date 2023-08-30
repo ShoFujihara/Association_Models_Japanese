@@ -1,7 +1,7 @@
 
-# シリーズ編者による序文 {-}
+# シリーズ編者による内容紹介 {-}
 
-「シリーズ編者による序文」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．
+「シリーズ編者による内容紹介」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．
 
 パッケージは`tidyverse`（データセットの処理のため），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`gnm`（連関分析の処理のため）を使用する．
 
@@ -18,10 +18,10 @@ library(gnm)
 ### 独立性の検定 {-}
 
 
-使用するデータは精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）である．元データについて，ここではクロス表（のようにみえる）形式で入力する．これを`Freq`とする．
+使用するデータは精神的健康と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）である．元データについて，ここではクロス表（のようにみえる）形式で入力する．これを`Freq`とする．
 
 ```{r}
-# 元データの入力
+# 元データの入力（xページ）
 Freq <- c( 64,  94, 58, 46,
            57,  94, 54, 40,
            57, 105, 65, 60,
@@ -81,8 +81,9 @@ str(tab)
 
 ```{r}
 # 注：tabのクラスはtableに変換が必要
-Margins(tab)
+DescTools::Margins(tab)
 ```
+
 
 次に`vcd`パッケージの`mosaic`を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を解釈する際に参考にすると良い．
 
@@ -97,12 +98,11 @@ mosaic(tab, shade = TRUE, keep_aspect_ratio = FALSE)
 chisq.test(tab)
 ```
 
-`vcd`パッケージの`assocstats`ではピアソンのカイ2乗値だけではなく尤度比統計量も出力される．本書と同じ結果になっているのかを確認してほしい．
+`vcd`パッケージの`assocstats`ではピアソンのカイ2乗統計量$\chi^2$だけではなく尤度比統計量$L^2$も出力される．本書と同じ結果になっているのかを確認してほしい．
 
 ```{r}
 # ピアソンのカイ2乗統計量と尤度比統計量
 assocstats(tab)
-summary(assocstats(tab))
 ```
 
 `chisq.test(tab)`からは他にもいろいろな情報が得られる．ヘルプ`?chisq.test`か`names`関数で確認してみよう．
@@ -151,6 +151,9 @@ tab_expected <- chisq.test(tab)$expected |> as.table()
 tab_expected
 Margins(tab_expected)
 ```
+
+なお，`DescTools::ExpFreq(tab)`でも同様の期待度数を求めることができる．
+
 
 ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．
 自由度についても`nrow`と`ncol`を用いて計算（`prod(dim(tab) -1)`でもよい）．
@@ -360,7 +363,7 @@ U$df.residual
 - 尤度比統計量$L^2$と自由度の差を求める場合`anova`関数を用いる．
 
 ```{r}
-anova(O,U)
+anova(O, U)
 ```
 
 
@@ -422,7 +425,6 @@ d_ind
 
 ## 3元クロス分類表の入力
 
-
 ```{r}
 data <- c(2,5,1,
   2,4,7,
@@ -480,6 +482,6 @@ Friendly and Meyer (2016) を参考に表を作成．
 - 分析方法については第2章のプログラムを参考にしてほしい．
 
 ## 参考文献 {-}
-- Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.” *Journal of the American Statistical Association* 74(367):537–52.
+- Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.”*Journal of the American Statistical Association* 74(367):537–52.
 
 

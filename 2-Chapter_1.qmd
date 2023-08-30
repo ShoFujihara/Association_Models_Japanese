@@ -1,6 +1,53 @@
 # 第1章
 
-- 特になし．
+- 本章で紹介されている連関の尺度のいくつかは`DescTools`パッケージの`Assocs`で求めることができる．
+- 「シリーズ編者による内容紹介」の精神的健康と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）を用いて分析する．
+
+```{r}
+# 元データの入力（xページ）
+Freq <- c( 64,  94, 58, 46,
+           57,  94, 54, 40,
+           57, 105, 65, 60,
+           72, 141, 77, 94,
+           36,  97, 54, 78,
+           21,  71, 54, 71)
+
+# データを表形式に変換
+tab <- matrix(
+  Freq,
+  nrow = 6,
+  ncol = 4,
+  byrow = TRUE,
+  dimnames = list(
+    SES = LETTERS[1:6],
+    MHS = c("well",
+            "mild",
+            "modelrate",
+            "impared")
+  )
+)
+tab
+```
+
+
+```{r}
+DescTools::Desc(tab)
+DescTools::Assocs(tab)
+```
+
+次のように個別に尺度を求めることもできる．
+詳しくは`?DescTools`の`Statistics:`を確認してほしい．
+
+```{r}
+DescTools::CramerV(tab, conf.level = 0.95)
+DescTools::Lambda(tab, conf.level = 0.95)
+DescTools::GoodmanKruskalTau(tab, conf.level = 0.95)
+DescTools::KendallTauB(tab, conf.level = 0.95)
+DescTools::StuartTauC(tab, conf.level = 0.95)
+DescTools::GoodmanKruskalGamma(tab, conf.level = 0.95)
+DescTools::SomersDelta(tab, conf.level = 0.95)
+DescTools::UncertCoef(tab, conf.level = 0.95)
+```
 
 
 

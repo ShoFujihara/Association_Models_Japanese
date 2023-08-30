@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>『カテゴリカルデータのための連関モデル』 - シリーズ編者による序文</title>
+<title>『カテゴリカルデータのための連関モデル』 - シリーズ編者による内容紹介</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -137,7 +137,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">シリーズ編者による序文</h1>
+      <h1 class="quarto-secondary-nav-title">シリーズ編者による内容紹介</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -167,7 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./1-Introduction.html" class="sidebar-item-text sidebar-link active">シリーズ編者による序文</a>
+  <a href="./1-Introduction.html" class="sidebar-item-text sidebar-link active">シリーズ編者による内容紹介</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -235,7 +235,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">シリーズ編者による序文</h1>
+<h1 class="title d-none d-lg-block">シリーズ編者による内容紹介</h1>
 </div>
 
 
@@ -249,7 +249,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>「シリーズ編者による序文」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．</p>
+<p>「シリーズ編者による内容紹介」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．</p>
 <p>パッケージは<code>tidyverse</code>（データセットの処理のため），<code>DescTools</code>（記述統計を求めるため），<code>vcd</code>パッケージ（カテゴリカルデータの分析のため），<code>gnm</code>（連関分析の処理のため）を使用する．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># パッケージの読み込み</span></span>
@@ -261,9 +261,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="独立性の検定" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="独立性の検定">独立性の検定</h3>
-<p>使用するデータは精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）である．元データについて，ここではクロス表（のようにみえる）形式で入力する．これを<code>Freq</code>とする．</p>
+<p>使用するデータは精神的健康と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）である．元データについて，ここではクロス表（のようにみえる）形式で入力する．これを<code>Freq</code>とする．</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 元データの入力</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 元データの入力（xページ）</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Freq <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">64</span>,  <span class="dv">94</span>, <span class="dv">58</span>, <span class="dv">46</span>,</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>,  <span class="dv">94</span>, <span class="dv">54</span>, <span class="dv">40</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>, <span class="dv">105</span>, <span class="dv">65</span>, <span class="dv">60</span>,</span>
@@ -344,7 +344,7 @@ SES well mild modelrate impared
 <p>クロス表の周辺分布を確認しておく．ここでは<code>DescTools</code>パッケージの<code>Margins</code>を用いる．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 注：tabのクラスはtableに変換が必要</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Margins</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Margins</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$SES
    level  freq   perc  cumfreq  cumperc
@@ -363,17 +363,14 @@ $MHS
 4    impared   389  23.4%    1'660   100.0%</code></pre>
 </div>
 </div>
-<p>次に<code>vcd</code>パッケージの<code>mosaic</code>を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を読み解き，解釈する際に参考すると良い．</p>
+<p>次に<code>vcd</code>パッケージの<code>mosaic</code>を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を解釈する際に参考にすると良い．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaic</span>(tab, <span class="at">shade =</span> <span class="cn">TRUE</span>, <span class="at">keep_aspect_ratio =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="1-Introduction_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<ul>
-<li><code>chisq.test</code>関数を用いて，<code>tab</code>に対してカイ2乗検定を行う．ピアソンのカイ2乗値<code>X-squared</code>，自由度<code>df</code>，p値<code>p-value</code>が得られる．</li>
-<li><code>vcd</code>パッケージの<code>assocstats</code>ではピアソンのカイ2乗値だけではなく尤度比統計量も出力される．本書と同じ結果になっているのかを確認してほしい．</li>
-</ul>
+<p><code>chisq.test</code>関数を用いて，<code>tab</code>に対してカイ2乗検定を行う．ピアソンのカイ2乗値<code>X-squared</code>，自由度<code>df</code>，p値<code>p-value</code>が得られる．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 表に対してカイ2乗検定を行う</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -384,6 +381,9 @@ $MHS
 data:  tab
 X-squared = 45.985, df = 15, p-value = 5.346e-05</code></pre>
 </div>
+</div>
+<p><code>vcd</code>パッケージの<code>assocstats</code>ではピアソンのカイ2乗統計量<span class="math inline">\(\chi^2\)</span>だけではなく尤度比統計量<span class="math inline">\(L^2\)</span>も出力される．本書と同じ結果になっているのかを確認してほしい．</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ピアソンのカイ2乗統計量と尤度比統計量</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">assocstats</span>(tab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -395,74 +395,52 @@ Phi-Coefficient   : NA
 Contingency Coeff.: 0.164 
 Cramer's V        : 0.096 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">assocstats</span>(tab))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Number of cases in table: 1660 
-Number of factors: 2 
-Test for independence of all factors:
-    Chisq = 45.99, df = 15, p-value = 5.346e-05
-                    X^2 df   P(&gt; X^2)
-Likelihood Ratio 47.418 15 3.1554e-05
-Pearson          45.985 15 5.3458e-05
-
-Phi-Coefficient   : NA 
-Contingency Coeff.: 0.164 
-Cramer's V        : 0.096 </code></pre>
 </div>
-</div>
-<ul>
-<li><code>chisq.test(tab)</code>からは他にもいろいろな情報が得られる．</li>
-<li>ヘルプ<code>?chisq.test</code>か<code>names</code>関数で確認してみよう．</li>
-</ul>
+<p><code>chisq.test(tab)</code>からは他にもいろいろな情報が得られる．ヘルプ<code>?chisq.test</code>か<code>names</code>関数で確認してみよう．</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ヘルプの方法</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>?chisq.test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ヘルプの方法</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>?chisq.test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ul>
-<li><code>names</code>関数で確認．</li>
-</ul>
+<p><code>names</code>関数で確認する．</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># chisq.test(tab)に含まれるオブジェクトの名前を確認</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">chisq.test</span>(tab))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># chisq.test(tab)に含まれるオブジェクトの名前を確認</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "statistic" "parameter" "p.value"   "method"    "data.name" "observed" 
 [7] "expected"  "residuals" "stdres"   </code></pre>
 </div>
 </div>
-<ul>
-<li>せっかくなので全部確認してみたい．</li>
-</ul>
+<p>せっかくなので全部確認してみたい．</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># カイ2乗統計量</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>statistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># カイ2乗統計量</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>statistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>X-squared 
  45.98526 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 自由度</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>parameter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 自由度</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>parameter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>df 
 15 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># p値</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># p値</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5.345771e-05</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 方法</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>method</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 方法</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>method</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Pearson's Chi-squared test"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># データ名</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>data.name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># データ名</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>data.name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "tab"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 観測度数</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>observed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 観測度数</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>observed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   MHS
 SES well mild modelrate impared
@@ -473,8 +451,8 @@ SES well mild modelrate impared
   E   36   97        54      78
   F   21   71        54      71</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 期待度数</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>expected</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 期待度数</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>expected</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   MHS
 SES     well      mild modelrate  impared
@@ -485,8 +463,8 @@ SES     well      mild modelrate  impared
   E 49.00904  96.10241  57.78916 62.09940
   F 40.13193  78.69518  47.32169 50.85120</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ピアソンの残差 (observed - expected) / sqrt(expected)</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>residuals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ピアソンの残差 (observed - expected) / sqrt(expected)</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>residuals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   MHS
 SES        well        mild   modelrate     impared
@@ -497,8 +475,8 @@ SES        well        mild   modelrate     impared
   E -1.85826240  0.09156111 -0.49844745  2.01776175
   F -3.02004713 -0.86745061  0.97081545  2.82552047</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 標準化残差 (observed - expected) / sqrt(V)</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>stdres</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 標準化残差 (observed - expected) / sqrt(V)</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>stdres</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   MHS
 SES        well        mild   modelrate     impared
@@ -510,29 +488,41 @@ SES        well        mild   modelrate     impared
   F -3.58789516 -1.16540491  1.17753617  3.46338368</code></pre>
 </div>
 </div>
-<ul>
-<li>期待度数は<code>chisq.test(tab)$expected</code>とすればよい．これを<code>tab_expected</code>というオブジェクトとする．</li>
-</ul>
+<p>期待度数は<code>chisq.test(tab)$expected</code>とすればよい．これを<code>tab_expected</code>というオブジェクトとする．</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ixページの期待度数</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>tab_expected <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tab)<span class="sc">$</span>expected</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>tab_expected</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ixページの期待度数</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>tab_expected <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tab)<span class="sc">$</span>expected <span class="sc">|&gt;</span> <span class="fu">as.table</span>()</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>tab_expected</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   MHS
-SES     well      mild modelrate  impared
-  A 48.45422  95.01446  57.13494 61.39639
-  B 45.31024  88.84940  53.42771 57.41265
-  C 53.07771 104.08072  62.58675 67.25482
-  D 71.01687 139.25783  83.73976 89.98554
-  E 49.00904  96.10241  57.78916 62.09940
-  F 40.13193  78.69518  47.32169 50.85120</code></pre>
+SES      well      mild modelrate   impared
+  A  48.45422  95.01446  57.13494  61.39639
+  B  45.31024  88.84940  53.42771  57.41265
+  C  53.07771 104.08072  62.58675  67.25482
+  D  71.01687 139.25783  83.73976  89.98554
+  E  49.00904  96.10241  57.78916  62.09940
+  F  40.13193  78.69518  47.32169  50.85120</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Margins</span>(tab_expected)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$SES
+   level  freq   perc  cumfreq  cumperc
+1      A   262  15.8%      262    15.8%
+2      B   245  14.8%      507    30.5%
+3      C   287  17.3%      794    47.8%
+4      D   384  23.1%    1'178    71.0%
+5      E   265  16.0%    1'443    86.9%
+6      F   217  13.1%    1'660   100.0%
+
+$MHS
+       level  freq   perc  cumfreq  cumperc
+1       well   307  18.5%      307    18.5%
+2       mild   602  36.3%      909    54.8%
+3  modelrate   362  21.8%    1'271    76.6%
+4    impared   389  23.4%    1'660   100.0%</code></pre>
 </div>
 </div>
-<ul>
-<li>ixページの数式用いて，実際に計算することでピアソンの<span class="math inline">\(\chi^2\)</span>統計量と尤度比統計量<span class="math inline">\(L^2\)</span>を求める（英語版のテキストは式に間違いがあるので注意）．</li>
-<li>自由度についても<code>nrow</code>と<code>ncol</code>を用いて計算（<code>prod(dim(tab) -1)</code>でもよい）．</li>
-<li><code>list</code>関数は様々なもの（値，ベクトル，データ，リスト等）をまとめ，並べて表示するときに用いる．</li>
-</ul>
+<p>ixページの数式用いて，実際に計算することでピアソンの<span class="math inline">\(\chi^2\)</span>統計量と尤度比統計量<span class="math inline">\(L^2\)</span>を求める（英語版のテキストは式に間違いがあるので注意）． 自由度についても<code>nrow</code>と<code>ncol</code>を用いて計算（<code>prod(dim(tab) -1)</code>でもよい）． <code>list</code>関数は様々なもの（値，ベクトル，データ，リスト等）をまとめ，並べて表示するときに用いる．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 適合度（X2とL2）</span></span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(((tab <span class="sc">-</span> tab_expected)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> tab_expected))</span>
@@ -1055,7 +1045,7 @@ $尤度比統計量
 <li>尤度比統計量<span class="math inline">\(L^2\)</span>と自由度の差を求める場合<code>anova</code>関数を用いる．</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(O,U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(O, U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Deviance Table
 
@@ -1396,7 +1386,7 @@ women blue        2     8    1    2
 <section id="参考文献" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="参考文献">参考文献</h2>
 <ul>
-<li>Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.” <em>Journal of the American Statistical Association</em> 74(367):537–52.</li>
+<li>Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.”<em>Journal of the American Statistical Association</em> 74(367):537–52.</li>
 </ul>
 
 
