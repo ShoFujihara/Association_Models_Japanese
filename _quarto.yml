@@ -22,7 +22,11 @@ format:
   html:
     theme: minty
     toc-title: 目次
-    
+    code-fold: false
+    code-tools: true
+    code-block-bg: true
+    code-block-border-left: "#0ABAB5"
+
 crossref:
   fig-title: 図     # (default is "Figure")
   tbl-title: 表     # (default is "Table")

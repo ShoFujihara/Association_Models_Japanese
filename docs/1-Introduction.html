@@ -235,7 +235,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">シリーズ編者による内容紹介</h1>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block">シリーズ編者による内容紹介</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -503,6 +503,9 @@ SES      well      mild modelrate   impared
   E  49.00904  96.10241  57.78916  62.09940
   F  40.13193  78.69518  47.32169  50.85120</code></pre>
 </div>
+</div>
+<p>なお，<code>DescTools::ExpFreq(tab)</code>でも同様の期待度数を求めることができる．</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Margins</span>(tab_expected)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$SES
@@ -811,9 +814,9 @@ SES well mild modelrate impared
 <h4 class="unnumbered anchored" data-anchor-id="独立モデル">独立モデル</h4>
 <ul>
 <li>この形式のデータ（<code>Freq</code>）に対して，独立モデルによる分析を行う．これは先程の独立性の検定と同じ結果となる．</li>
-<li><code>|&gt;</code>はパイプ演算子であり，パイプ演算子を使うと<code>function(x)</code>を<code>x |&gt; function()</code>とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば<code>function(x, y)</code>）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，<code>function(x, y)</code>は<code>x |&gt; function(y)</code>とすればよい．では<code>y |&gt;</code>とする場合は，<code>y |&gt; function(x, .)</code>とすることで<code>function(x, y)</code>と同じ結果を得ることができる．</li>
-<li><code>d</code>というデータに対して，<code>gnm</code>を適用する．<code>度数 ~ 行変数 + 列変数</code>といった形で関連を指定する．<code>glm</code>を使ってもよいが，最終的には<code>gnm</code>を使うことになるので，ここでは</li>
-<li>モデルの分布族（family）は<code>poisson</code>（ポワソン分布）とする．これを忘れると<code>gaussian</code>（正規分布）が適用され，異なる結果が出力されるので注意する ．<code>gnm</code>内で<code>data = _</code>となっているが<code>.</code>にはパイプ演算子の左辺にある<code>d</code>が入る．つまりこれは<code>data = d</code>とすることに等しい．</li>
+<li><code>|&gt;</code>はパイプ演算子であり，パイプ演算子を使うと<code>function(x)</code>を<code>x |&gt; function()</code>とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば<code>function(x, y)</code>）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，<code>function(x, y)</code>は<code>x |&gt; function(y)</code>とすればよい．では<code>y |&gt;</code>とする場合は，<code>y |&gt; function(x, _)</code>とすることで<code>function(x, y)</code>と同じ結果を得ることができる．<code>_</code>はプレースホルダーと呼ばれ，引数が適用される場所を示している．</li>
+<li><code>d</code>というデータに対して，<code>gnm</code>を適用する．<code>度数 ~ 行変数 + 列変数</code>といった形で関連を指定する．<code>glm</code>を使ってもよいが，最終的には<code>gnm</code>を使うことになるので，ここでは<code>gnm</code>を用いる．</li>
+<li>モデルの分布族（family）は<code>poisson</code>（ポワソン分布）とする．これを忘れると<code>gaussian</code>（正規分布）が適用され，異なる結果が出力されるので注意する ．<code>gnm</code>内で<code>data = _</code>となっているが<code>_</code>にはパイプ演算子の左辺にある<code>d</code>が入る．つまりこれは<code>data = d</code>とすることに等しい．</li>
 <li>こうして得られた分析の結果を<code>O</code>としている．</li>
 </ul>
 <div class="cell">
@@ -911,7 +914,7 @@ Number of iterations: 5</code></pre>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> O<span class="sc">$</span>y</span>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>expected_O <span class="ot">&lt;-</span> O<span class="sc">$</span>fitted.values</span>
 <span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 行と列のカテゴリ数</span></span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 行と列のカテゴリ数をユニークな値の数から求める</span></span>
 <span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>I <span class="ot">&lt;-</span> d<span class="sc">$</span>PSES <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()</span>
 <span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> d<span class="sc">$</span>MHS <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()</span>
 <span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a></span>
@@ -945,7 +948,7 @@ $尤度比統計量
 <h4 class="unnumbered anchored" data-anchor-id="一様連関モデル-1">一様連関モデル</h4>
 <ul>
 <li>次に一様連関モデル（Uniform association model）による分析を行う．</li>
-<li><code>PSES</code>を<code>as.integer</code>関数で整数にしたものを<code>Rscore</code>，<code>MHS</code>を<code>as.integer</code>関数で整数にしたものを<code>Cscore</code>として，<code>mutate</code>関数でデータに新たに変数を作成している．<code>d &lt;- d |&gt;</code>は<code>mutate</code>変数を追加して元のデータに上書きをしている．</li>
+<li><code>PSES</code>を<code>as.integer</code>関数で整数にしたものを<code>Rscore</code>，<code>MHS</code>を<code>as.integer</code>関数で整数にしたものを<code>Cscore</code>として，<code>mutate</code>関数でデータに新たに変数を作成している．更に平均値を引いて中心化している．<code>d &lt;- d |&gt;</code>は<code>mutate</code>変数を追加して元のデータに上書きをしている．</li>
 <li>変数の追加された<code>d</code>データに対して，一様連関モデルによる分析を<code>gnm</code>パッケージで行う．</li>
 <li>独立モデルとの違いは，作成した整数スコアの積<code>Rscore:Cscore</code>がモデルに追加されているだけである．<code>Rscore*Cscore</code>とすると<code>Rscore</code>と<code>Cscore</code>も表示されるが結果は変わらない．</li>
 </ul>
@@ -953,15 +956,17 @@ $尤度比統計量
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 行変数と列変数を連続した整数値とする</span></span>
 <span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> </span>
 <span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rscore =</span> <span class="fu">as.integer</span>(PSES),</span>
-<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Cscore =</span> <span class="fu">as.integer</span>(MHS))</span>
-<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 一様連関モデル</span></span>
-<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> </span>
-<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS <span class="sc">+</span> Rscore<span class="sc">:</span>Cscore, </span>
-<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson, </span>
-<span id="cb73-9"><a href="#cb73-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>,</span>
-<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> _)</span>
-<span id="cb73-11"><a href="#cb73-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果の表示</span></span>
-<span id="cb73-12"><a href="#cb73-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Rscore =</span> Rscore <span class="sc">-</span> <span class="fu">mean</span>(Rscore),</span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">Cscore =</span> <span class="fu">as.integer</span>(MHS),</span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">Cscore =</span> Cscore <span class="sc">-</span> <span class="fu">mean</span>(Cscore))</span>
+<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 一様連関モデル</span></span>
+<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> </span>
+<span id="cb73-9"><a href="#cb73-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS <span class="sc">+</span> Rscore<span class="sc">:</span>Cscore, </span>
+<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson, </span>
+<span id="cb73-11"><a href="#cb73-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>,</span>
+<span id="cb73-12"><a href="#cb73-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> _)</span>
+<span id="cb73-13"><a href="#cb73-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果の表示</span></span>
+<span id="cb73-14"><a href="#cb73-14" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(U)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -974,15 +979,15 @@ Deviance Residuals:
 
 Coefficients:
               Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)    4.08817    0.08299  49.258  &lt; 2e-16 ***
-PSES2         -0.27661    0.09445  -2.929 0.003406 ** 
-PSES3         -0.33651    0.10841  -3.104 0.001909 ** 
-PSES4         -0.27228    0.13155  -2.070 0.038473 *  
-PSES5         -0.87902    0.16903  -5.200 1.99e-07 ***
-PSES6         -1.32360    0.20946  -6.319 2.63e-10 ***
-MHS2           0.37892    0.08360   4.533 5.83e-06 ***
-MHS3          -0.44530    0.12489  -3.566 0.000363 ***
-MHS4          -0.70991    0.17460  -4.066 4.79e-05 ***
+(Intercept)    3.83878    0.07926  48.436  &lt; 2e-16 ***
+PSES2         -0.04989    0.08908  -0.560  0.57542    
+PSES3          0.11692    0.08599   1.360  0.17390    
+PSES4          0.40787    0.08087   5.044 4.56e-07 ***
+PSES5          0.02784    0.08778   0.317  0.75108    
+PSES6         -0.19002    0.09251  -2.054  0.03997 *  
+MHS2           0.69632    0.07059   9.864  &lt; 2e-16 ***
+MHS3           0.18951    0.07827   2.421  0.01547 *  
+MHS4           0.24230    0.07709   3.143  0.00167 ** 
 Rscore:Cscore  0.09069    0.01501   6.043 1.51e-09 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
@@ -1191,17 +1196,17 @@ Age       No  Yes
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,660 × 4
     PSES   MHS Rscore Cscore
-   &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
- 1     1     1      1      1
- 2     1     1      1      1
- 3     1     1      1      1
- 4     1     1      1      1
- 5     1     1      1      1
- 6     1     1      1      1
- 7     1     1      1      1
- 8     1     1      1      1
- 9     1     1      1      1
-10     1     1      1      1
+   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1     1     1   -2.5   -1.5
+ 2     1     1   -2.5   -1.5
+ 3     1     1   -2.5   -1.5
+ 4     1     1   -2.5   -1.5
+ 5     1     1   -2.5   -1.5
+ 6     1     1   -2.5   -1.5
+ 7     1     1   -2.5   -1.5
+ 8     1     1   -2.5   -1.5
+ 9     1     1   -2.5   -1.5
+10     1     1   -2.5   -1.5
 # ℹ 1,650 more rows</code></pre>
 </div>
 </div>
@@ -1209,19 +1214,20 @@ Age       No  Yes
 <section id="元クロス分類表の入力" class="level2">
 <h2 class="anchored" data-anchor-id="元クロス分類表の入力">3元クロス分類表の入力</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">1</span>,</span>
-<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">7</span>,</span>
-<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">5</span>,</span>
-<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>,</span>
-<span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">5</span>,</span>
-<span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>,</span>
-<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb105-10"><a href="#cb105-10" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,</span>
-<span id="cb105-11"><a href="#cb105-11" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
-<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb105-13"><a href="#cb105-13" aria-hidden="true" tabindex="-1"></a><span class="fu">array</span>(data, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">1</span>,</span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">7</span>,</span>
+<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">5</span>,</span>
+<span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a>  <span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>,</span>
+<span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">5</span>,</span>
+<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>,</span>
+<span id="cb105-10"><a href="#cb105-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb105-11"><a href="#cb105-11" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,</span>
+<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb105-13"><a href="#cb105-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-14"><a href="#cb105-14" aria-hidden="true" tabindex="-1"></a><span class="fu">array</span>(data, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>, , 1
 
@@ -1390,6 +1396,8 @@ women blue        2     8    1    2
 </ul>
 
 
+<!-- -->
+
 </section>
 
 </main> <!-- /main -->
@@ -1441,6 +1449,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
@@ -1502,7 +1561,499 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">第1章</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb113" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># シリーズ編者による内容紹介 {-}</span></span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a>「シリーズ編者による内容紹介」の分析は短いが，Rによるカテゴリカルデータ分析の方法の基礎を身につける上ではよい例である．少し長くなるが，基本的な操作方法の説明やクロス表の分析方法について説明したい．</span>
+<span id="cb113-4"><a href="#cb113-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-5"><a href="#cb113-5" aria-hidden="true" tabindex="-1"></a>パッケージは<span class="in">`tidyverse`</span>（データセットの処理のため），<span class="in">`DescTools`</span>（記述統計を求めるため），<span class="in">`vcd`</span>パッケージ（カテゴリカルデータの分析のため），<span class="in">`gnm`</span>（連関分析の処理のため）を使用する．</span>
+<span id="cb113-6"><a href="#cb113-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-9"><a href="#cb113-9" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-10"><a href="#cb113-10" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb113-11"><a href="#cb113-11" aria-hidden="true" tabindex="-1"></a><span class="co"># パッケージの読み込み</span></span>
+<span id="cb113-12"><a href="#cb113-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb113-13"><a href="#cb113-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb113-14"><a href="#cb113-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
+<span id="cb113-15"><a href="#cb113-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vcd)</span>
+<span id="cb113-16"><a href="#cb113-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gnm)</span>
+<span id="cb113-17"><a href="#cb113-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-18"><a href="#cb113-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-19"><a href="#cb113-19" aria-hidden="true" tabindex="-1"></a><span class="fu">### 独立性の検定 {-}</span></span>
+<span id="cb113-20"><a href="#cb113-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-21"><a href="#cb113-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-22"><a href="#cb113-22" aria-hidden="true" tabindex="-1"></a>使用するデータは精神的健康と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）である．元データについて，ここではクロス表（のようにみえる）形式で入力する．これを<span class="in">`Freq`</span>とする．</span>
+<span id="cb113-23"><a href="#cb113-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-26"><a href="#cb113-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-27"><a href="#cb113-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 元データの入力（xページ）</span></span>
+<span id="cb113-28"><a href="#cb113-28" aria-hidden="true" tabindex="-1"></a>Freq <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">64</span>,  <span class="dv">94</span>, <span class="dv">58</span>, <span class="dv">46</span>,</span>
+<span id="cb113-29"><a href="#cb113-29" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>,  <span class="dv">94</span>, <span class="dv">54</span>, <span class="dv">40</span>,</span>
+<span id="cb113-30"><a href="#cb113-30" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>, <span class="dv">105</span>, <span class="dv">65</span>, <span class="dv">60</span>,</span>
+<span id="cb113-31"><a href="#cb113-31" aria-hidden="true" tabindex="-1"></a>           <span class="dv">72</span>, <span class="dv">141</span>, <span class="dv">77</span>, <span class="dv">94</span>,</span>
+<span id="cb113-32"><a href="#cb113-32" aria-hidden="true" tabindex="-1"></a>           <span class="dv">36</span>,  <span class="dv">97</span>, <span class="dv">54</span>, <span class="dv">78</span>,</span>
+<span id="cb113-33"><a href="#cb113-33" aria-hidden="true" tabindex="-1"></a>           <span class="dv">21</span>,  <span class="dv">71</span>, <span class="dv">54</span>, <span class="dv">71</span>)</span>
+<span id="cb113-34"><a href="#cb113-34" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-35"><a href="#cb113-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-36"><a href="#cb113-36" aria-hidden="true" tabindex="-1"></a>実際は横に長い一行のベクトルとなる．</span>
+<span id="cb113-37"><a href="#cb113-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-40"><a href="#cb113-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-41"><a href="#cb113-41" aria-hidden="true" tabindex="-1"></a><span class="co"># 確認</span></span>
+<span id="cb113-42"><a href="#cb113-42" aria-hidden="true" tabindex="-1"></a>Freq</span>
+<span id="cb113-43"><a href="#cb113-43" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-44"><a href="#cb113-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-45"><a href="#cb113-45" aria-hidden="true" tabindex="-1"></a>このベクトルを<span class="in">`matrix`</span>関数を用いて，行列に変換する．これを<span class="in">`tab`</span>とする（名前は何でもよい）．<span class="in">`nrow`</span>は行カテゴリ数，<span class="in">`ncol`</span>は列カテゴリ数である．<span class="in">`byrow = TRUE`</span>を忘れないように注意すること．また<span class="in">`dimnames`</span>で行と列のそれぞれの変数名とカテゴリ名を指定することも可能である．この指定は特に無くてもよい．</span>
+<span id="cb113-46"><a href="#cb113-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-49"><a href="#cb113-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-50"><a href="#cb113-50" aria-hidden="true" tabindex="-1"></a><span class="co"># データを表形式に変換</span></span>
+<span id="cb113-51"><a href="#cb113-51" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb113-52"><a href="#cb113-52" aria-hidden="true" tabindex="-1"></a>  Freq,</span>
+<span id="cb113-53"><a href="#cb113-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">6</span>,</span>
+<span id="cb113-54"><a href="#cb113-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">4</span>,</span>
+<span id="cb113-55"><a href="#cb113-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb113-56"><a href="#cb113-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb113-57"><a href="#cb113-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">SES =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>],</span>
+<span id="cb113-58"><a href="#cb113-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>,</span>
+<span id="cb113-59"><a href="#cb113-59" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mild"</span>,</span>
+<span id="cb113-60"><a href="#cb113-60" aria-hidden="true" tabindex="-1"></a>            <span class="st">"modelrate"</span>,</span>
+<span id="cb113-61"><a href="#cb113-61" aria-hidden="true" tabindex="-1"></a>            <span class="st">"impared"</span>)</span>
+<span id="cb113-62"><a href="#cb113-62" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb113-63"><a href="#cb113-63" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb113-64"><a href="#cb113-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-65"><a href="#cb113-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-66"><a href="#cb113-66" aria-hidden="true" tabindex="-1"></a>これで表を再現することができた．</span>
+<span id="cb113-67"><a href="#cb113-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-70"><a href="#cb113-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-71"><a href="#cb113-71" aria-hidden="true" tabindex="-1"></a><span class="co"># 確認</span></span>
+<span id="cb113-72"><a href="#cb113-72" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb113-73"><a href="#cb113-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-74"><a href="#cb113-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-75"><a href="#cb113-75" aria-hidden="true" tabindex="-1"></a>初歩的なクロス表の分析はここで作成された<span class="in">`tab`</span>に対して行う．</span>
+<span id="cb113-76"><a href="#cb113-76" aria-hidden="true" tabindex="-1"></a><span class="in">`as.table`</span>によってクラスを<span class="in">`matrix`</span>から<span class="in">`table`</span>に変えることもできる．分析はどちらであっても問題ないが，周辺分布を<span class="in">`Margins`</span>によって確認したいときはクラスを<span class="in">`table`</span>に変換しておく必要がある．</span>
+<span id="cb113-77"><a href="#cb113-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-80"><a href="#cb113-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-81"><a href="#cb113-81" aria-hidden="true" tabindex="-1"></a><span class="co"># クラスを確認</span></span>
+<span id="cb113-82"><a href="#cb113-82" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(tab)</span>
+<span id="cb113-83"><a href="#cb113-83" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(tab)</span>
+<span id="cb113-84"><a href="#cb113-84" aria-hidden="true" tabindex="-1"></a><span class="co"># クラスをmatrixからtableに変える</span></span>
+<span id="cb113-85"><a href="#cb113-85" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">as.table</span>(tab)</span>
+<span id="cb113-86"><a href="#cb113-86" aria-hidden="true" tabindex="-1"></a><span class="co"># クラスを確認</span></span>
+<span id="cb113-87"><a href="#cb113-87" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(tab)</span>
+<span id="cb113-88"><a href="#cb113-88" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(tab)</span>
+<span id="cb113-89"><a href="#cb113-89" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-90"><a href="#cb113-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-91"><a href="#cb113-91" aria-hidden="true" tabindex="-1"></a>クロス表の周辺分布を確認しておく．ここでは<span class="in">`DescTools`</span>パッケージの<span class="in">`Margins`</span>を用いる．</span>
+<span id="cb113-92"><a href="#cb113-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-95"><a href="#cb113-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-96"><a href="#cb113-96" aria-hidden="true" tabindex="-1"></a><span class="co"># 注：tabのクラスはtableに変換が必要</span></span>
+<span id="cb113-97"><a href="#cb113-97" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Margins</span>(tab)</span>
+<span id="cb113-98"><a href="#cb113-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-99"><a href="#cb113-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-100"><a href="#cb113-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-101"><a href="#cb113-101" aria-hidden="true" tabindex="-1"></a>次に<span class="in">`vcd`</span>パッケージの<span class="in">`mosaic`</span>を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を解釈する際に参考にすると良い．</span>
+<span id="cb113-102"><a href="#cb113-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-105"><a href="#cb113-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-106"><a href="#cb113-106" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaic</span>(tab, <span class="at">shade =</span> <span class="cn">TRUE</span>, <span class="at">keep_aspect_ratio =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb113-107"><a href="#cb113-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-108"><a href="#cb113-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-109"><a href="#cb113-109" aria-hidden="true" tabindex="-1"></a><span class="in">`chisq.test`</span>関数を用いて，<span class="in">`tab`</span>に対してカイ2乗検定を行う．ピアソンのカイ2乗値<span class="in">`X-squared`</span>，自由度<span class="in">`df`</span>，p値<span class="in">`p-value`</span>が得られる．</span>
+<span id="cb113-110"><a href="#cb113-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-113"><a href="#cb113-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-114"><a href="#cb113-114" aria-hidden="true" tabindex="-1"></a><span class="co"># 表に対してカイ2乗検定を行う</span></span>
+<span id="cb113-115"><a href="#cb113-115" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)</span>
+<span id="cb113-116"><a href="#cb113-116" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-117"><a href="#cb113-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-118"><a href="#cb113-118" aria-hidden="true" tabindex="-1"></a><span class="in">`vcd`</span>パッケージの<span class="in">`assocstats`</span>ではピアソンのカイ2乗統計量$\chi^2$だけではなく尤度比統計量$L^2$も出力される．本書と同じ結果になっているのかを確認してほしい．</span>
+<span id="cb113-119"><a href="#cb113-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-122"><a href="#cb113-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-123"><a href="#cb113-123" aria-hidden="true" tabindex="-1"></a><span class="co"># ピアソンのカイ2乗統計量と尤度比統計量</span></span>
+<span id="cb113-124"><a href="#cb113-124" aria-hidden="true" tabindex="-1"></a><span class="fu">assocstats</span>(tab)</span>
+<span id="cb113-125"><a href="#cb113-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-126"><a href="#cb113-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-127"><a href="#cb113-127" aria-hidden="true" tabindex="-1"></a><span class="in">`chisq.test(tab)`</span>からは他にもいろいろな情報が得られる．ヘルプ<span class="in">`?chisq.test`</span>か<span class="in">`names`</span>関数で確認してみよう．</span>
+<span id="cb113-128"><a href="#cb113-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-129"><a href="#cb113-129" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, eval = FALSE}</span></span>
+<span id="cb113-130"><a href="#cb113-130" aria-hidden="true" tabindex="-1"></a><span class="co"># ヘルプの方法</span></span>
+<span id="cb113-131"><a href="#cb113-131" aria-hidden="true" tabindex="-1"></a>?chisq.test</span>
+<span id="cb113-132"><a href="#cb113-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-133"><a href="#cb113-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-134"><a href="#cb113-134" aria-hidden="true" tabindex="-1"></a><span class="in">`names`</span>関数で確認する．</span>
+<span id="cb113-135"><a href="#cb113-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-138"><a href="#cb113-138" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-139"><a href="#cb113-139" aria-hidden="true" tabindex="-1"></a><span class="co"># chisq.test(tab)に含まれるオブジェクトの名前を確認</span></span>
+<span id="cb113-140"><a href="#cb113-140" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab) <span class="sc">|&gt;</span> <span class="fu">names</span>()</span>
+<span id="cb113-141"><a href="#cb113-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-142"><a href="#cb113-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-143"><a href="#cb113-143" aria-hidden="true" tabindex="-1"></a>せっかくなので全部確認してみたい．</span>
+<span id="cb113-144"><a href="#cb113-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-147"><a href="#cb113-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-148"><a href="#cb113-148" aria-hidden="true" tabindex="-1"></a><span class="co"># カイ2乗統計量</span></span>
+<span id="cb113-149"><a href="#cb113-149" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>statistic</span>
+<span id="cb113-150"><a href="#cb113-150" aria-hidden="true" tabindex="-1"></a><span class="co"># 自由度</span></span>
+<span id="cb113-151"><a href="#cb113-151" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>parameter</span>
+<span id="cb113-152"><a href="#cb113-152" aria-hidden="true" tabindex="-1"></a><span class="co"># p値</span></span>
+<span id="cb113-153"><a href="#cb113-153" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>p.value</span>
+<span id="cb113-154"><a href="#cb113-154" aria-hidden="true" tabindex="-1"></a><span class="co"># 方法</span></span>
+<span id="cb113-155"><a href="#cb113-155" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>method</span>
+<span id="cb113-156"><a href="#cb113-156" aria-hidden="true" tabindex="-1"></a><span class="co"># データ名</span></span>
+<span id="cb113-157"><a href="#cb113-157" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>data.name</span>
+<span id="cb113-158"><a href="#cb113-158" aria-hidden="true" tabindex="-1"></a><span class="co"># 観測度数</span></span>
+<span id="cb113-159"><a href="#cb113-159" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>observed</span>
+<span id="cb113-160"><a href="#cb113-160" aria-hidden="true" tabindex="-1"></a><span class="co"># 期待度数</span></span>
+<span id="cb113-161"><a href="#cb113-161" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>expected</span>
+<span id="cb113-162"><a href="#cb113-162" aria-hidden="true" tabindex="-1"></a><span class="co"># ピアソンの残差 (observed - expected) / sqrt(expected)</span></span>
+<span id="cb113-163"><a href="#cb113-163" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>residuals</span>
+<span id="cb113-164"><a href="#cb113-164" aria-hidden="true" tabindex="-1"></a><span class="co"># 標準化残差 (observed - expected) / sqrt(V)</span></span>
+<span id="cb113-165"><a href="#cb113-165" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tab)<span class="sc">$</span>stdres</span>
+<span id="cb113-166"><a href="#cb113-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-167"><a href="#cb113-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-168"><a href="#cb113-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-169"><a href="#cb113-169" aria-hidden="true" tabindex="-1"></a>期待度数は<span class="in">`chisq.test(tab)$expected`</span>とすればよい．これを<span class="in">`tab_expected`</span>というオブジェクトとする．</span>
+<span id="cb113-170"><a href="#cb113-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-173"><a href="#cb113-173" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-174"><a href="#cb113-174" aria-hidden="true" tabindex="-1"></a><span class="co"># ixページの期待度数</span></span>
+<span id="cb113-175"><a href="#cb113-175" aria-hidden="true" tabindex="-1"></a>tab_expected <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tab)<span class="sc">$</span>expected <span class="sc">|&gt;</span> <span class="fu">as.table</span>()</span>
+<span id="cb113-176"><a href="#cb113-176" aria-hidden="true" tabindex="-1"></a>tab_expected</span>
+<span id="cb113-177"><a href="#cb113-177" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-178"><a href="#cb113-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-179"><a href="#cb113-179" aria-hidden="true" tabindex="-1"></a>なお，<span class="in">`DescTools::ExpFreq(tab)`</span>でも同様の期待度数を求めることができる．</span>
+<span id="cb113-180"><a href="#cb113-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-183"><a href="#cb113-183" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-184"><a href="#cb113-184" aria-hidden="true" tabindex="-1"></a><span class="fu">Margins</span>(tab_expected)</span>
+<span id="cb113-185"><a href="#cb113-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-186"><a href="#cb113-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-187"><a href="#cb113-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-188"><a href="#cb113-188" aria-hidden="true" tabindex="-1"></a>ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．</span>
+<span id="cb113-189"><a href="#cb113-189" aria-hidden="true" tabindex="-1"></a>自由度についても<span class="in">`nrow`</span>と<span class="in">`ncol`</span>を用いて計算（<span class="in">`prod(dim(tab) -1)`</span>でもよい）．</span>
+<span id="cb113-190"><a href="#cb113-190" aria-hidden="true" tabindex="-1"></a><span class="in">`list`</span>関数は様々なもの（値，ベクトル，データ，リスト等）をまとめ，並べて表示するときに用いる．</span>
+<span id="cb113-191"><a href="#cb113-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-194"><a href="#cb113-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-195"><a href="#cb113-195" aria-hidden="true" tabindex="-1"></a><span class="co"># 適合度（X2とL2）</span></span>
+<span id="cb113-196"><a href="#cb113-196" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(((tab <span class="sc">-</span> tab_expected)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> tab_expected))</span>
+<span id="cb113-197"><a href="#cb113-197" aria-hidden="true" tabindex="-1"></a>L2 <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">sum</span>((tab <span class="sc">*</span> <span class="fu">log</span>(tab <span class="sc">/</span> tab_expected)))</span>
+<span id="cb113-198"><a href="#cb113-198" aria-hidden="true" tabindex="-1"></a><span class="co"># 自由度</span></span>
+<span id="cb113-199"><a href="#cb113-199" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> (<span class="fu">nrow</span>(tab) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="fu">ncol</span>(tab) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb113-200"><a href="#cb113-200" aria-hidden="true" tabindex="-1"></a><span class="co"># df &lt;- prod(dim(tab) -1)</span></span>
+<span id="cb113-201"><a href="#cb113-201" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果をリストで表示</span></span>
+<span id="cb113-202"><a href="#cb113-202" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"自由度"</span> <span class="ot">=</span> df,</span>
+<span id="cb113-203"><a href="#cb113-203" aria-hidden="true" tabindex="-1"></a>     <span class="st">"ピアソンのカイ2乗統計量"</span> <span class="ot">=</span> X2, </span>
+<span id="cb113-204"><a href="#cb113-204" aria-hidden="true" tabindex="-1"></a>     <span class="st">"尤度比統計量"</span> <span class="ot">=</span> L2)</span>
+<span id="cb113-205"><a href="#cb113-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-206"><a href="#cb113-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-207"><a href="#cb113-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-208"><a href="#cb113-208" aria-hidden="true" tabindex="-1"></a><span class="fu">### 一様連関モデル {-}</span></span>
+<span id="cb113-209"><a href="#cb113-209" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>ページixの一様連関モデルを再現する．</span>
+<span id="cb113-210"><a href="#cb113-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-211"><a href="#cb113-211" aria-hidden="true" tabindex="-1"></a><span class="fu">#### データの準備 {-}</span></span>
+<span id="cb113-212"><a href="#cb113-212" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>多元表の分析は表形式（table form）ではなく，度数，行変数，列変数からなる集計データを作成して行うことが多い．このデータの形式は度数形式（frequency form）と呼ばれる．</span>
+<span id="cb113-213"><a href="#cb113-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>先程のデータについてもクロス表ではなく，次のような集計データを作成する．</span>
+<span id="cb113-214"><a href="#cb113-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-215"><a href="#cb113-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-216"><a href="#cb113-216" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, results = FALSE, echo = FALSE}</span></span>
+<span id="cb113-217"><a href="#cb113-217" aria-hidden="true" tabindex="-1"></a><span class="co"># 度数のベクトル</span></span>
+<span id="cb113-218"><a href="#cb113-218" aria-hidden="true" tabindex="-1"></a>Freq</span>
+<span id="cb113-219"><a href="#cb113-219" aria-hidden="true" tabindex="-1"></a><span class="co"># 行変数</span></span>
+<span id="cb113-220"><a href="#cb113-220" aria-hidden="true" tabindex="-1"></a>PSES <span class="ot">&lt;-</span> <span class="fu">gl</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">k =</span> <span class="dv">4</span>)</span>
+<span id="cb113-221"><a href="#cb113-221" aria-hidden="true" tabindex="-1"></a>PSES</span>
+<span id="cb113-222"><a href="#cb113-222" aria-hidden="true" tabindex="-1"></a><span class="co"># 列変数</span></span>
+<span id="cb113-223"><a href="#cb113-223" aria-hidden="true" tabindex="-1"></a>MHS  <span class="ot">&lt;-</span> <span class="fu">gl</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">length =</span> <span class="dv">24</span>)</span>
+<span id="cb113-224"><a href="#cb113-224" aria-hidden="true" tabindex="-1"></a>MHS</span>
+<span id="cb113-225"><a href="#cb113-225" aria-hidden="true" tabindex="-1"></a><span class="co"># 度数，行変数，列変数からなるデータを作成</span></span>
+<span id="cb113-226"><a href="#cb113-226" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">tibble</span>(Freq, PSES, MHS)</span>
+<span id="cb113-227"><a href="#cb113-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-228"><a href="#cb113-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-229"><a href="#cb113-229" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>データを表示して確認する．</span>
+<span id="cb113-230"><a href="#cb113-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-231"><a href="#cb113-231" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, results = FALSE, echo = FALSE}</span></span>
+<span id="cb113-232"><a href="#cb113-232" aria-hidden="true" tabindex="-1"></a><span class="co"># データの確認</span></span>
+<span id="cb113-233"><a href="#cb113-233" aria-hidden="true" tabindex="-1"></a>d</span>
+<span id="cb113-234"><a href="#cb113-234" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-235"><a href="#cb113-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-236"><a href="#cb113-236" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo = FALSE}</span></span>
+<span id="cb113-237"><a href="#cb113-237" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(d, </span>
+<span id="cb113-238"><a href="#cb113-238" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="fu">c</span>(<span class="st">'r'</span>, <span class="st">'r'</span>, <span class="st">'r'</span>), </span>
+<span id="cb113-239"><a href="#cb113-239" aria-hidden="true" tabindex="-1"></a>             <span class="at">table.attr =</span> <span class="st">"style='width:30%;'"</span>, </span>
+<span id="cb113-240"><a href="#cb113-240" aria-hidden="true" tabindex="-1"></a>             <span class="at">format =</span> <span class="st">"html"</span>, </span>
+<span id="cb113-241"><a href="#cb113-241" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">"精神衛生と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb113-242"><a href="#cb113-242" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">position =</span> <span class="st">"center"</span>)</span>
+<span id="cb113-243"><a href="#cb113-243" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-244"><a href="#cb113-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-245"><a href="#cb113-245" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>度数については先程作成した<span class="in">`Freq`</span>を使う．</span>
+<span id="cb113-246"><a href="#cb113-246" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`gl`</span>（Generate Factor Levels）によって度数に対応するカテゴリを作成する．数値で作成してもよいが，その場合は最後に<span class="in">`factor`</span>に変換しておく．</span>
+<span id="cb113-247"><a href="#cb113-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-250"><a href="#cb113-250" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-251"><a href="#cb113-251" aria-hidden="true" tabindex="-1"></a><span class="co"># 度数のベクトル</span></span>
+<span id="cb113-252"><a href="#cb113-252" aria-hidden="true" tabindex="-1"></a>Freq</span>
+<span id="cb113-253"><a href="#cb113-253" aria-hidden="true" tabindex="-1"></a><span class="co"># 行変数</span></span>
+<span id="cb113-254"><a href="#cb113-254" aria-hidden="true" tabindex="-1"></a>PSES <span class="ot">&lt;-</span> <span class="fu">gl</span>(<span class="at">n =</span> <span class="dv">6</span>, <span class="at">k =</span> <span class="dv">4</span>)</span>
+<span id="cb113-255"><a href="#cb113-255" aria-hidden="true" tabindex="-1"></a>PSES</span>
+<span id="cb113-256"><a href="#cb113-256" aria-hidden="true" tabindex="-1"></a><span class="co"># 列変数</span></span>
+<span id="cb113-257"><a href="#cb113-257" aria-hidden="true" tabindex="-1"></a>MHS  <span class="ot">&lt;-</span> <span class="fu">gl</span>(<span class="at">n =</span> <span class="dv">4</span>, <span class="at">k =</span> <span class="dv">1</span>, <span class="at">length =</span> <span class="dv">24</span>)</span>
+<span id="cb113-258"><a href="#cb113-258" aria-hidden="true" tabindex="-1"></a>MHS</span>
+<span id="cb113-259"><a href="#cb113-259" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-260"><a href="#cb113-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-261"><a href="#cb113-261" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>以上で作成した度数（<span class="in">`Freq`</span>），行変数（<span class="in">`PSES`</span>），列変数（<span class="in">`MHS`</span>）のベクトルを用いてデータを作成する．</span>
+<span id="cb113-262"><a href="#cb113-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-265"><a href="#cb113-265" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-266"><a href="#cb113-266" aria-hidden="true" tabindex="-1"></a><span class="co"># 度数，行変数，列変数からなる度数形式データを作成</span></span>
+<span id="cb113-267"><a href="#cb113-267" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">tibble</span>(Freq, PSES, MHS)</span>
+<span id="cb113-268"><a href="#cb113-268" aria-hidden="true" tabindex="-1"></a><span class="co"># データの確認</span></span>
+<span id="cb113-269"><a href="#cb113-269" aria-hidden="true" tabindex="-1"></a>d</span>
+<span id="cb113-270"><a href="#cb113-270" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-271"><a href="#cb113-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-272"><a href="#cb113-272" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>このような形式のデータにすることで柔軟なモデリングを行うことができる．</span>
+<span id="cb113-273"><a href="#cb113-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>なお<span class="in">`gnm`</span>パッケージには<span class="in">`mentalHealth`</span>というデータがそもそも存在するのでそれを用いてもよい．</span>
+<span id="cb113-274"><a href="#cb113-274" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>表形式データからこのような度数形式データを作成する場合は<span class="in">`data.frame`</span>を用いれば簡単である．</span>
+<span id="cb113-275"><a href="#cb113-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-278"><a href="#cb113-278" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-279"><a href="#cb113-279" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(tab)</span>
+<span id="cb113-280"><a href="#cb113-280" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-281"><a href="#cb113-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-282"><a href="#cb113-282" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>逆に度数形式データから表形式データを作成するためには<span class="in">`xtabs`</span>を用いる．</span>
+<span id="cb113-283"><a href="#cb113-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-286"><a href="#cb113-286" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-287"><a href="#cb113-287" aria-hidden="true" tabindex="-1"></a><span class="fu">xtabs</span>(Freq <span class="sc">~</span> SES <span class="sc">+</span> MHS, <span class="at">data =</span> <span class="fu">data.frame</span>(tab))</span>
+<span id="cb113-288"><a href="#cb113-288" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-289"><a href="#cb113-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-290"><a href="#cb113-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-291"><a href="#cb113-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-292"><a href="#cb113-292" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 独立モデル {-}</span></span>
+<span id="cb113-293"><a href="#cb113-293" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>この形式のデータ（<span class="in">`Freq`</span>）に対して，独立モデルによる分析を行う．これは先程の独立性の検定と同じ結果となる．</span>
+<span id="cb113-294"><a href="#cb113-294" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`|&gt;`</span>はパイプ演算子であり，パイプ演算子を使うと<span class="in">`function(x)`</span>を<span class="in">`x |&gt; function()`</span>とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば<span class="in">`function(x, y)`</span>）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，<span class="in">`function(x, y)`</span>は<span class="in">`x |&gt; function(y)`</span>とすればよい．では<span class="in">`y |&gt;`</span>とする場合は，<span class="in">`y |&gt; function(x, _)`</span>とすることで<span class="in">`function(x, y)`</span>と同じ結果を得ることができる．<span class="in">`_`</span>はプレースホルダーと呼ばれ，引数が適用される場所を示している．</span>
+<span id="cb113-295"><a href="#cb113-295" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`d`</span>というデータに対して，<span class="in">`gnm`</span>を適用する．<span class="in">`度数 ~ 行変数 + 列変数`</span>といった形で関連を指定する．<span class="in">`glm`</span>を使ってもよいが，最終的には<span class="in">`gnm`</span>を使うことになるので，ここでは<span class="in">`gnm`</span>を用いる．</span>
+<span id="cb113-296"><a href="#cb113-296" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>モデルの分布族（family）は<span class="in">`poisson`</span>（ポワソン分布）とする．これを忘れると<span class="in">`gaussian`</span>（正規分布）が適用され，異なる結果が出力されるので注意する</span>
+<span id="cb113-297"><a href="#cb113-297" aria-hidden="true" tabindex="-1"></a>．<span class="in">`gnm`</span>内で<span class="in">`data = _`</span>となっているが<span class="in">`_`</span>にはパイプ演算子の左辺にある<span class="in">`d`</span>が入る．つまりこれは<span class="in">`data = d`</span>とすることに等しい．</span>
+<span id="cb113-298"><a href="#cb113-298" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>こうして得られた分析の結果を<span class="in">`O`</span>としている．</span>
+<span id="cb113-299"><a href="#cb113-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-302"><a href="#cb113-302" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-303"><a href="#cb113-303" aria-hidden="true" tabindex="-1"></a><span class="co"># 独立モデル</span></span>
+<span id="cb113-304"><a href="#cb113-304" aria-hidden="true" tabindex="-1"></a>O <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span></span>
+<span id="cb113-305"><a href="#cb113-305" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS, </span>
+<span id="cb113-306"><a href="#cb113-306" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson, </span>
+<span id="cb113-307"><a href="#cb113-307" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>,</span>
+<span id="cb113-308"><a href="#cb113-308" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> _)</span>
+<span id="cb113-309"><a href="#cb113-309" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-310"><a href="#cb113-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-311"><a href="#cb113-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-312"><a href="#cb113-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>結果は<span class="in">`O`</span>（係数と最小限の適合度のみ）あるいは<span class="in">`summary(O)`</span>（標準誤差やp値を含んだモデルの結果の要約）で確認できる．</span>
+<span id="cb113-313"><a href="#cb113-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-316"><a href="#cb113-316" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-317"><a href="#cb113-317" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果の表示</span></span>
+<span id="cb113-318"><a href="#cb113-318" aria-hidden="true" tabindex="-1"></a>O</span>
+<span id="cb113-319"><a href="#cb113-319" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(O)</span>
+<span id="cb113-320"><a href="#cb113-320" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-321"><a href="#cb113-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-322"><a href="#cb113-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>他にもどのような情報があるのかをヘルプか<span class="in">`names`</span>で確認する．</span>
+<span id="cb113-323"><a href="#cb113-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-326"><a href="#cb113-326" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-327"><a href="#cb113-327" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(O)</span>
+<span id="cb113-328"><a href="#cb113-328" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(<span class="fu">summary</span>(O))</span>
+<span id="cb113-329"><a href="#cb113-329" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-330"><a href="#cb113-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-331"><a href="#cb113-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-332"><a href="#cb113-332" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>結果には期待度数<span class="in">`fitted.values`</span>があるので，これを用いて適合度を計算してみる．</span>
+<span id="cb113-333"><a href="#cb113-333" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>観測度数については<span class="in">`Freq`</span>の変わりに<span class="in">`O$y`</span>を用いてもよい．これはモデル<span class="in">`O`</span>で使用された従属変数<span class="in">`y`</span>であり，<span class="in">`Freq`</span>そのものである．</span>
+<span id="cb113-334"><a href="#cb113-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-337"><a href="#cb113-337" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-338"><a href="#cb113-338" aria-hidden="true" tabindex="-1"></a><span class="co"># 期待度数をexpected_Oとする</span></span>
+<span id="cb113-339"><a href="#cb113-339" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> O<span class="sc">$</span>y</span>
+<span id="cb113-340"><a href="#cb113-340" aria-hidden="true" tabindex="-1"></a>expected_O <span class="ot">&lt;-</span> O<span class="sc">$</span>fitted.values</span>
+<span id="cb113-341"><a href="#cb113-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-342"><a href="#cb113-342" aria-hidden="true" tabindex="-1"></a><span class="co"># 行と列のカテゴリ数をユニークな値の数から求める</span></span>
+<span id="cb113-343"><a href="#cb113-343" aria-hidden="true" tabindex="-1"></a>I <span class="ot">&lt;-</span> d<span class="sc">$</span>PSES <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()</span>
+<span id="cb113-344"><a href="#cb113-344" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> d<span class="sc">$</span>MHS <span class="sc">|&gt;</span> <span class="fu">unique</span>() <span class="sc">|&gt;</span> <span class="fu">length</span>()</span>
+<span id="cb113-345"><a href="#cb113-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-346"><a href="#cb113-346" aria-hidden="true" tabindex="-1"></a><span class="co"># 自由度</span></span>
+<span id="cb113-347"><a href="#cb113-347" aria-hidden="true" tabindex="-1"></a>df_O <span class="ot">&lt;-</span> (I <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (J <span class="sc">-</span> <span class="dv">1</span>) </span>
+<span id="cb113-348"><a href="#cb113-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-349"><a href="#cb113-349" aria-hidden="true" tabindex="-1"></a><span class="co"># 適合度（X2とL2）</span></span>
+<span id="cb113-350"><a href="#cb113-350" aria-hidden="true" tabindex="-1"></a>X2_O <span class="ot">&lt;-</span> ((observed <span class="sc">-</span> expected_O)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> expected_O) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span>
+<span id="cb113-351"><a href="#cb113-351" aria-hidden="true" tabindex="-1"></a>L2_O <span class="ot">&lt;-</span> (observed <span class="sc">*</span> <span class="fu">log</span>(observed <span class="sc">/</span> expected_O)) <span class="sc">|&gt;</span> <span class="fu">sum</span>() <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb113-352"><a href="#cb113-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-353"><a href="#cb113-353" aria-hidden="true" tabindex="-1"></a><span class="co"># リストでまとめて表示</span></span>
+<span id="cb113-354"><a href="#cb113-354" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"自由度"</span> <span class="ot">=</span> df_O,</span>
+<span id="cb113-355"><a href="#cb113-355" aria-hidden="true" tabindex="-1"></a>     <span class="st">"ピアソンのカイ2乗統計量"</span> <span class="ot">=</span> X2_O,</span>
+<span id="cb113-356"><a href="#cb113-356" aria-hidden="true" tabindex="-1"></a>     <span class="st">"尤度比統計量"</span> <span class="ot">=</span> L2_O)</span>
+<span id="cb113-357"><a href="#cb113-357" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-358"><a href="#cb113-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-359"><a href="#cb113-359" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`summary(O)`</span>では<span class="in">`Residual deviance: 47.418 on 15 degrees of freedom`</span>となっており，先程の分析と適合度は一致する．</span>
+<span id="cb113-360"><a href="#cb113-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-361"><a href="#cb113-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-362"><a href="#cb113-362" aria-hidden="true" tabindex="-1"></a><span class="fu">#### 一様連関モデル {-}</span></span>
+<span id="cb113-363"><a href="#cb113-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-364"><a href="#cb113-364" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>次に一様連関モデル（Uniform association model）による分析を行う．</span>
+<span id="cb113-365"><a href="#cb113-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`PSES`</span>を<span class="in">`as.integer`</span>関数で整数にしたものを<span class="in">`Rscore`</span>，<span class="in">`MHS`</span>を<span class="in">`as.integer`</span>関数で整数にしたものを<span class="in">`Cscore`</span>として，<span class="in">`mutate`</span>関数でデータに新たに変数を作成している．更に平均値を引いて中心化している．<span class="in">`d &lt;- d |&gt;`</span>は<span class="in">`mutate`</span>変数を追加して元のデータに上書きをしている．</span>
+<span id="cb113-366"><a href="#cb113-366" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>変数の追加された<span class="in">`d`</span>データに対して，一様連関モデルによる分析を<span class="in">`gnm`</span>パッケージで行う．</span>
+<span id="cb113-367"><a href="#cb113-367" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>独立モデルとの違いは，作成した整数スコアの積<span class="in">`Rscore:Cscore`</span>がモデルに追加されているだけである．<span class="in">`Rscore*Cscore`</span>とすると<span class="in">`Rscore`</span>と<span class="in">`Cscore`</span>も表示されるが結果は変わらない．</span>
+<span id="cb113-368"><a href="#cb113-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-371"><a href="#cb113-371" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-372"><a href="#cb113-372" aria-hidden="true" tabindex="-1"></a><span class="co"># 行変数と列変数を連続した整数値とする</span></span>
+<span id="cb113-373"><a href="#cb113-373" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> </span>
+<span id="cb113-374"><a href="#cb113-374" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rscore =</span> <span class="fu">as.integer</span>(PSES),</span>
+<span id="cb113-375"><a href="#cb113-375" aria-hidden="true" tabindex="-1"></a>         <span class="at">Rscore =</span> Rscore <span class="sc">-</span> <span class="fu">mean</span>(Rscore),</span>
+<span id="cb113-376"><a href="#cb113-376" aria-hidden="true" tabindex="-1"></a>         <span class="at">Cscore =</span> <span class="fu">as.integer</span>(MHS),</span>
+<span id="cb113-377"><a href="#cb113-377" aria-hidden="true" tabindex="-1"></a>         <span class="at">Cscore =</span> Cscore <span class="sc">-</span> <span class="fu">mean</span>(Cscore))</span>
+<span id="cb113-378"><a href="#cb113-378" aria-hidden="true" tabindex="-1"></a><span class="co"># 一様連関モデル</span></span>
+<span id="cb113-379"><a href="#cb113-379" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> </span>
+<span id="cb113-380"><a href="#cb113-380" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS <span class="sc">+</span> Rscore<span class="sc">:</span>Cscore, </span>
+<span id="cb113-381"><a href="#cb113-381" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson, </span>
+<span id="cb113-382"><a href="#cb113-382" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>,</span>
+<span id="cb113-383"><a href="#cb113-383" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> _)</span>
+<span id="cb113-384"><a href="#cb113-384" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果の表示</span></span>
+<span id="cb113-385"><a href="#cb113-385" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(U)</span>
+<span id="cb113-386"><a href="#cb113-386" aria-hidden="true" tabindex="-1"></a><span class="co"># 適合度（X2とL2）</span></span>
+<span id="cb113-387"><a href="#cb113-387" aria-hidden="true" tabindex="-1"></a>observed <span class="ot">&lt;-</span> U<span class="sc">$</span>y</span>
+<span id="cb113-388"><a href="#cb113-388" aria-hidden="true" tabindex="-1"></a>expected_U <span class="ot">&lt;-</span> U<span class="sc">$</span>fitted.values</span>
+<span id="cb113-389"><a href="#cb113-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-390"><a href="#cb113-390" aria-hidden="true" tabindex="-1"></a>df_U <span class="ot">&lt;-</span> (I <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">*</span>(J <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb113-391"><a href="#cb113-391" aria-hidden="true" tabindex="-1"></a>X2_U <span class="ot">&lt;-</span> ((observed <span class="sc">-</span> expected_U)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> expected_U) <span class="sc">|&gt;</span> <span class="fu">sum</span>()</span>
+<span id="cb113-392"><a href="#cb113-392" aria-hidden="true" tabindex="-1"></a>L2_U <span class="ot">&lt;-</span> (observed <span class="sc">*</span> <span class="fu">log</span>(observed <span class="sc">/</span> expected_U)) <span class="sc">|&gt;</span> <span class="fu">sum</span>() <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb113-393"><a href="#cb113-393" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="st">"自由度"</span> <span class="ot">=</span> df_U,</span>
+<span id="cb113-394"><a href="#cb113-394" aria-hidden="true" tabindex="-1"></a>     <span class="st">"ピアソンのカイ2乗統計量"</span> <span class="ot">=</span> X2_U, </span>
+<span id="cb113-395"><a href="#cb113-395" aria-hidden="true" tabindex="-1"></a>     <span class="st">"尤度比統計量"</span> <span class="ot">=</span> L2_U)</span>
+<span id="cb113-396"><a href="#cb113-396" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-397"><a href="#cb113-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-398"><a href="#cb113-398" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>結果がixページと一致することを確認してほしい．</span>
+<span id="cb113-399"><a href="#cb113-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-400"><a href="#cb113-400" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>なお，尤度比統計量$L^2$と自由度は次のように求めることができる．</span>
+<span id="cb113-401"><a href="#cb113-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-404"><a href="#cb113-404" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-405"><a href="#cb113-405" aria-hidden="true" tabindex="-1"></a><span class="co"># 独立モデルのL</span></span>
+<span id="cb113-406"><a href="#cb113-406" aria-hidden="true" tabindex="-1"></a>O<span class="sc">$</span>deviance</span>
+<span id="cb113-407"><a href="#cb113-407" aria-hidden="true" tabindex="-1"></a><span class="co"># 独立モデルのdf</span></span>
+<span id="cb113-408"><a href="#cb113-408" aria-hidden="true" tabindex="-1"></a>O<span class="sc">$</span>df.residual</span>
+<span id="cb113-409"><a href="#cb113-409" aria-hidden="true" tabindex="-1"></a><span class="co"># 一様連関モデルのL</span></span>
+<span id="cb113-410"><a href="#cb113-410" aria-hidden="true" tabindex="-1"></a>U<span class="sc">$</span>deviance</span>
+<span id="cb113-411"><a href="#cb113-411" aria-hidden="true" tabindex="-1"></a><span class="co"># 一様連関モデルのdf</span></span>
+<span id="cb113-412"><a href="#cb113-412" aria-hidden="true" tabindex="-1"></a>U<span class="sc">$</span>df.residual</span>
+<span id="cb113-413"><a href="#cb113-413" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-414"><a href="#cb113-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-415"><a href="#cb113-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-416"><a href="#cb113-416" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>尤度比統計量$L^2$と自由度の差を求める場合<span class="in">`anova`</span>関数を用いる．</span>
+<span id="cb113-417"><a href="#cb113-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-420"><a href="#cb113-420" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-421"><a href="#cb113-421" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(O, U)</span>
+<span id="cb113-422"><a href="#cb113-422" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-423"><a href="#cb113-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-424"><a href="#cb113-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-425"><a href="#cb113-425" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>以上で本書の序文の再現は終了である．</span>
+<span id="cb113-426"><a href="#cb113-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-427"><a href="#cb113-427" aria-hidden="true" tabindex="-1"></a><span class="fu">## 度数，行変数，列変数のデータからクロス表を作成 {-}</span></span>
+<span id="cb113-428"><a href="#cb113-428" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>度数，行変数，列変数のデータからクロス表を作成するには<span class="in">`xtabs`</span>関数を用いる．</span>
+<span id="cb113-429"><a href="#cb113-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-432"><a href="#cb113-432" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-433"><a href="#cb113-433" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> PSES <span class="sc">+</span> MHS, <span class="at">data =</span> _)</span>
+<span id="cb113-434"><a href="#cb113-434" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-435"><a href="#cb113-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-436"><a href="#cb113-436" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Rに初めから準備されている<span class="in">`Titanic`</span>データは，多少特殊な集計がされているが，これに<span class="in">`data.frame`</span>関数を適用すると，集計データになる．これに対して<span class="in">`xtabs`</span>関数を用いればクロス表を簡単に作成できる．</span>
+<span id="cb113-437"><a href="#cb113-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-440"><a href="#cb113-440" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-441"><a href="#cb113-441" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">|&gt;</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Class <span class="sc">+</span> Survived, <span class="at">data =</span> _)</span>
+<span id="cb113-442"><a href="#cb113-442" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">|&gt;</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Sex <span class="sc">+</span> Survived, <span class="at">data =</span> _)</span>
+<span id="cb113-443"><a href="#cb113-443" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(Titanic) <span class="sc">|&gt;</span> <span class="fu">xtabs</span>(Freq <span class="sc">~</span> Age <span class="sc">+</span> Survived, <span class="at">data =</span> _)</span>
+<span id="cb113-444"><a href="#cb113-444" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-445"><a href="#cb113-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-446"><a href="#cb113-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-447"><a href="#cb113-447" aria-hidden="true" tabindex="-1"></a><span class="fu">## 個票データから集計データを作成</span></span>
+<span id="cb113-448"><a href="#cb113-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-449"><a href="#cb113-449" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>個票データから集計データを作成する方法はいくつか考えられるが，ここでは<span class="in">`count`</span>関数を用いる．</span>
+<span id="cb113-450"><a href="#cb113-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-453"><a href="#cb113-453" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-454"><a href="#cb113-454" aria-hidden="true" tabindex="-1"></a><span class="co"># スターウォーズデータ</span></span>
+<span id="cb113-455"><a href="#cb113-455" aria-hidden="true" tabindex="-1"></a>starwars</span>
+<span id="cb113-456"><a href="#cb113-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-457"><a href="#cb113-457" aria-hidden="true" tabindex="-1"></a><span class="co"># 1つの変数にcount関数を適用</span></span>
+<span id="cb113-458"><a href="#cb113-458" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb113-459"><a href="#cb113-459" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sex)</span>
+<span id="cb113-460"><a href="#cb113-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-461"><a href="#cb113-461" aria-hidden="true" tabindex="-1"></a><span class="co"># 2つの変数にcount関数を適用し，集計レベルのデータを作成</span></span>
+<span id="cb113-462"><a href="#cb113-462" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">|&gt;</span> </span>
+<span id="cb113-463"><a href="#cb113-463" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sex, gender)</span>
+<span id="cb113-464"><a href="#cb113-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-465"><a href="#cb113-465" aria-hidden="true" tabindex="-1"></a><span class="co"># 欠損値を処理し，nをFreqと名前を変更し，df_dstarwarsとしてデータを保存</span></span>
+<span id="cb113-466"><a href="#cb113-466" aria-hidden="true" tabindex="-1"></a>df_dstarwars <span class="ot">&lt;-</span> starwars <span class="sc">|&gt;</span> </span>
+<span id="cb113-467"><a href="#cb113-467" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(sex, gender) <span class="sc">|&gt;</span> </span>
+<span id="cb113-468"><a href="#cb113-468" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb113-469"><a href="#cb113-469" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Freq =</span> n)</span>
+<span id="cb113-470"><a href="#cb113-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-471"><a href="#cb113-471" aria-hidden="true" tabindex="-1"></a><span class="co"># 確認</span></span>
+<span id="cb113-472"><a href="#cb113-472" aria-hidden="true" tabindex="-1"></a>df_dstarwars</span>
+<span id="cb113-473"><a href="#cb113-473" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-474"><a href="#cb113-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-475"><a href="#cb113-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-476"><a href="#cb113-476" aria-hidden="true" tabindex="-1"></a><span class="fu">## 集計データを個票データに変換</span></span>
+<span id="cb113-477"><a href="#cb113-477" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-478"><a href="#cb113-478" aria-hidden="true" tabindex="-1"></a>集計データを個票データに変換したいときには<span class="in">`vcdExtra`</span>パッケージの<span class="in">`expand.dft`</span>を用いる．</span>
+<span id="cb113-479"><a href="#cb113-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-480"><a href="#cb113-480" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, message =  FALSE}</span></span>
+<span id="cb113-481"><a href="#cb113-481" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vcdExtra)</span>
+<span id="cb113-482"><a href="#cb113-482" aria-hidden="true" tabindex="-1"></a>d_ind <span class="ot">&lt;-</span> <span class="fu">expand.dft</span>(d, <span class="at">dreq =</span> <span class="st">"Freq"</span>)</span>
+<span id="cb113-483"><a href="#cb113-483" aria-hidden="true" tabindex="-1"></a>d_ind</span>
+<span id="cb113-484"><a href="#cb113-484" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-485"><a href="#cb113-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-486"><a href="#cb113-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-487"><a href="#cb113-487" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3元クロス分類表の入力</span></span>
+<span id="cb113-488"><a href="#cb113-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-491"><a href="#cb113-491" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb113-492"><a href="#cb113-492" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb113-493"><a href="#cb113-493" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">1</span>,</span>
+<span id="cb113-494"><a href="#cb113-494" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">7</span>,</span>
+<span id="cb113-495"><a href="#cb113-495" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb113-496"><a href="#cb113-496" aria-hidden="true" tabindex="-1"></a>  <span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">5</span>,</span>
+<span id="cb113-497"><a href="#cb113-497" aria-hidden="true" tabindex="-1"></a>  <span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>,</span>
+<span id="cb113-498"><a href="#cb113-498" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb113-499"><a href="#cb113-499" aria-hidden="true" tabindex="-1"></a>  <span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">5</span>,</span>
+<span id="cb113-500"><a href="#cb113-500" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>,</span>
+<span id="cb113-501"><a href="#cb113-501" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb113-502"><a href="#cb113-502" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,</span>
+<span id="cb113-503"><a href="#cb113-503" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb113-504"><a href="#cb113-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-505"><a href="#cb113-505" aria-hidden="true" tabindex="-1"></a><span class="fu">array</span>(data, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
+<span id="cb113-506"><a href="#cb113-506" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-507"><a href="#cb113-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-508"><a href="#cb113-508" aria-hidden="true" tabindex="-1"></a>tab1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">1</span>,</span>
+<span id="cb113-509"><a href="#cb113-509" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">7</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
+<span id="cb113-510"><a href="#cb113-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-511"><a href="#cb113-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-512"><a href="#cb113-512" aria-hidden="true" tabindex="-1"></a>tab2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">7</span>,<span class="dv">5</span>,</span>
+<span id="cb113-513"><a href="#cb113-513" aria-hidden="true" tabindex="-1"></a>          <span class="dv">8</span>,<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
+<span id="cb113-514"><a href="#cb113-514" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-515"><a href="#cb113-515" aria-hidden="true" tabindex="-1"></a>tab3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">5</span>,</span>
+<span id="cb113-516"><a href="#cb113-516" aria-hidden="true" tabindex="-1"></a>          <span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
+<span id="cb113-517"><a href="#cb113-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-518"><a href="#cb113-518" aria-hidden="true" tabindex="-1"></a>tab4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,</span>
+<span id="cb113-519"><a href="#cb113-519" aria-hidden="true" tabindex="-1"></a>          <span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span><span class="cn">TRUE</span>)</span>
+<span id="cb113-520"><a href="#cb113-520" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-521"><a href="#cb113-521" aria-hidden="true" tabindex="-1"></a>tab_merge <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(tab1,tab2,tab3,tab4), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
+<span id="cb113-522"><a href="#cb113-522" aria-hidden="true" tabindex="-1"></a>tab_merge</span>
+<span id="cb113-523"><a href="#cb113-523" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(tab_merge) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">R =</span> <span class="fu">c</span>(<span class="st">"men"</span>,<span class="st">"women"</span>),</span>
+<span id="cb113-524"><a href="#cb113-524" aria-hidden="true" tabindex="-1"></a>                            <span class="at">C =</span> <span class="fu">c</span>(<span class="st">"blue"</span>,<span class="st">"red"</span>,<span class="st">"green"</span>),</span>
+<span id="cb113-525"><a href="#cb113-525" aria-hidden="true" tabindex="-1"></a>                            <span class="at">L =</span> <span class="fu">c</span>(<span class="st">"north"</span>,<span class="st">"south"</span>,<span class="st">"east"</span>,<span class="st">"west"</span>))</span>
+<span id="cb113-526"><a href="#cb113-526" aria-hidden="true" tabindex="-1"></a>tab_merge</span>
+<span id="cb113-527"><a href="#cb113-527" aria-hidden="true" tabindex="-1"></a><span class="co"># フラットな形式で3元表を表示</span></span>
+<span id="cb113-528"><a href="#cb113-528" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(tab_merge)</span>
+<span id="cb113-529"><a href="#cb113-529" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb113-530"><a href="#cb113-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-531"><a href="#cb113-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-532"><a href="#cb113-532" aria-hidden="true" tabindex="-1"></a>Friendly and Meyer (2016) を参考に表を作成．</span>
+<span id="cb113-533"><a href="#cb113-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-534"><a href="#cb113-534" aria-hidden="true" tabindex="-1"></a>|元のデータ形式|変換後のデータ形式|方法|</span>
+<span id="cb113-535"><a href="#cb113-535" aria-hidden="true" tabindex="-1"></a>|:---|:---|:---|</span>
+<span id="cb113-536"><a href="#cb113-536" aria-hidden="true" tabindex="-1"></a>|ケース形式|度数形式|<span class="in">`data.frame(table(d$A,d$B))`</span>|</span>
+<span id="cb113-537"><a href="#cb113-537" aria-hidden="true" tabindex="-1"></a>|ケース形式|表形式|<span class="in">`table(d$A,d$B)`</span>|</span>
+<span id="cb113-538"><a href="#cb113-538" aria-hidden="true" tabindex="-1"></a>|度数形式|ケース形式|<span class="in">`expand.dfr(X)`</span>|</span>
+<span id="cb113-539"><a href="#cb113-539" aria-hidden="true" tabindex="-1"></a>|度数形式|表形式| <span class="in">`xtabs(Freq ~ A + B)`</span>|</span>
+<span id="cb113-540"><a href="#cb113-540" aria-hidden="true" tabindex="-1"></a>|表形式|ケース形式|<span class="in">`expand.dfr(X)`</span>|</span>
+<span id="cb113-541"><a href="#cb113-541" aria-hidden="true" tabindex="-1"></a>|表形式|度数形式|<span class="in">`data.frame(tab)`</span>|</span>
+<span id="cb113-542"><a href="#cb113-542" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-543"><a href="#cb113-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-544"><a href="#cb113-544" aria-hidden="true" tabindex="-1"></a><span class="fu">## 練習問題 {-}</span></span>
+<span id="cb113-545"><a href="#cb113-545" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>せっかくデータを入力したので，このデータを使ってGoodman（1979）の表5A，表5B，表5Cの結果を再現しよう．</span>
+<span id="cb113-546"><a href="#cb113-546" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>分析方法については第2章のプログラムを参考にしてほしい．</span>
+<span id="cb113-547"><a href="#cb113-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb113-548"><a href="#cb113-548" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献 {-}</span></span>
+<span id="cb113-549"><a href="#cb113-549" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.”*Journal of the American Statistical Association* 74(367):537–52.</span>
+<span id="cb113-550"><a href="#cb113-550" aria-hidden="true" tabindex="-1"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 
 

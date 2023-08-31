@@ -167,7 +167,7 @@ vcd::mosaic(tab_2.1, shade = TRUE, keep_aspect_ratio = FALSE)
 ```
 
 
-::: {.callout-tip}
+::: {.callout-tip collapse="true"}
 ## ggplotでモザイクプロット
 図はすべて`ggplot()`を使用して描きたいという場合は，`ggmosaic`パッケージを用いる．
 その前に集計データを`vcdExtra::expand.dft()`によって個票データに変換し，`ggmosaic::geom_mosaic`を使用する．
@@ -295,13 +295,13 @@ fit |> confint("COMM2:SUP2") |> exp()
 まずは表2.3Aを作成する．値をベクトルの形式で入力する．
 
 ```{r}
-Freq <- c( 39, 50, 18,  4,
-          140,178, 85, 23,
-          108,195, 97, 23,
-          238,598,363,111,
-           78,250,150, 55,
-           50,200,208, 74,
-            8, 29, 46, 21)
+Freq <- c( 39,  50,  18,   4,
+          140, 178,  85,  23,
+          108, 195,  97,  23,
+          238, 598, 363, 111,
+           78, 250, 150,  55,
+           50, 200, 208,  74,
+            8,  29,  46,  21)
 ```
 
 ベクトルのデータを`matrix`で行列にし，最終的には`as.table`でtable形式にする．
@@ -394,7 +394,9 @@ options(contrasts = c(factor = "contr.treatment",
 # 行変数と列変数の整数値を作成
 freq_tab_2.3A <- freq_tab_2.3A |> 
   mutate(Rscore = as.integer(polviews),
-         Cscore = as.integer(fefam))
+         Rscore = Rscore - mean(Rscore),
+         Cscore = as.integer(fefam),
+         Cscore = Cscore - mean(Cscore))
 freq_tab_2.3A
 ```
 
@@ -536,9 +538,6 @@ model.summary(Ralt, "R: Row effect (dummy coding)")
 # モデル行列の確認
 model.matrix(Ralt) |> unique()
 ```
-
-
-
 
 
 
@@ -776,6 +775,16 @@ summary(RC)
 list(mu = mu, nu = nu)
 ```
 
+和が0，2乗和が1となっていることを確認
+
+```{r}
+sum(mu$qvframe[,1])
+sum(mu$qvframe[,1]^2)
+
+sum(nu$qvframe[,1])
+sum(nu$qvframe[,1]^2)
+```
+
 
 適合度は変化していない．
 
@@ -838,7 +847,7 @@ RC_mw <- freq_tab_2.3A |>
 summary(RC_mw)
 ```
 
-内在的連関パラメータが0.25673となっている．
+内的連関パラメータ$\phi$が0.25673となっている．
 
 
 適合度は変化していない．
@@ -896,7 +905,7 @@ model_comparison <- function(x, y = 0) {
 bind_rows(model_comparison(1,2),
           model_comparison(2,6),
           model_comparison(6),
-          model_comparison(1))
+          model_comparison(1)) |> kable(digit = 3)
 ```
 
 
@@ -906,7 +915,7 @@ bind_rows(model_comparison(1,2),
 # Table 2.4 Panel C
 bind_rows(model_comparison(2,4),
           model_comparison(4,6),
-          model_comparison(2,6))
+          model_comparison(2,6)) |> kable(digit = 3)
 ```
 
 
@@ -1056,7 +1065,7 @@ rc_fit_wm <- rc(tab_2.3A,
 summary(rc_fit_wm)
 ```
 
-これは先ほど求めた周辺重みづけの結果（内在的連関パラメータが0.25673）と一致する．
+これは先ほど求めた周辺重みづけの結果（内的連関パラメータが0.25673）と一致する．
 
 
 ## 表2.3B
@@ -1074,10 +1083,10 @@ options(contrasts = c(factor = "contr.treatment",
 
 
 ```{r}
-Freq <- c(518,  95, 6, 35, 5,
-         　 81,  67, 4, 49, 2,
-          452,1003,67,630, 5,
-           71, 157,37,562,12)
+Freq <- c(518,   95,  6,  35,  5,
+         　81,   67,  4,  49,  2,
+          452, 1003, 67, 630,  5,
+           71,  157, 37, 562, 12)
 
 # データを表形式に変換
 tab_2.3B <- matrix(Freq, 
@@ -1191,8 +1200,6 @@ RC2 <- freq_tab_2.3B |>
       tolerance = 1e-12)
 ```
 
-
-
 ## 表2.6A
 
 表2.6Aを再現する．
@@ -1269,9 +1276,9 @@ nu <- getContrasts(UplusRC,
                    scaleWeights = "unit")
 
 # 中心化制約と尺度化制約の確認
-sum(mu$qvframe[,1])
+sum(mu$qvframe[,1]) |> round()
 sum(mu$qvframe[,1]^2)
-sum(nu$qvframe[,1])
+sum(nu$qvframe[,1]) |> round()
 sum(nu$qvframe[,1]^2)
 
 # 行スコアと列スコアの両端の値を固定する
@@ -1360,7 +1367,10 @@ summary(RplusRC)$coefficients |>
 
 ## 表2.7C
 
+`Algorithm failed - no model could be estimated`となったら再度推定すること．
+
 ```{r}
+set.seed(1234)
 CplusRC.un <- freq_tab_2.3B |>
   gnm(Freq ~ Educ + Occ + 
         Rscore:Occ + 

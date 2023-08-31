@@ -149,10 +149,13 @@ chisq.test(tab)$stdres
 # ixページの期待度数
 tab_expected <- chisq.test(tab)$expected |> as.table()
 tab_expected
-Margins(tab_expected)
 ```
 
 なお，`DescTools::ExpFreq(tab)`でも同様の期待度数を求めることができる．
+
+```{r}
+Margins(tab_expected)
+```
 
 
 ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．
@@ -251,10 +254,10 @@ xtabs(Freq ~ SES + MHS, data = data.frame(tab))
 
 #### 独立モデル {-}
 - この形式のデータ（`Freq`）に対して，独立モデルによる分析を行う．これは先程の独立性の検定と同じ結果となる．
-- `|>`はパイプ演算子であり，パイプ演算子を使うと`function(x)`を`x |> function()`とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば`function(x, y)`）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，`function(x, y)`は`x |> function(y)`とすればよい．では`y |>`とする場合は，`y |> function(x, .)`とすることで`function(x, y)`と同じ結果を得ることができる．
-- `d`というデータに対して，`gnm`を適用する．`度数 ~ 行変数 + 列変数`といった形で関連を指定する．`glm`を使ってもよいが，最終的には`gnm`を使うことになるので，ここでは
+- `|>`はパイプ演算子であり，パイプ演算子を使うと`function(x)`を`x |> function()`とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば`function(x, y)`）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，`function(x, y)`は`x |> function(y)`とすればよい．では`y |>`とする場合は，`y |> function(x, _)`とすることで`function(x, y)`と同じ結果を得ることができる．`_`はプレースホルダーと呼ばれ，引数が適用される場所を示している．
+- `d`というデータに対して，`gnm`を適用する．`度数 ~ 行変数 + 列変数`といった形で関連を指定する．`glm`を使ってもよいが，最終的には`gnm`を使うことになるので，ここでは`gnm`を用いる．
 - モデルの分布族（family）は`poisson`（ポワソン分布）とする．これを忘れると`gaussian`（正規分布）が適用され，異なる結果が出力されるので注意する
-．`gnm`内で`data = _`となっているが`.`にはパイプ演算子の左辺にある`d`が入る．つまりこれは`data = d`とすることに等しい．
+．`gnm`内で`data = _`となっているが`_`にはパイプ演算子の左辺にある`d`が入る．つまりこれは`data = d`とすることに等しい．
 - こうして得られた分析の結果を`O`としている．
 
 ```{r}
@@ -291,7 +294,7 @@ names(summary(O))
 observed <- O$y
 expected_O <- O$fitted.values
 
-# 行と列のカテゴリ数
+# 行と列のカテゴリ数をユニークな値の数から求める
 I <- d$PSES |> unique() |> length()
 J <- d$MHS |> unique() |> length()
 
@@ -314,7 +317,7 @@ list("自由度" = df_O,
 #### 一様連関モデル {-}
 
 - 次に一様連関モデル（Uniform association model）による分析を行う．
-- `PSES`を`as.integer`関数で整数にしたものを`Rscore`，`MHS`を`as.integer`関数で整数にしたものを`Cscore`として，`mutate`関数でデータに新たに変数を作成している．`d <- d |>`は`mutate`変数を追加して元のデータに上書きをしている．
+- `PSES`を`as.integer`関数で整数にしたものを`Rscore`，`MHS`を`as.integer`関数で整数にしたものを`Cscore`として，`mutate`関数でデータに新たに変数を作成している．更に平均値を引いて中心化している．`d <- d |>`は`mutate`変数を追加して元のデータに上書きをしている．
 - 変数の追加された`d`データに対して，一様連関モデルによる分析を`gnm`パッケージで行う．
 - 独立モデルとの違いは，作成した整数スコアの積`Rscore:Cscore`がモデルに追加されているだけである．`Rscore*Cscore`とすると`Rscore`と`Cscore`も表示されるが結果は変わらない．
 
@@ -322,7 +325,9 @@ list("自由度" = df_O,
 # 行変数と列変数を連続した整数値とする
 d <- d |> 
   mutate(Rscore = as.integer(PSES),
-         Cscore = as.integer(MHS))
+         Rscore = Rscore - mean(Rscore),
+         Cscore = as.integer(MHS),
+         Cscore = Cscore - mean(Cscore))
 # 一様連関モデル
 U <- d |> 
   gnm(Freq ~ PSES + MHS + Rscore:Cscore, 
@@ -344,7 +349,6 @@ list("自由度" = df_U,
 ```
 
 - 結果がixページと一致することを確認してほしい．
-
 
 - なお，尤度比統計量$L^2$と自由度は次のように求めることができる．
 
@@ -426,7 +430,8 @@ d_ind
 ## 3元クロス分類表の入力
 
 ```{r}
-data <- c(2,5,1,
+data <- c(
+  2,5,1,
   2,4,7,
   
   4,7,5,
