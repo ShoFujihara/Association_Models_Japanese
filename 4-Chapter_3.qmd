@@ -185,6 +185,26 @@ M8 <- freq_tab_3.1 %>%
 ```
 
 
+モデル間の比較は次のように行う．
+
+```{r}
+# Model 3 と Model 2の比較
+pchisq(q = M3$deviance - M2$deviance,
+       df = M3$df.residual - M2$df.residual,
+       lower.tail = FALSE)
+# Model 6 と Model 3の比較
+pchisq(q = M6$deviance - M3$deviance,
+       df = M6$df.residual - M3$df.residual,
+       lower.tail = FALSE)
+# Model 13 と Model 8の比較
+## Model 13が推定できないため表の値を用いる
+pchisq(q = 9.22,
+       df = 6,
+       lower.tail = FALSE)
+```
+
+
+
 ## 表3.2
 
 表3.2を再現する．

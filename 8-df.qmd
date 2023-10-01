@@ -1,0 +1,160 @@
+
+# 自由度 {-}
+
+ここでは『カテゴリカルデータの連関モデル』では詳細に説明されていない，自由度の求め方を示す．
+
+
+## 2元表の場合
+
+- 式（2.4）：$O$モデル
+
+\begin{align}
+{\rm df} &= \overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B}]\\
+& = IJ - I - J + 1\\
+& = (I - 1)(J - 1)
+\end{align}
+
+- 式（2.6）：$FI$モデル
+
+\begin{align}
+{\rm df} & = \overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B}+ \overbrace{(I - 1) \times (J - 1)}^{\lambda_{ij}^{AB}}]\\
+&= IJ - IJ \\
+& = 0
+\end{align}
+
+
+- 式（2.7）：$U$モデル
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{1}^{\beta}]\\
+ &= IJ - I - J
+\end{align}
+
+
+- 式（2.9）：$R$モデル
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B}  + \overbrace{(I - 1)}^{\tau_i^A}]\\
+ &= IJ - 2I - J + 2\\
+ &= (I - 1)(J - 2)
+\end{align}
+
+
+- 式（2.11）：$C$モデル
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B}  + \overbrace{(J - 1)}^{\tau_j^B}]\\
+ &= IJ - I - 2J + 2\\
+ &= (I - 2)(J - 1)
+\end{align}
+
+- 式（2.13）：$R+C$モデル
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{(I - 1)}^{\tau_i^A} + \overbrace{(J - 2)}^{\tau_j^B}] \\
+ &= IJ - 2I - 2J + 4\\
+ &= (I - 2)(J - 2)
+\end{align}
+
+
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{(I - 2)}^{\tau_i^A} + \overbrace{(J - 1)}^{\tau_j^B}] \\ 
+&= IJ - 2I - 2J + 4\\
+ &= (I - 2)(J - 2)
+\end{align}
+
+- 式（2.14）：$R+C$モデル
+
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{1}^{\beta} + \overbrace{(I - 2)}^{\tau_i^A} + \overbrace{(J - 2)}^{\tau_j^B}] \\ 
+ &= IJ - 2I - 2J + 4\\
+ &= (I - 2)(J - 2)
+\end{align}
+
+- 式（2.14）で$I=J$について$\tau_i^A=\tau_j^B$の時，
+
+\begin{align}
+{\rm df} &=  \overbrace{I^2}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(I - 1)}^{\lambda_j^B} + \overbrace{1}^{\beta} + \overbrace{(I - 2)}^{\tau_i^A}]\\
+ &= I^2 - 3I + 2\\
+ &= (I - 1)(I - 2)
+\end{align}
+
+
+- 式（2.16）：$RC$モデル
+
+\begin{align}
+{\rm df} &= \overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} +  \overbrace{1}^{\phi} + 
+\overbrace{(I - 2)}^{\mu_i} + \overbrace{(J - 2)}^{\nu_j}]\\
+ &= IJ - 2I -2J + 4 \\
+ &= (I - 2)(I - 2)
+\end{align}
+
+
+- 式（2.20）：$U+RC$モデル
+
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{1}^{\phi_1} +  \overbrace{1}^{\phi_2}+ \overbrace{(I - 2)}^{\mu_i} + \overbrace{(J - 2)}^{\nu_j}]\\
+ &= IJ - 2I - 2J + 3
+ \end{align}
+ 
+ - 式（2.22）：$R+RC$モデル
+
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{(I - 2)}^{\tau_i^A} + \overbrace{1}^{\phi_1} + \overbrace{(I - 2)}^{\mu_i} + \overbrace{(J - 2)}^{\nu_j}]\\
+ &= IJ - 3I - 2J + 6\\
+ &= (I - 2)(J - 3)
+ \end{align}
+ 
+ 
+ - 式（2.24）：$C+RC$モデル
+
+\begin{align}
+{\rm df} &=\overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{(J - 2)}^{\tau_j^B} + \overbrace{1}^{\phi_1} + \overbrace{(I - 2)}^{\mu_i} + \overbrace{(J - 2)}^{\nu_j}]\\ &= IJ - 2I - 3J + 6\\
+ &= (I - 3)(J - 2)
+ \end{align}
+
+
+ - 式（2.26）：$R+C+RC$モデル
+
+\begin{align}
+{\rm df} &= \overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{(I - 3)}^{\tau_i^A} + \overbrace{(J - 2)}^{\tau_j^B}+ \overbrace{1}^{\phi_1} + \overbrace{(I - 2)}^{\mu_i} + \overbrace{(J - 2)}^{\nu_j}]\\
+ &= IJ - 3I - 3J + 9\\
+ &= (I - 3)(J - 3)
+ \end{align}
+
+\begin{align}
+{\rm df} &= \overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + \overbrace{(I - 2)}^{\tau_i^A} + \overbrace{(J - 3)}^{\tau_j^B}+ \overbrace{1}^{\phi_1} + \overbrace{(I - 2)}^{\mu_i} + \overbrace{(J - 2)}^{\nu_j}]\\ 
+&= IJ - 3I - 3J + 9\\
+ &= (I - 3)(J - 3)
+ \end{align}
+ 
+ - 式（2.28）：$RC(2)$モデル
+
+次元間制約については$M (M - 1)$を引けばよい．
+
+\begin{align}
+{\rm df} &= \overbrace{IJ}^{全自由度} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B}+ \overbrace{1}^{\phi_1} + \overbrace{(I - 2)}^{\mu_{i1}} + \overbrace{(J - 2)}^{\nu_{j1}} + \overbrace{1}^{\phi_2} + \overbrace{(I - 2)}^{\mu_{i2}} + \overbrace{(J - 2)}^{\nu_{j2}}- \overbrace{2}^{次元間制約}]\\
+ &= IJ - 3I - 3J + 9 \\
+ &= (I - 3)(J - 3)
+ \end{align}
+ 
+ - 式（2.31）：$RC(M)$モデル
+ 
+ \begin{align}
+{\rm df} &=  \overbrace{IJ}^{全自由度} - \{\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} + [\overbrace{M}^{\phi_m} + \overbrace{M(I - 2)}^{\mu_{im}} + \overbrace{M(J - 2)}^{\nu_{jm}} - \overbrace{M(M - 1)}^{次元間制約}] \} \\
+ &=  IJ - I - J + 1 + 2M - MI - MJ + M^2 \\
+ & = I(J - M - 1) - J + 1 + 2M - MJ + M^2\\
+ & = I(J - M - 1) - M(J - M - 1) - (J - M - 1) \\
+ & = (I - M - 1)(J - M - 1)
+ \end{align}
+ 
+ 
+$M = 2$の時
+\begin{align}
+{\rm df} &=  (I - M - 1)(J - M - 1)\\
+ &= (I - 2 - 1)(J - 2 - 1) \\
+ &= (I - 3)(J - 3)
+ \end{align}
+ となり，式（2.28）の$RC(2)$の自由度となる．
+ 
+
+## 3元表の場合
+
+
+
