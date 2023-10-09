@@ -7,12 +7,22 @@
 
 ```{r}
 #| message: false
-# パッケージの読み込み
+# パッケージの呼び出し
 library(tidyverse)
-library(magrittr)
 library(DescTools)
 library(vcd)
 library(gnm)
+```
+
+`packman`パッケージがインストールされているのであればそれを用いて呼び出してもよい．
+
+```{r}
+pacman::p_load(
+  tidyverse,
+  DescTools,
+  vcd,
+  gnm
+)
 ```
 
 ### 独立性の検定 {-}
@@ -84,7 +94,6 @@ str(tab)
 DescTools::Margins(tab)
 ```
 
-
 次に`vcd`パッケージの`mosaic`を用いてモザイクプロットを確認する．SESとメンタルヘルスが関連しており，SESが高いほどメンタルヘルスが良好である傾向が確認できる．色のあるセルは，結果を解釈する際に参考にすると良い．
 
 ```{r}
@@ -104,6 +113,7 @@ chisq.test(tab)
 # ピアソンのカイ2乗統計量と尤度比統計量
 assocstats(tab)
 ```
+
 
 `chisq.test(tab)`からは他にもいろいろな情報が得られる．ヘルプ`?chisq.test`か`names`関数で確認してみよう．
 
@@ -159,8 +169,17 @@ Margins(tab_expected)
 
 
 ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．
-自由度についても`nrow`と`ncol`を用いて計算（`prod(dim(tab) -1)`でもよい）．
+
+$\chi^2 = \sum_i \sum_j \frac{\left(f_{ij} - F_{ij}\right)^2}{F_{ij}}$
+
+$L^2 = 2 \sum_i \sum_j f_{ij} \log \frac{f_{ij}}{F_{ij}}$
+
+
+- 自由度についても`nrow`と`ncol`を用いて計算（`prod(dim(tab) -1)`でもよい）．
 `list`関数は様々なもの（値，ベクトル，データ，リスト等）をまとめ，並べて表示するときに用いる．
+
+
+
 
 ```{r}
 # 適合度（X2とL2）
@@ -203,6 +222,8 @@ d <- tibble(Freq, PSES, MHS)
 # データの確認
 d
 ```
+
+`knitr`パッケージの`kable`関数を使い，html形式でデータを示す．
 
 ```{r, echo = FALSE}
 knitr::kable(d, 
@@ -253,11 +274,12 @@ xtabs(Freq ~ SES + MHS, data = data.frame(tab))
 
 
 #### 独立モデル {-}
+
 - この形式のデータ（`Freq`）に対して，独立モデルによる分析を行う．これは先程の独立性の検定と同じ結果となる．
 - `|>`はパイプ演算子であり，パイプ演算子を使うと`function(x)`を`x |> function()`とすることができ，処理の流れが分かりやすくなる．引数（argument）が複数ある場合（例えば`function(x, y)`）はパイプ演算子の左辺は1つめの引数として用いられる．つまり，`function(x, y)`は`x |> function(y)`とすればよい．では`y |>`とする場合は，`y |> function(x, _)`とすることで`function(x, y)`と同じ結果を得ることができる．`_`はプレースホルダーと呼ばれ，引数が適用される場所を示している．
 - `d`というデータに対して，`gnm`を適用する．`度数 ~ 行変数 + 列変数`といった形で関連を指定する．`glm`を使ってもよいが，最終的には`gnm`を使うことになるので，ここでは`gnm`を用いる．
-- モデルの分布族（family）は`poisson`（ポワソン分布）とする．これを忘れると`gaussian`（正規分布）が適用され，異なる結果が出力されるので注意する
-．`gnm`内で`data = _`となっているが`_`にはパイプ演算子の左辺にある`d`が入る．つまりこれは`data = d`とすることに等しい．
+- モデルの分布族（family）は`poisson`（ポワソン分布）とする．これを忘れると`gaussian`（正規分布）が適用され，異なる結果が出力されるので注意する．
+`gnm`内で`data = _`となっているが`_`にはパイプ演算子の左辺にある`d`が入る．つまりこれは`data = d`とすることに等しい．
 - こうして得られた分析の結果を`O`としている．
 
 ```{r}
@@ -285,7 +307,6 @@ names(O)
 names(summary(O))
 ```
 
-
 - 結果には期待度数`fitted.values`があるので，これを用いて適合度を計算してみる．
 - 観測度数については`Freq`の変わりに`O$y`を用いてもよい．これはモデル`O`で使用された従属変数`y`であり，`Freq`そのものである．
 
@@ -294,9 +315,9 @@ names(summary(O))
 observed <- O$y
 expected_O <- O$fitted.values
 
-# 行と列のカテゴリ数をユニークな値の数から求める
-I <- d$PSES |> unique() |> length()
-J <- d$MHS |> unique() |> length()
+# 行と列のカテゴリ数を水準の数から求める
+I <- d$PSES |> levels() |> length()
+J <- d$MHS |> levels() |> length()
 
 # 自由度
 df_O <- (I - 1) * (J - 1) 

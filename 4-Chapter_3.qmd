@@ -394,18 +394,19 @@ M7_SE_coef
 # mu[i], i = 1 to 7
 mu <- getContrasts(M8, 
                    pickCoef(M8, "[.]polviews.c"),
-                   ref = c(2,1,2,1,1)/7, 
-                   scaleRef =c(2,1,2,1,1)/7,
-                   scaleWeights=c(2,1,2,1,1))
+                   ref = c(2, 1, 2, 1, 1) / 7,
+                   scaleRef = c(2, 1, 2, 1, 1) / 7,
+                   scaleWeights = c(2, 1, 2, 1, 1))
 
 mu <- getContrasts(M8,
                    pickCoef(M8, "[.]polviews.c"),
-                   ref = c(2,1,2,1,1)/7, 
-                   scaleRef =c(2,1,2,1,1)/7,
-                   scaleWeights=c(2,1,2,1,1))
+                   ref = c(2, 1, 2, 1, 1) / 7,
+                   scaleRef = c(2, 1, 2, 1, 1) / 7,
+                   scaleWeights = c(2, 1, 2, 1, 1))
 mu;mu
 
-con <- c(mu$qvframe[,1][c(1,1,2,3,3,4,5)], mu$qvframe[,1][c(1,1,2,3,3,4,5)])
+con <- c(mu$qvframe[, 1][c(1, 1, 2, 3, 3, 4, 5)], 
+         mu$qvframe[, 1][c(1, 1, 2, 3, 3, 4, 5)])
 ```
 
 一貫した行スコア（等値制約あり）を指定して再推定．

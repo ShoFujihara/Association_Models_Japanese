@@ -157,7 +157,7 @@ tab_2.1 <- matrix(
 tab_2.1
 ```
 
-周辺分布とモザイクプロットも確認する．
+周辺分布とモザイクプロットも確認する．本書で指摘されている関係性が図からも見て取れる．
 
 ```{r}
 # 周辺分布の表示
@@ -287,6 +287,13 @@ summary(fit)
 # Odds ratios fit$coefficientsのCOMM2:SUP2の要素のみを取り出し，指数関数expを適用
 fit$coefficients["COMM2:SUP2"] |> exp()
 fit |> confint("COMM2:SUP2") |> exp()
+```
+
+次のようにしてもよい．
+
+```{r}
+coef(fit)["COMM2:SUP2"] |> exp()
+confint(fit)["COMM2:SUP2",] |> exp()
 ```
 
 
@@ -461,7 +468,7 @@ model.summary(U, "U:Uniform")
 
 ```{r}
 # model.matrixを適用し，ユニークな値だけを表示
-model.matrix(U) |> unique()
+model.matrix(U) |> unique() 
 ```
 
 
@@ -499,8 +506,10 @@ Rの結果では，polviews1からpolviews6までの結果が表示されてい�
 pickCoef(R, ":Cscore")
 # 12から17番目の係数を取り出し，足す
 R$coefficients[12:17] |> sum()
+# 次のようにもできる
+R$coefficients[pickCoef(R, ":Cscore")] |> sum()
 # 0から足したものを引く
-0 - (R$coefficients[12:17] |> sum())
+0 - (R$coefficients[pickCoef(R, ":Cscore")] |> sum())
 ```
 
 contrastsをもとに戻して同様の分析を行う．
@@ -566,8 +575,8 @@ model.matrix(C) |> unique()
 
 ```{r}
 pickCoef(C, ":Rscore")
-C$coefficients[12:14] |> sum()
-0 - (C$coefficients[12:14] |> sum())
+C$coefficients[pickCoef(C, ":Rscore")] |> sum()
+0 - (C$coefficients[pickCoef(C, ":Rscore")] |> sum())
 ```
 
 
@@ -584,7 +593,6 @@ Calt <- freq_tab_2.3A |>
       tolerance = 1e-12)
 ```
 
-
 推定値は表2.5Cを確認せよ．
 
 ```{r}
@@ -597,7 +605,7 @@ summary(Calt)
 
 ```{r}
 # モデル適合度
-model.summary(C, "C:Column effect (effect coding)")
+model.summary(C, "C:Column effect (effect coding)") 
 model.summary(Calt, "C:Column effect (dummy coding)")
 ```
 
@@ -609,6 +617,8 @@ model.matrix(Calt) |> unique()
 
 
 ## 行・列効果モデル（$R+C$）
+
+普通に推定しても収束しない．
 
 ```{r}
 # コントラスト
@@ -623,7 +633,6 @@ RplusCno <- freq_tab_2.3A |>
       data = _, 
       tolerance = 1e-12)
 ```
-
 
 係数を確認する．この場合，制約は3つ必要であるが2つしかNAとなっていない．テキストや表2.5Dを参照し，どのような制約を課すのかをきめる．ここでは表2.5Dのような制約を課す．
 
@@ -660,7 +669,6 @@ summary(RplusC)
 model.summary(RplusC)
 ```
 
-
 11番目，18番目，21番目の係数を0にして推定する．
 
 ```{r}
@@ -678,7 +686,6 @@ summary(RplusC_2)
 model.summary(RplusC_2)
 ```
 
-
 `Rscore:Cscore`を含めて推定すれば，制約は自動的に課されており（`polviews`の1番目と7番目，`fefam`の1 番目と4番目），特に指定する必要はない．
 
 ```{r}
@@ -688,7 +695,6 @@ RplusCalt <- freq_tab_2.3A |>
       family = poisson, 
       data = _, 
       tolerance = 1e-12)
-RplusCalt
 # 結果
 summary(RplusCalt)
 # モデル適合度
@@ -726,6 +732,11 @@ mu <- getContrasts(RC.un, pickCoef(RC.un,
                    scaleRef = "mean", 
                    scaleWeights = "unit")
 
+# 値の方向を揃える
+if (mu$qvframe[1,1] > 0 ) {
+  mu$qvframe[,1] <- -1 * mu$qvframe[,1]
+}
+
 # 合計が0，2乗和が1となっていること確認する．
 list("和" = sum(mu$qvframe[,1]), 
      "2乗和" = sum(mu$qvframe[,1]^2))
@@ -735,6 +746,12 @@ nu <- getContrasts(RC.un, pickCoef(RC.un, "[.]fefam"),
                    ref = "mean",
                    scaleRef = "mean",
                    scaleWeights = "unit")
+
+# 値の方向を揃える
+if (nu$qvframe[1,1] > 0 ) {
+  nu$qvframe[,1] <- -1 * nu$qvframe[,1]
+}
+
 
 # 合計が0，2乗和が1となっていること確認する．
 list("和" = sum(nu$qvframe[,1]), 
@@ -760,7 +777,6 @@ RC <- freq_tab_2.3A |>
 
 `Deviance is not finite 警告メッセージ: Algorithm failed - no model could be estimated `と表示されたらもう一度推定する．`set.seed`の値をいくつか変えて実行するのがよい．
 
-
 表2.5Eの値と一致しているのかを確認する．
 
 ```{r}
@@ -785,7 +801,6 @@ sum(nu$qvframe[,1])
 sum(nu$qvframe[,1]^2)
 ```
 
-
 適合度は変化していない．
 
 ```{r}
@@ -796,8 +811,6 @@ model.summary(RC)
 
 
 
-
-
 ## 周辺重みづけ
 
 ```{r}
@@ -805,6 +818,7 @@ model.summary(RC)
 rp <- prop.table(apply(tab_2.3A, 1, sum, na.rm = TRUE))
 rp
 sum(rp)
+
 # 列の周辺確率
 cp <- prop.table(apply(tab_2.3A, 2, sum, na.rm = TRUE))
 cp
@@ -817,11 +831,21 @@ mu <- getContrasts(RC.un, pickCoef(RC.un,
                    scaleRef = rp, 
                    scaleWeights = rp)
 
+# 値の方向を揃える
+if (mu$qvframe[1,1] > 0 ) {
+  mu$qvframe[,1] <- -1 * mu$qvframe[,1]
+}
+
 # nu[j], j = 1 to 4
 nu <- getContrasts(RC.un, pickCoef(RC.un, "[.]fefam"), 
                    ref = cp,
                    scaleRef = cp,
                    scaleWeights = cp)
+
+# 値の方向を揃える
+if (nu$qvframe[1,1] > 0 ) {
+  nu$qvframe[,1] <- -1 * nu$qvframe[,1]
+}
 
 # muの1番目と7番目，nuの1番目と4番目の値を取り出し保存する．
 con <- c(mu$qvframe[,1][c(1,7)],
@@ -841,13 +865,12 @@ RC_mw <- freq_tab_2.3A |>
       tolerance = 1e-12)
 ```
 
-
 ```{r}
 # 結果
 summary(RC_mw)
 ```
 
-内的連関パラメータ$\phi$が0.25673となっている．
+内的連関パラメータ$\phi$が0.25673となっている．場合によっては符号が逆となる．
 
 
 適合度は変化していない．
@@ -935,7 +958,7 @@ summary(U)$coefficients |>
 ## 表2.5B
 
 
-省略された係数について，値を標準誤差を求める方法は次の通り．
+省略された係数について，標準誤差を求める方法は次の通り．
 
 ```{r}
 # Table 2.5 Panel B 
@@ -1505,7 +1528,7 @@ summary(RplusCplusRC)$coefficients |>
 
 ## 表2.7E
 
-Wongのサポートページにあるように，`gnm`を用いてRC(2)の係数を推定することは難しい．ここではKateri, Maria. 2014.  {¥it Contingency Table Analysis: Methods and Implementation Using R}. New York: Birkhäuser. のsupportページにあるプログラムを使用して係数を求める．
+Wongのサポートページにあるように，`gnm`を用いてRC(2)の係数を推定することは難しい．ここではKateri, Maria. 2014.  {\it Contingency Table Analysis: Methods and Implementation Using R}. New York: Birkhäuser. のsupportページにあるプログラムを使用して係数を求める．
 
 $M > 1$のRC(M)を推定するためには`gnm`の`instances`を用いる．
 今は`instances = 2`としており，RC(2)を用いている．

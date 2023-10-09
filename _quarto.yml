@@ -15,8 +15,9 @@ book:
     - 5-Chapter_4.qmd
     - 6-Chapter_5.qmd
     - 7-Chapter_6.qmd
-    - 8-Note.qmd
-    - 9-R.qmd
+    - 8-df.qmd
+    - 9-Note.qmd
+    - 10-R.qmd
 
 format:
   html:
