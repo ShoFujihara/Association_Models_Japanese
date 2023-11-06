@@ -188,15 +188,11 @@ fit_cs <- est_cs |>
              ymin = conf.low,
              ymax = conf.high)) + 
   geom_pointrange()
-  
+fit_cs
+
 # 図を並べる
-ggpubr::ggarrange(fig_ct, fit_cs)
+ggpubr::ggarrange(fig_ct, fit_cs, nrow = 2)
 ```
-
-
-
-
-
 
 
 
