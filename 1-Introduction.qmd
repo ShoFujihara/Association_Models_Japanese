@@ -12,6 +12,7 @@ library(tidyverse)
 library(DescTools)
 library(vcd)
 library(gnm)
+library(broom)
 ```
 
 `packman`パッケージがインストールされているのであればそれを用いて呼び出してもよい．
@@ -300,6 +301,8 @@ O <- d |>
 # 結果の表示
 O
 summary(O)
+tidy(O)   # エラーは出るが問題はない
+glance(O)
 ```
 
 - 他にもどのような情報があるのかをヘルプか`names`で確認する．
@@ -359,6 +362,8 @@ U <- d |>
       data = _)
 # 結果の表示
 summary(U)
+tidy(U)   # エラーは出るが問題はない
+glance(U)
 # 適合度（X2とL2）
 observed <- U$y
 expected_U <- U$fitted.values

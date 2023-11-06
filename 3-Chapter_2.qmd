@@ -20,12 +20,15 @@ library(knitr)
 ## 対比について
 
 回帰モデルにおけるカテゴリカル変数の係数を解釈する上では対比
-（contrasts）が重要である．まず，デフォルトでの`contrasts`を確認したい．`factor`変数については`contr.treatment`，`ordered`変数については`contr.poly`という対比が用いられている．`contr.treatment`は基準となっている水準とそれぞれの水準を対比する．これはダミーコーディングと呼ばれる．
+（contrasts）が重要である．まずはモデルを推定できるようになることのほうが重要なので，
+ひとまずとばして次の @sec-tab2_1 から読みすすめてもよい．
+
+まず，デフォルト（標準の状態）での`contrasts`を確認したい．`factor`変数については`contr.treatment`，`ordered`変数については`contr.poly`という対比が用いられている．`contr.treatment`は基準となっている水準とそれぞれの水準を対比する．これはダミーコーディングと呼ばれる．
 `contr.poly`は直交多項式（orthogonal polynomials）に基づいた対比を行う（気にしなくてよい）．
 
 ```{r}
 # デフォルトのcontrastsを確認
-options('contrasts')
+options("contrasts")
 ```
 
 ```{r}
@@ -35,7 +38,7 @@ options(contrasts = c(factor = "contr.treatment",
 ```
 
 具体的に何をしているのかを以下のプログラムで確認する．
-ダミーコーディングの`contr.treatment`以外にも効果コーディングの`contr.sum`がある．両者を比較してみたい．
+ダミーコーディングの`contr.treatment`以外にも効果コーディングの`contr.sum`がある．まずは両者を比較してみたい．
 
 ```{r}
 # データの作成
@@ -48,17 +51,25 @@ contr.treatment(x)
 contr.sum(x)
 ```
 
-実際に回帰分析を例に`contr.treatment`と`contr.sum`の違いを確認する．データは`mpg`（Fuel economy data from 1999 to 2008 for 38 popular models of cars）である．従属変数は`hwy`（highway miles per gallon）であり，独立変数は`class`（"type" of car）とする．
+実際に回帰分析を例に`contr.treatment`と`contr.sum`の違いを確認する．データは`forcats`パッケージ（`tidyverse`に含まれる）の`gss_cat`（A sample of categorical variables from the General Social survey）である．従属変数は`tvhours`（hours per day watching tv）であり，独立変数は`marital`（marital status）とする．
 
 ```{r}
-# class別のhwyの平均値
-mpg |> 
-  dplyr::summarise(n = sum(!is.na(hwy)),
-                   Mean = mean(hwy, na.rm = TRUE),
-                   .by = class) |> 
-  mutate(Diff_1 = Mean - Mean[class == "2seater"],
+# class別のtvhoursの平均値
+gss_cat |> 
+  dplyr::summarise(n = sum(!is.na(tvhours)),
+                   Mean = mean(tvhours, na.rm = TRUE),
+                   .by = marital) |> 
+  mutate(Diff_1 = Mean - Mean[marital == "Never married"],
          Diff_2 = Mean - mean(Mean))
 ```
+
+
+水準は`levels`関数で確認できる．1つ目の水準は`No answer`であり，最後の水準は`Married`である．
+
+```{r}
+gss_cat$marital |> levels()
+```
+
 
 まずダミーコーディング（dummy coding）の結果を確認する．
 
@@ -67,14 +78,15 @@ mpg |>
 options(contrasts = c(factor = "contr.treatment", 
                       ordered = "contr.poly"))
 # 回帰分析
-fit_ct <- lm(hwy ~ class, data = mpg)
+fit_ct <- lm(tvhours ~ marital, data = gss_cat)
 # 回帰分析の結果
 summary(fit_ct)
+tidy(fit_ct)
 # モデルマトリックス
 model.matrix(fit_ct) |> unique()
 ```
 
-出力される係数は6つである．`class`は`factor`によって水準が設定されているわけではないので，`2seater`が基準カテゴリとなっており，出力からは省略されている．つまり，`2seater`の係数は0であり，`(Intercept) `の値は`2seater`の平均値を示している．
+出力される係数は5つである．`marital`は`factor`によって水準が設定されているわけではないので，`No answer`が基準カテゴリとなっており，出力からは省略されている．つまり，`No answer`の係数は0であり，`(Intercept) `の値は`No answer`の平均値を示している．
 
 次に効果コーディングの結果を確認する．
 
@@ -83,52 +95,113 @@ model.matrix(fit_ct) |> unique()
 options(contrasts = c(factor = "contr.sum", 
                       ordered = "contr.poly"))
 # 回帰分析
-fit_cs <- lm(hwy ~ class, data = mpg)
+fit_cs <- lm(tvhours ~ marital, data = gss_cat)
 # 回帰分析の結果
 summary(fit_cs)
+tidy(fit_cs)
 # モデルマトリックス
 model.matrix(fit_cs) |> unique()
 ```
 
-ここでも出力される係数は6つであるが，ここでは最後のカテゴリが省略されている．しかし，最後のカテゴリである`classsuv`の係数は0ではない．すべての係数の和が0になるという制約を与えているので，`classsuv`の係数は他の係数の値の和を0から引いたものとなる．
+ここでも出力される係数は5つであるが，ここでは最後のカテゴリである`Married`が省略されている．しかし，最後のカテゴリである`Married`の係数は0ではない．すべての係数の和が0になるという制約を与えているので，`Married`の係数は他の係数の値の和を0から引いたものとなる．
 
 ```{r}
-# classという文字が含まれる係数を取り出し，係数の番号を調べる（2から7）
-pickCoef(fit_cs, "class")
-# 係数の2から7までを取り出し，その和を求める．
-fit_cs$coefficients[2:7] |> sum()
+# classという文字が含まれる係数を取り出し，係数の番号を調べる（2から6）
+pickCoef(fit_cs, "marital")
+# 係数の2から6までを取り出し，その和を求める．
+fit_cs$coefficients[2:6] |> sum()
+# 直接次のようにしても良い．
+fit_cs$coefficients[pickCoef(fit_cs, "marital")] |> sum()
 # 和を0から引く
-0 - (fit_cs$coefficients[2:7] |> sum())
+0 - (fit_cs$coefficients[2:6] |> sum())
 ```
 
-したがって，`classsuv`の係数は-5.571663となる．
+したがって，`Married`の係数は`r 0 - (fit_cs$coefficients[2:6] |> sum())`となる．
 
 `contrasts`の設定を変更して分析を終えたら必ずもとに戻しておく．
 
 ```{r}
 # デフォルトに戻す
 options(contrasts = c(factor = "contr.treatment", ordered = "contr.poly"))
+options("contrasts")
 ```
 
 `lm`ではモデルの中で`contrasts`を指定することもできる．2つの方法で係数を比較してみる．
 
 ```{r}
 # 回帰分析
-fit_cs2_1 <- lm(hwy ~ class, data = mpg)
+fit_cs2_1 <- lm(tvhours ~ marital, data = gss_cat)
 # 回帰分析の結果
 summary(fit_cs2_1)
 # 回帰分析
-fit_cs2_2 <- lm(hwy ~ class, data = mpg,
-              contrasts = list(class = "contr.sum"))
+fit_cs2_2 <- lm(tvhours ~ marital, data = gss_cat,
+              contrasts = list(marital = "contr.sum"))
 # 回帰分析の結果
 summary(fit_cs2_2)
+tidy(fit_cs2_2)
+```
+
+
+では結果を図にしてみる．
+```{r}
+# termのカテゴリ名を変換し，最後に`No answer`の行を加える．
+est_ct <- fit_ct |> 
+  tidy(conf.int = TRUE) |> 
+  mutate(term = case_when(
+    grepl("Never", term) ~ "Never married",
+    grepl("Separated", term) ~ "Separated",
+    grepl("Divorced", term) ~ "Divorced",
+    grepl("Widowed", term) ~ "Widowed",
+    grepl("Married", term) ~ "Married",
+    .default = term
+  )) |> 
+  add_row(term = "No answer", estimate = 0)
+est_ct
+
+# 結果を図示する．
+fig_ct <- est_ct |> 
+  ggplot(aes(x = term,
+             y = estimate,
+             ymin = conf.low,
+             ymax = conf.high)) + 
+  geom_pointrange()
+fig_ct
+
+# termのカテゴリ名を変換し，最後に`Married`の行を加える．
+est_cs <- fit_cs |> 
+  tidy(conf.int = TRUE) |> 
+  mutate(term = case_match(term,
+                           "marital1" ~ "No answer",
+                           "marital2" ~ "Never married",
+                           "marital3" ~ "Separated",
+                           "marital4" ~ "Divorced",
+                           "marital5" ~ "Widowed",
+                           "marital6" ~ "Married",
+                           .default = term)) |> 
+  add_row(term = "Married", 
+          estimate = 0 - (fit_cs$coefficients[2:6] |> sum()))
+
+# 結果を図示する．
+fit_cs <- est_cs |> 
+  ggplot(aes(x = term,
+             y = estimate,
+             ymin = conf.low,
+             ymax = conf.high)) + 
+  geom_pointrange()
+  
+# 図を並べる
+ggpubr::ggarrange(fig_ct, fit_cs)
 ```
 
 
 
 
 
-## 表2.1 (p.11)
+
+
+
+
+## 表2.1 (p.11) {#sec-tab2_1}
 
 まずp.11の表2.1を再現する．クロス表に周辺度数を追加する場合は，`addmargins`を用いる．
 
@@ -388,7 +461,7 @@ model.summary <- function(obj, Model = NULL){
 
 ```{r}
 # デフォルトのcontrasts
-options('contrasts')
+options("contrasts")
 # defaultのcontrastsの設定（ここでは特に意味はない．constrastをいじった後にデフォルトに戻す）
 options(contrasts = c(factor = "contr.treatment", 
                       ordered = "contr.poly"))
@@ -490,7 +563,7 @@ contrastを修正し，polviewsの係数のすべてを足すと0になるよう
 # contrastを修正している．
 options(contrasts = c(factor = "contr.sum", 
                       ordered = "contr.treatment"))
-options('contrasts')
+options("contrasts")
 
 R <- freq_tab_2.3A |>
   gnm(Freq ~ polviews + fefam + Cscore*polviews, 
@@ -1104,7 +1177,7 @@ summary(rc_fit_wm)
 
 ```{r}
 # コントラストを確認
-options('contrasts')
+options("contrasts")
 # default
 options(contrasts = c(factor = "contr.treatment",
                       ordered = "contr.poly"))

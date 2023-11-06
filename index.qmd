@@ -7,9 +7,23 @@
 
 共立出版の[「計量分析One Point」シリーズ](https://www.kyoritsu-pub.co.jp/series/100268/)のひとつとして出版された
 
-Raymond Wong著・藤原翔訳．2021．『カテゴリカルデータの連関分析』共立出版．
+[Raymond Wong著・藤原翔訳．2023．『カテゴリカルデータの連関モデル』共立出版．](https://www.kyoritsu-pub.co.jp/book/b10039534.html)
+のためのサポートページです．
 
-のためのサポートページです．本書の付録や補遺とすることも検討しましたが，*Association Models*は他のQASSに比べて分量が多いため（156ページ！），そしてRのバージョンアップやパッケージの更新などに備えるため，正誤表もあわせて公開するためにオンラインで公開することにしました．本書と関連した連関モデルの適用例の情報についても，このサポートページで補うことができればと思います．
+
+2023年11月29日販売
+
+![](association_model_japanese.jpeg){width=30%}
+
+
+- [honto](https://honto.jp/netstore/pd-book_32822793.html)
+- [紀伊国屋書店ウェブストア](https://www.kinokuniya.co.jp/f/dsg-01-9784320114173)
+- [TSUTAYAオンラインショッピング](https://shop.tsutaya.co.jp/book/product/9784320114173/)
+- [楽天ブックス](https://books.rakuten.co.jp/rb/17641204/)
+- [Amazon](https://www.amazon.co.jp/gp/product/4320114175/)
+
+
+本書の付録や補遺とすることも検討しましたが，*Association Models*は他の[Quantitative Applications in the Social Sciences (QASS)](https://us.sagepub.com/en-us/nam/qass)に比べて分量が多いため（156ページ！），そしてRのバージョンアップやパッケージの更新などに備えるため，正誤表もあわせて公開するためにオンラインで公開することにしました．本書と関連した連関モデルの適用例の情報についても，このサポートページで補うことができればと思います．
 
 このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．
 
