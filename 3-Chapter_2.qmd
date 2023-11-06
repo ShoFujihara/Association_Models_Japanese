@@ -438,6 +438,15 @@ model.summary(O, "O:Independent")
 
 
 
+```{r}
+broom::augment(O, newdata = freq_tab_2.3A, type.predict = "response") |> 
+  dplyr::summarise(L2 = sum(Freq * log( Freq / .fitted)) * 2,
+                   BIC = L2 - summary(O)$df.residual * log(sum(freq_tab_2.3A$Freq)))
+predict(O, newdata = freq_tab_2.3A, type = "response")
+O$fitted.values
+```
+
+
 ### 一様連関モデル
 
 一様連関モデルでは先ほど作成した行変数と列変数の整数スコアの積である`Rscore:Cscore`を加える．`Rscore*Cscore`あるいは`I(Rscore*Cscore)`でもよい．
