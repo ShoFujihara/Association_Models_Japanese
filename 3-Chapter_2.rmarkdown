@@ -1,0 +1,1813 @@
+# 第2章
+
+
+第2章では2元表の連関モデルが紹介されている．制約のかけかたは少し複雑なのでプログラムとテキストをみながら手順を確認して欲しい．
+
+パッケージは`tidyverse`（データセットの処理のため），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`broom`（回帰係数の整理），`gnm`（連関分析の処理のため），`logmult`（連関モデルのため）を使用する．
+
+
+
+```{r, message = FALSE}
+library(tidyverse)
+library(broom)
+library(gnm)
+library(vcd)
+library(DescTools)
+library(logmult)
+library(knitr)
+```
+
+
+
+## 対比について
+
+回帰モデルにおけるカテゴリカル変数の係数を解釈する上では対比
+（contrasts）が重要である．まず，デフォルトでの`contrasts`を確認したい．`factor`変数については`contr.treatment`，`ordered`変数については`contr.poly`という対比が用いられている．`contr.treatment`は基準となっている水準とそれぞれの水準を対比する．これはダミーコーディングと呼ばれる．
+`contr.poly`は直交多項式（orthogonal polynomials）に基づいた対比を行う（気にしなくてよい）．
+
+
+```{r}
+# デフォルトのcontrastsを確認
+options('contrasts')
+```
+
+```{r}
+# defaultのcontrastsの設定（ここでは特に意味はない．constrastをいじった後にデフォルトに戻す）
+options(contrasts = c(factor = "contr.treatment", 
+                      ordered = "contr.poly"))
+```
+
+
+具体的に何をしているのかを以下のプログラムで確認する．
+ダミーコーディングの`contr.treatment`以外にも効果コーディングの`contr.sum`がある．両者を比較してみたい．
+
+
+```{r}
+# データの作成
+x <- c("A","B","C","D","E")
+# 確認
+x
+# 基準カテゴリが0となるような対比
+contr.treatment(x)
+# 合計が0となるような対比
+contr.sum(x)
+```
+
+
+実際に回帰分析を例に`contr.treatment`と`contr.sum`の違いを確認する．データは`mpg`（Fuel economy data from 1999 to 2008 for 38 popular models of cars）である．従属変数は`hwy`（highway miles per gallon）であり，独立変数は`class`（"type" of car）とする．
+
+
+```{r}
+# class別のhwyの平均値
+mpg |> 
+  dplyr::summarise(n = sum(!is.na(hwy)),
+                   Mean = mean(hwy, na.rm = TRUE),
+                   .by = class) |> 
+  mutate(Diff_1 = Mean - Mean[class == "2seater"],
+         Diff_2 = Mean - mean(Mean))
+```
+
+
+まずダミーコーディング（dummy coding）の結果を確認する．
+
+
+```{r}
+# 回帰分析の例（contr.treatmentを使用）
+options(contrasts = c(factor = "contr.treatment", 
+                      ordered = "contr.poly"))
+# 回帰分析
+fit_ct <- lm(hwy ~ class, data = mpg)
+# 回帰分析の結果
+summary(fit_ct)
+# モデルマトリックス
+model.matrix(fit_ct) |> unique()
+```
+
+
+出力される係数は6つである．`class`は`factor`によって水準が設定されているわけではないので，`2seater`が基準カテゴリとなっており，出力からは省略されている．つまり，`2seater`の係数は0であり，`(Intercept) `の値は`2seater`の平均値を示している．
+
+次に効果コーディングの結果を確認する．
+
+
+```{r}
+# 回帰分析の例（contr.sumを使用）
+options(contrasts = c(factor = "contr.sum", 
+                      ordered = "contr.poly"))
+# 回帰分析
+fit_cs <- lm(hwy ~ class, data = mpg)
+# 回帰分析の結果
+summary(fit_cs)
+# モデルマトリックス
+model.matrix(fit_cs) |> unique()
+```
+
+
+ここでも出力される係数は6つであるが，ここでは最後のカテゴリが省略されている．しかし，最後のカテゴリである`classsuv`の係数は0ではない．すべての係数の和が0になるという制約を与えているので，`classsuv`の係数は他の係数の値の和を0から引いたものとなる．
+
+
+```{r}
+# classという文字が含まれる係数を取り出し，係数の番号を調べる（2から7）
+pickCoef(fit_cs, "class")
+# 係数の2から7までを取り出し，その和を求める．
+fit_cs$coefficients[2:7] |> sum()
+# 和を0から引く
+0 - (fit_cs$coefficients[2:7] |> sum())
+```
+
+
+したがって，`classsuv`の係数は-5.571663となる．
+
+`contrasts`の設定を変更して分析を終えたら必ずもとに戻しておく．
+
+
+```{r}
+# デフォルトに戻す
+options(contrasts = c(factor = "contr.treatment", ordered = "contr.poly"))
+```
+
+
+`lm`ではモデルの中で`contrasts`を指定することもできる．2つの方法で係数を比較してみる．
+
+
+```{r}
+# 回帰分析
+fit_cs2_1 <- lm(hwy ~ class, data = mpg)
+# 回帰分析の結果
+summary(fit_cs2_1)
+# 回帰分析
+fit_cs2_2 <- lm(hwy ~ class, data = mpg,
+              contrasts = list(class = "contr.sum"))
+# 回帰分析の結果
+summary(fit_cs2_2)
+```
+
+
+
+
+
+
+## 表2.1 (p.11)
+
+まずp.11の表2.1を再現する．クロス表に周辺度数を追加する場合は，`addmargins`を用いる．
+
+
+```{r}
+# 度数
+Freq <- c( 40, 250,
+          160,3000)
+Freq
+```
+
+
+ベクトルを表にする．ここでは`as.table`でクラスを`table`としている．
+
+
+```{r}
+# 行列を作成し，表とする．
+tab_2.1 <- matrix(
+  Freq,
+  nrow = 2,
+  ncol = 2,
+  byrow = TRUE,
+  dimnames = c(list(
+    Member = c("Member", "Nonmember"),
+    Position = c("Have subordinates",
+            "No subordinates")
+  ))
+) |> as.table()
+tab_2.1
+```
+
+
+周辺分布とモザイクプロットも確認する．本書で指摘されている関係性が図からも見て取れる．
+
+
+```{r}
+# 周辺分布の表示
+Margins(tab_2.1)
+# モザイクプロット
+vcd::mosaic(tab_2.1, shade = TRUE, keep_aspect_ratio = FALSE)
+```
+
+
+
+::: {.callout-tip collapse="true"}
+## ggplotでモザイクプロット
+図はすべて`ggplot()`を使用して描きたいという場合は，`ggmosaic`パッケージを用いる．
+その前に集計データを`vcdExtra::expand.dft()`によって個票データに変換し，`ggmosaic::geom_mosaic`を使用する．
+
+
+```{r}
+# パッケージの呼び出し
+library(ggmosaic)
+library(vcdExtra)
+# データの変換
+df_tab_2.1 <- vcdExtra::expand.dft(data.frame(tab_2.1), dreq = "Freq") |> tibble()
+df_tab_2.1
+
+# ggplotでモザイクプロット
+df_tab_2.1 |> 
+  ggplot() + 
+  ggmosaic::geom_mosaic(aes(x = product(Position, Member), fill = Position)) + 
+  scale_fill_viridis_d() + 
+  coord_flip()   # mosaicと表示をあわせる
+```
+
+:::
+
+表に`addmargins()`で周辺度数を追加する．
+
+
+```{r}
+# A. 度数（周辺度数の追加）
+tab_2.1 |> addmargins()
+```
+
+
+表の数字を用いてオッズ比を計算する．
+
+
+```{r}
+# B. Odds 
+x <- tab_2.1
+x[1,1]/x[1,2]
+x[2,1]/x[2,2]
+
+# C. Odds ratio
+OR <- (x[1,1]/x[1,2]) / (x[2,1]/x[2,2])
+OR
+```
+
+
+（対数）オッズ比の信頼区間をもとめる．
+
+
+```{r}
+# 対数オッズの標準誤差を求める
+SD <- sqrt(1/x[1,1] + 1/x[1,2] + 1/x[2,1] + 1/x[2,2]) 
+# 対数オッズ比の信頼区間を求める
+CI_log_OR <- log(OR) + qnorm(c(0.025, 0.975)) * SD
+CI_log_OR
+# オッズ比の信頼区間を求める
+exp(CI_log_OR)
+```
+
+
+`DescTools`パッケージの`OddsRatio`関数を用いてオッズ比を求める．`conf.level = 0.95`とすることで信頼区間を求めることもできる．
+先程計算したものと値が一致している．
+
+
+```{r}
+OddsRatio(tab_2.1, conf.level = 0.95)
+```
+
+
+::: {.callout-tip}
+## 関数の中身を確認する．
+
+`OddsRatio()`がどのような処理をしているのかについては`OddsRatio`と入力し，関数の中身をみることで確認できる．
+ただし，`UseMethod("OddsRatio")`となっており，詳細が分からないことがある．その場合は，`methods()`を用いる．
+そして，`OddsRatio.default*`のように`*`がついているものについて`DescTools:::OddsRatio.default`のように入力することで中身を確認することができる．`getAnywhere(OddsRatio.default)`としてもよい．
+
+
+```{r}
+#| eval: false
+OddsRatio
+methods(OddsRatio)
+DescTools:::OddsRatio.default
+getAnywhere(OddsRatio.default)
+```
+
+::::
+
+
+さらに詳細な結果をみたければ`DescTools`パッケージの`Desc`を用いる．
+
+
+```{r}
+Desc(tab_2.1)
+```
+
+
+次にセルの組み合わせを単位とした集計データを作成し，`gnm`を適用することでオッズ比を求めてみたい．`gl()`は`n`個の水準のある因子を作成する．`k`は各水準を何度繰り返すのかを指定する．`length`でベクトルの長さを設定することで，その長さになるまで因子の作成が繰り返される．
+
+
+```{r}
+# 度数のベクトル
+Freq
+# 行変数
+COMM <- gl(n = 2, k = 2)
+COMM
+# 列変数
+SUP  <- gl(n = 2, k = 1, length = 4)
+SUP
+# 度数，行変数，列変数からなるデータを作成
+freq_tab_2.1 <- tibble(COMM, SUP, Freq)
+# データの確認
+freq_tab_2.1
+```
+
+
+
+分析には通常は`glm`を用いるが，後の分析とあわせて`gnm`によって推定する．結果は異ならない．`family = poisson`という指定を忘れないようにすること．何も指定しないと`family = gaussian`となり，通常の線形回帰分析を行ってしまうので注意する．
+
+
+
+```{r}
+# gnmで推定
+fit <- freq_tab_2.1 |> 
+  gnm(Freq ~ COMM + SUP + COMM:SUP, data = _, family = poisson)
+# 結果
+summary(fit)
+```
+
+
+`COMM2:SUP2`の係数は1.0986である．これは対数オッズなので，指数関数`exp`を適用してオッズ比を求める．
+
+
+
+```{r}
+# Odds ratios fit$coefficientsのCOMM2:SUP2の要素のみを取り出し，指数関数expを適用
+fit$coefficients["COMM2:SUP2"] |> exp()
+fit |> confint("COMM2:SUP2") |> exp()
+```
+
+
+次のようにしてもよい．
+
+
+```{r}
+coef(fit)["COMM2:SUP2"] |> exp()
+confint(fit)["COMM2:SUP2",] |> exp()
+```
+
+
+
+## 表2.3A (p.32)
+
+まずは表2.3Aを作成する．値をベクトルの形式で入力する．
+
+
+```{r}
+Freq <- c( 39,  50,  18,   4,
+          140, 178,  85,  23,
+          108, 195,  97,  23,
+          238, 598, 363, 111,
+           78, 250, 150,  55,
+           50, 200, 208,  74,
+            8,  29,  46,  21)
+```
+
+
+ベクトルのデータを`matrix`で行列にし，最終的には`as.table`でtable形式にする．
+
+
+```{r}
+# データを表形式に変換
+tab_2.3A <- matrix(
+  Freq,
+  nrow = 7,
+  ncol = 4,
+  byrow = TRUE,
+  dimnames = c(list(
+    polviews =  c(
+      "Strongly liberal",
+      "Liberal",
+      "Slightly liberal",
+      "Moderate",
+      "Slightly conservative",
+      "Conservative",
+      "Strongly conservative"),
+    fefam = c("Strongly Disagree",
+                               "Disagree",
+                               "Agree",
+                               "Strongly agree")
+  ))) |> as.table()
+tab_2.3A
+```
+
+```{r}
+# 度数，行変数，列変数からなる集計データを作成
+polviews <- gl(n = 7, k = 4)   # 1-7までの各数字について4つ値を出す
+fefam <- gl(n = 4, k = 1, length = 28)   # 1-4までの数字の列を長さが28になるまで繰り返す
+freq_tab_2.3A <- tibble(Freq, polviews, fefam)
+freq_tab_2.3A
+```
+
+
+- なお`tab_2.3A`に対して，data.frameを適用しても集計データは作成される．tableの行変数と列変数が指定されていないと，行変数は`Var1`，列変数は`Var2`となるので，必要に応じて名前を`rename`で修正する
+．
+
+
+```{r}
+data.frame(tab_2.3A) |> 
+  tibble()
+```
+
+
+
+以下では複数のモデルの適合度を比較する．そこで，モデル適合度を表示するための関数を作成する．モデルはすべて`gnm`によって推定されることを前提としている．`glm`の場合はエラーが出るので注意すること．
+
+
+```{r}
+# 引数となるobjはgnmの結果
+model.summary <- function(obj, Model = NULL){
+  if (sum(class(obj) == "gnm") != 1)
+    stop("estimate with gnm")
+  aic <- obj$deviance - obj$df * 2 # AIC(L2)
+  bic <- obj$deviance - obj$df * log(sum(obj$y)) #BIC(L2)
+  delta <- 100 * sum(abs(obj$y - obj$fitted.values)) / (2 * sum(obj$y))
+  p <- pchisq(obj$deviance, obj$df, lower.tail = FALSE)     #p<-ifelse(p<0.001,"<0.001",p)
+  result <- matrix(0, 1, 7)
+  if (is.null(Model)){ 
+  Model <- deparse(substitute(obj))
+  }
+  result <- tibble(
+    "Model Description" = Model,
+    "df" = obj$df,
+    "L2" = obj$deviance,
+    #"AIC(L2)" = aic,
+    "BIC" = bic,
+    "Delta" = delta,
+    "p" = p
+  )
+  return(result)
+  }
+```
+
+
+
+コントラストがデフォルトの`factor = "contr.treatment"`と`ordered = "contr.poly"`になっているのかを確認する．
+
+
+```{r}
+# デフォルトのcontrasts
+options('contrasts')
+# defaultのcontrastsの設定（ここでは特に意味はない．constrastをいじった後にデフォルトに戻す）
+options(contrasts = c(factor = "contr.treatment", 
+                      ordered = "contr.poly"))
+```
+
+
+
+行スコアと列スコアを用いるので，まず`as.integer`を用いて行スコア（`Rscore`）と列スコア（`Cscore`）の変数を作成する．
+
+
+```{r}
+# 行変数と列変数の整数値を作成
+freq_tab_2.3A <- freq_tab_2.3A |> 
+  mutate(Rscore = as.integer(polviews),
+         Rscore = Rscore - mean(Rscore),
+         Cscore = as.integer(fefam),
+         Cscore = Cscore - mean(Cscore))
+freq_tab_2.3A
+```
+
+
+
+
+
+### 独立モデル
+
+独立モデルは次のようになる．
+
+
+```{r}
+#  1. O: Independence/Null Association Model
+O <- freq_tab_2.3A |>
+  gnm(Freq ~ polviews + fefam,
+      family = poisson,
+      data = _,
+      tolerance = 1e-12
+      )
+# 結果
+summary(O)
+```
+
+
+先ほど作成した適合度の関数を用いる．2つめの引数はモデルの名前の詳細を記述可能だが，これは省略してもよい．
+
+
+```{r}
+# モデル適合度
+model.summary(O, "O:Independent")
+```
+
+
+
+テキストの表2.4と同じ結果になっているのかを確認してみる．
+
+
+
+
+```{r}
+broom::augment(O, newdata = freq_tab_2.3A, type.predict = "response") |> 
+  dplyr::summarise(L2 = sum(Freq * log( Freq / .fitted)) * 2,
+                   BIC = L2 - summary(O)$df.residual * log(sum(freq_tab_2.3A$Freq)))
+predict(O, newdata = freq_tab_2.3A, type = "response")
+O$fitted.values
+```
+
+
+
+### 一様連関モデル
+
+一様連関モデルでは先ほど作成した行変数と列変数の整数スコアの積である`Rscore:Cscore`を加える．`Rscore*Cscore`あるいは`I(Rscore*Cscore)`でもよい．
+
+
+```{r}
+# 2. U: Uniform Association Model
+U <- freq_tab_2.3A |>
+  gnm(Freq ~ polviews + fefam + Rscore:Cscore,
+    family = poisson,
+    data = _,
+    tolerance = 1e-12)
+```
+
+```{r}
+# 結果
+summary(U)
+```
+
+
+表2.4Aと同じ結果になっているのかを確認する．
+
+
+```{r}
+# モデル適合度
+model.summary(U, "U:Uniform")
+```
+
+
+
+モデル行列を確認するのもよいだろう．
+
+
+```{r}
+# model.matrixを適用し，ユニークな値だけを表示
+model.matrix(U) |> unique() 
+```
+
+
+
+### 行効果モデル
+
+contrastを修正し，polviewsの係数のすべてを足すと0になるように効果コーディングを行ってる．なお行変数と列スコアの積については`Cscore*polviews`とし，`Cscore:polviews`としない．
+
+
+```{r}
+# 3. R: Row Effect Model
+# contrastを修正している．
+options(contrasts = c(factor = "contr.sum", 
+                      ordered = "contr.treatment"))
+options('contrasts')
+
+R <- freq_tab_2.3A |>
+  gnm(Freq ~ polviews + fefam + Cscore*polviews, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+# 結果
+summary(R)
+# モデル適合度
+model.summary(R, "R:Row effect")
+# モデル行列の確認
+model.matrix(R) |> unique()
+```
+
+
+表2.4の適合度を確認しよう．また，パラメータ推定値については，表2.5のBから確認する．
+Rの結果では，polviews1からpolviews6までの結果が表示されているが，polviews7は示されていない．パラメータのすべての値を足すと0となることから($\sum \tau_i^A=0$)，polviews7の係数は`0-(-0.6721737)=0.6721737`となる．これをRで計算するためには係数を取り出し，それらを足したものを0から引けばよい．
+
+
+
+```{r}
+# R
+# 取り出す係数を探す
+pickCoef(R, ":Cscore")
+# 12から17番目の係数を取り出し，足す
+R$coefficients[12:17] |> sum()
+# 次のようにもできる
+R$coefficients[pickCoef(R, ":Cscore")] |> sum()
+# 0から足したものを引く
+0 - (R$coefficients[pickCoef(R, ":Cscore")] |> sum())
+```
+
+
+contrastsをもとに戻して同様の分析を行う．
+今度は`polviews1:Cscore`の係数が省略されているが，この値は0である（$\tau_1^A=0$）．
+
+
+```{r}
+# alternative (default)
+options(contrasts = c(factor = "contr.treatment",
+                      ordered = "contr.poly"))
+Ralt <- freq_tab_2.3A |>
+  gnm(Freq ~ polviews + fefam + Cscore*polviews, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+```
+
+
+
+結果は表2.5Bの「他の正規化」の行を確認して欲しい．
+
+
+```{r}
+# 結果
+summary(Ralt)
+```
+
+
+
+モデルの適合度は全く同じであることがわかる．
+
+
+```{r}
+# モデル適合度
+model.summary(R, "R: Row effect (effect coding)")
+model.summary(Ralt, "R: Row effect (dummy coding)")
+```
+
+```{r}
+# モデル行列の確認
+model.matrix(Ralt) |> unique()
+```
+
+
+
+
+## 列効果モデル
+
+列効果モデルは行効果モデルと同様の方法で推定すればよい．まずは効果コーディングで推定し，その後にダミーコーディングで推定する．
+
+
+```{r}
+# 4. C: Column Effect Model
+# contrast
+options(contrasts = c(factor = "contr.sum", 
+                      ordered = "contr.treatment"))
+C <- freq_tab_2.3A |> 
+  gnm(Freq ~ polviews + fefam + Rscore*fefam, family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+# 結果
+summary(C)
+# モデル適合度
+model.summary(C, "C:Column effect")
+# モデル行列の確認
+model.matrix(C) |> unique()
+```
+
+
+すべてを足すと0となることから($\sum \tau_j^B=0$)，polviews7の係数は`0-(-0.2496118)=0.2496118`となる
+
+
+```{r}
+pickCoef(C, ":Rscore")
+C$coefficients[pickCoef(C, ":Rscore")] |> sum()
+0 - (C$coefficients[pickCoef(C, ":Rscore")] |> sum())
+```
+
+
+
+以下はダミーコーディングを用いている．
+
+
+```{r}
+# alternative (default)
+options(contrasts = c(factor = "contr.treatment",
+                      ordered = "contr.poly"))
+Calt <- freq_tab_2.3A |> 
+  gnm(Freq ~ polviews + fefam + Rscore*fefam, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+```
+
+
+推定値は表2.5Cを確認せよ．
+
+
+```{r}
+# 結果
+summary(Calt)
+```
+
+
+
+適合度は効果コーディングとダミーコーディングで変化しない．
+
+
+```{r}
+# モデル適合度
+model.summary(C, "C:Column effect (effect coding)") 
+model.summary(Calt, "C:Column effect (dummy coding)")
+```
+
+```{r}
+# モデル行列の確認
+model.matrix(Calt) |> unique()
+```
+
+
+
+## 行・列効果モデル（$R+C$）
+
+普通に推定しても収束しない．
+
+
+```{r}
+# コントラスト
+options(contrasts = c(factor = "contr.treatment",
+                      ordered = "contr.treatment"))
+
+# 5. R+C: Row and Column Effect Model
+# 収束しない
+RplusCno <- freq_tab_2.3A |> 
+  gnm(Freq ~ polviews + fefam + Cscore:polviews + Rscore:fefam,
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+```
+
+
+係数を確認する．この場合，制約は3つ必要であるが2つしかNAとなっていない．テキストや表2.5Dを参照し，どのような制約を課すのかをきめる．ここでは表2.5Dのような制約を課す．
+
+
+```{r}
+RplusCno
+pickCoef(RplusCno, ":Cscore")  # 行効果
+pickCoef(RplusCno, ":Rscore")  # 列効果
+```
+
+
+あるいは次のように一覧にしてもよい．
+
+
+```{r}
+# 変数と係数と係数の順番を表示
+data.frame(var = names(RplusCno$coefficients),
+           estimate = RplusCno$coefficients) |> 
+  mutate(estimate = estimate,
+         number = row_number())
+```
+
+
+制約を課すのは11番目，17番目，18番目の係数であり，これらを0にする．対象となる係数は`constrain = c(11,17,18)`で指定し，制約は`constrainTo = c(0, 0, 0)`とする．あとは同じである．
+
+
+```{r}
+# polviews1:Cscore(11) = polviews7:Cscore(17) = fefam1:Rscore(18) = 0
+RplusC <- freq_tab_2.3A |> 
+  gnm(Freq ~ polviews + fefam + Cscore:polviews + Rscore:fefam,
+      constrain = c(11, 17, 18), 
+      constrainTo = c(0, 0, 0),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+# 結果
+summary(RplusC)
+# モデル適合度
+model.summary(RplusC)
+```
+
+
+11番目，18番目，21番目の係数を0にして推定する．
+
+
+```{r}
+# polviews1:Cscore(11) = polviews7:Cscore(17) = fefam1:Rscore(18) = 0
+RplusC_2 <- freq_tab_2.3A |> 
+  gnm(Freq ~ polviews + fefam + Cscore:polviews + Rscore:fefam,
+      constrain = c(11, 18, 21), 
+      constrainTo = c(0, 0, 0),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+# 結果
+summary(RplusC_2)
+# モデル適合度
+model.summary(RplusC_2)
+```
+
+
+`Rscore:Cscore`を含めて推定すれば，制約は自動的に課されており（`polviews`の1番目と7番目，`fefam`の1 番目と4番目），特に指定する必要はない．
+
+
+```{r}
+# 5. R+C: Row and Column Effect Model (Alternative)
+RplusCalt <- freq_tab_2.3A |> 
+  gnm(Freq ~ polviews + fefam + Rscore:Cscore + Cscore:polviews + Rscore:fefam,
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+# 結果
+summary(RplusCalt)
+# モデル適合度
+model.summary(RplusCalt)
+```
+
+
+
+## 行・列効果モデル（$RC(1)$）
+
+RC(1)については`Mult(1,polviews,fefam)`を含んだモデルで推定する．結果をみると係数は表示されているものの，標準誤差はNAとなっている．
+
+
+
+
+```{r}
+# 6. RC: RC(1) model
+RC.un <- freq_tab_2.3A |>
+  gnm(Freq ~ polviews + fefam + Mult(1,polviews,fefam),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+# 結果
+summary(RC.un)
+# モデル適合度
+model.summary(RC.un)
+```
+
+
+
+まずは「重みづけのないまたは単位標準化した解」を求める．`scaleWeights = "unit"`とする．`RC.un`から`.polviews`のある変数を`pickCoef(RC.un, "[.]polviews")`によって取り出す．
+
+
+```{r}
+# mu[i], i = 1 to 7
+mu <- getContrasts(RC.un, pickCoef(RC.un,
+                                   "[.]polviews"),
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+
+# 値の方向を揃える
+if (mu$qvframe[1,1] > 0 ) {
+  mu$qvframe[,1] <- -1 * mu$qvframe[,1]
+}
+
+# 合計が0，2乗和が1となっていること確認する．
+list("和" = sum(mu$qvframe[,1]), 
+     "2乗和" = sum(mu$qvframe[,1]^2))
+
+# nu[j], j = 1 to 4
+nu <- getContrasts(RC.un, pickCoef(RC.un, "[.]fefam"), 
+                   ref = "mean",
+                   scaleRef = "mean",
+                   scaleWeights = "unit")
+
+# 値の方向を揃える
+if (nu$qvframe[1,1] > 0 ) {
+  nu$qvframe[,1] <- -1 * nu$qvframe[,1]
+}
+
+
+# 合計が0，2乗和が1となっていること確認する．
+list("和" = sum(nu$qvframe[,1]), 
+     "2乗和" = sum(nu$qvframe[,1]^2))
+
+# muの1番目と7番目，nuの1番目と4番目の値を取り出し保存する．
+con <- c(mu$qvframe[,1][c(1,7)],
+         nu$qvframe[,1][c(1,4)])
+```
+
+```{r}
+#保存した値で制約を課した上で，再推定する．
+set.seed(1234)
+RC <- freq_tab_2.3A |> 
+  gnm(Freq ~ polviews + fefam + Mult(1,polviews,fefam), 
+      constrain = c(12,18,19,22),
+      constrainTo = con, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+```
+
+
+`Deviance is not finite 警告メッセージ: Algorithm failed - no model could be estimated `と表示されたらもう一度推定する．`set.seed`の値をいくつか変えて実行するのがよい．
+
+表2.5Eの値と一致しているのかを確認する．
+
+
+```{r}
+# 結果
+summary(RC)
+```
+
+
+先ほどの単位標準化した解と推定の結果が一致しているのかを確認する．
+
+
+```{r}
+# 指定したmuとnuの値と結果が一致しているかを確認
+list(mu = mu, nu = nu)
+```
+
+
+和が0，2乗和が1となっていることを確認
+
+
+```{r}
+sum(mu$qvframe[,1])
+sum(mu$qvframe[,1]^2)
+
+sum(nu$qvframe[,1])
+sum(nu$qvframe[,1]^2)
+```
+
+
+適合度は変化していない．
+
+
+```{r}
+# モデル適合度
+model.summary(RC.un)
+model.summary(RC)
+```
+
+
+
+
+## 周辺重みづけ
+
+
+```{r}
+# 行の周辺確率
+rp <- prop.table(apply(tab_2.3A, 1, sum, na.rm = TRUE))
+rp
+sum(rp)
+
+# 列の周辺確率
+cp <- prop.table(apply(tab_2.3A, 2, sum, na.rm = TRUE))
+cp
+sum(cp)
+
+# mu[i], i = 1 to 7
+mu <- getContrasts(RC.un, pickCoef(RC.un,
+                                   "[.]polviews"),
+                   ref = rp,
+                   scaleRef = rp, 
+                   scaleWeights = rp)
+
+# 値の方向を揃える
+if (mu$qvframe[1,1] > 0 ) {
+  mu$qvframe[,1] <- -1 * mu$qvframe[,1]
+}
+
+# nu[j], j = 1 to 4
+nu <- getContrasts(RC.un, pickCoef(RC.un, "[.]fefam"), 
+                   ref = cp,
+                   scaleRef = cp,
+                   scaleWeights = cp)
+
+# 値の方向を揃える
+if (nu$qvframe[1,1] > 0 ) {
+  nu$qvframe[,1] <- -1 * nu$qvframe[,1]
+}
+
+# muの1番目と7番目，nuの1番目と4番目の値を取り出し保存する．
+con <- c(mu$qvframe[,1][c(1,7)],
+         nu$qvframe[,1][c(1,4)])
+```
+
+```{r}
+#保存した値で制約を課した上で，再推定する．
+set.seed(1234)
+RC_mw <- freq_tab_2.3A |> 
+  gnm(Freq ~ polviews + fefam + Mult(1,polviews,fefam), 
+      constrain = c(12,18,19,22),
+      constrainTo = con, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+```
+
+```{r}
+# 結果
+summary(RC_mw)
+```
+
+
+内的連関パラメータ$\phi$が0.25673となっている．場合によっては符号が逆となる．
+
+
+適合度は変化していない．
+
+
+```{r}
+# モデル適合度
+model.summary(RC.un)
+model.summary(RC)
+model.summary(RC_mw)
+```
+
+
+
+## 表2.4A
+
+表2.4Aを再現する．
+
+
+```{r}
+models <- list()
+models[[1]] <- model.summary(O)
+models[[2]] <- model.summary(U)
+models[[3]] <- model.summary(R)
+models[[4]] <- model.summary(C)
+models[[5]] <- model.summary(RplusC)
+models[[6]] <- model.summary(RC)
+models |> bind_rows() |> kable(digit = 3)
+```
+
+
+
+## 表2.4B
+
+モデルの比較のための関数を作成する．引数は2つであり，1つめのモデルと2つめのモデルの比較を行う．2つめが指定されていなければ比較ではなくそのモデルの適合度を示す．
+
+
+```{r}
+model_comparison <- function(x, y = 0) {
+  models |> 
+    bind_rows() |>
+    dplyr::summarise(`Model Used` = 
+                ifelse(y == 0,
+                       paste0(x),
+                       paste0(x,"-",y)),
+              df = ifelse(y == 0, 
+                          df[x], 
+                          df[x] - df[y]),
+              L2 = ifelse(y == 0, 
+                          L2[x], 
+                          L2[x] - L2[y]))
+}
+```
+
+
+
+表2.4Bは次のように再現できる．
+
+
+```{r}
+# Table 2.4 Panel B
+bind_rows(model_comparison(1,2),
+          model_comparison(2,6),
+          model_comparison(6),
+          model_comparison(1)) |> kable(digit = 3)
+```
+
+
+
+表2.4Cも再現できる．
+
+
+```{r}
+# Table 2.4 Panel C
+bind_rows(model_comparison(2,4),
+          model_comparison(4,6),
+          model_comparison(2,6)) |> kable(digit = 3)
+```
+
+
+
+
+
+## 表2.5A
+
+係数を取り出して表2.5Aを再現する．
+
+
+```{r}
+summary(U)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Rscore:Cscore", Variable))
+```
+
+
+## 表2.5B
+
+
+省略された係数について，標準誤差を求める方法は次の通り．
+
+
+```{r}
+# Table 2.5 Panel B 
+summary(R)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl(":Cscore", Variable))
+# polviews7:Cscoreを求める
+mycontrast <- numeric(length(coef(R)))
+terms <- pickCoef(R,"[:]Cscore")
+mycontrast[terms] <- rep(-1,6)
+mycontrast <- cbind(mycontrast)
+colnames(mycontrast) <- "polviews7:Cscore"
+gnm::se(R, mycontrast)
+```
+
+
+## 表2.5B（他の正規化）
+
+
+```{r}
+# Table 2.5 Panel B Alternative
+summary(Ralt)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl(":Cscore", Variable))
+```
+
+
+## 表2.5C
+
+同様に列効果の最後のカテゴリの推定値と標準誤差を求める．
+
+
+```{r}
+# Table 2.5 Panel C
+summary(C)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl(":Rscore", Variable))
+# fefam4:Rscoreを求める
+mycontrast <- numeric(length(coef(C)))
+terms <- pickCoef(C,"[:]Rscore")
+mycontrast[terms] <- rep(-1,3)
+mycontrast <- cbind(mycontrast)
+colnames(mycontrast) <- "fefam4:Rscore"
+gnm::se(C, mycontrast)
+```
+
+
+## 表2.5C（他の正規化）
+
+1つ目のカテゴリの値を0とした正規化の場合は次のようになる．
+
+
+```{r}
+# Table 2.5 Panel C Alternative
+summary(Calt)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl(":Rscore", Variable))
+```
+
+
+## 表2.5D
+
+
+```{r}
+# Table 2.5 Panel D
+summary(RplusC)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Rscore|Cscore", Variable))
+```
+
+
+
+## 表2.5D（他の正規化）
+
+
+```{r}
+summary(RplusCalt)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Rscore|Cscore", Variable))
+```
+
+
+
+## 表2.5E
+
+
+```{r}
+summary(RC)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Mult", Variable))
+```
+
+
+## logmultパッケージの利用
+
+
+`logmult`は`gnm`をベースとしてRCモデルを簡単に実行できる関数である．
+
+まずは`logmult`パッケージの`anoas`で連関分析を行う．データはtableなので`tab_2.3A`を使用する．
+
+
+`anoas`は独立モデル，RC(1)，RC(2)，RC(3)，...と次元が`min(nrow(tab) - 1, ncol(tab) - 1)`までのRCモデルを推定する．RC(1)の結果は表2.4Aと一致している．
+
+
+```{r}
+anoas(tab_2.3A)
+```
+
+
+
+表2.5Eの推定値（RC(1)）は`rc`を用いて次のように再現できる．`nd = 1`で次元を1としている．標準誤差を求める上で，ブートストラップ法を用いている．結果には$\gamma=\delta=1/2$の場合の係数（Adjusted）が示されている．
+
+
+```{r}
+rc_fit <- rc(tab_2.3A, 
+             nd = 1, 
+             se = "bootstrap", 
+             weighting = "none",
+             nreplicates = 100, 
+             ncpus = getOption("boot.ncpus")
+             )
+summary(rc_fit, weighting = "none")
+```
+
+
+
+周辺重みづけを用いたい場合は`weighting = "marginal"とする．
+
+
+```{r}
+rc_fit_wm <- rc(tab_2.3A, 
+             nd = 1, 
+             se = "bootstrap", 
+             weighting = "marginal",
+             nreplicates = 100, 
+             ncpus = getOption("boot.ncpus")
+             )
+summary(rc_fit_wm)
+```
+
+
+これは先ほど求めた周辺重みづけの結果（内的連関パラメータが0.25673）と一致する．
+
+
+## 表2.3B
+
+
+```{r}
+# コントラストを確認
+options('contrasts')
+# default
+options(contrasts = c(factor = "contr.treatment",
+                      ordered = "contr.poly"))
+```
+
+
+
+`anoas`を用いるときにはのエラーを無くすために行列はラベルを用いない．
+
+
+
+```{r}
+Freq <- c(518,   95,  6,  35,  5,
+         　81,   67,  4,  49,  2,
+          452, 1003, 67, 630,  5,
+           71,  157, 37, 562, 12)
+
+# データを表形式に変換
+tab_2.3B <- matrix(Freq, 
+                   nrow = 4,
+                   ncol = 5,
+                   byrow = TRUE) |> as.table()
+tab_2.3B
+
+# 度数，行変数，列変数からなる集計データを作成
+Educ <- gl(n = 4, k = 5)
+Occ <- gl(n = 5, k = 1, length = 20)
+freq_tab_2.3B <- tibble(Freq, Educ, Occ)
+freq_tab_2.3B
+
+# 行変数と列変数の整数値を作成
+freq_tab_2.3B <- freq_tab_2.3B |> 
+  mutate(Rscore = as.numeric(Educ),
+         Cscore = as.numeric(Occ))
+freq_tab_2.3B
+```
+
+```{r}
+O <- freq_tab_2.3B |> 
+  gnm(Freq ~ Educ + Occ, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+U <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Cscore, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+R <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Cscore + 
+        Educ:Cscore, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+C <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Cscore + 
+        Occ:Rscore, 
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+RplusC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Cscore + 
+        Educ:Cscore + 
+        Occ:Rscore,
+      constrain = c(12,16), 
+      constrainTo = c(0,0),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+RC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Mult(1, Educ, Occ),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+UplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ +
+        Rscore:Cscore + 
+        Mult(1, Educ, Occ),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+RplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Cscore:Educ + 
+        Mult(1, Educ, Occ),
+      constrain = c(9,12),
+      constrainTo = c(0,0),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+CplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Occ + 
+        Mult(1, Educ, Occ),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+RplusCplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Cscore:Educ + 
+        Rscore:Occ + 
+        Mult(1, Educ, Occ),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+RC2 <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        instances(Mult(1, Educ, Occ),2),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+```
+
+
+## 表2.6A
+
+表2.6Aを再現する．
+
+
+```{r}
+models <- list()
+models[[1]] <- model.summary(O)
+models[[2]] <- model.summary(U)
+models[[3]] <- model.summary(R)
+models[[4]] <- model.summary(C)
+models[[5]] <- model.summary(RplusC)
+models[[6]] <- model.summary(RC)
+models[[7]] <- model.summary(UplusRC)
+models[[8]] <- model.summary(RplusRC)
+models[[9]] <- model.summary(CplusRC)
+models[[10]] <- model.summary(RplusCplusRC)
+models[[11]] <- model.summary(RC2)
+models |> bind_rows()
+```
+
+
+## 表2.6B
+
+
+```{r}
+# Table 2.4 Panel B
+bind_rows(model_comparison(1,6),
+          model_comparison(6,11),
+          model_comparison(11),
+          model_comparison(1))
+```
+
+
+
+## 表2.6C
+
+
+```{r}
+# Table 2.4 Panel C
+bind_rows(model_comparison(1,2),
+          model_comparison(2,6),
+          model_comparison(6,10),
+          model_comparison(10),
+          model_comparison(1))
+```
+
+
+
+## 表2.7A
+
+
+```{r}
+set.seed(1234)
+UplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Cscore + 
+        Mult(1, Educ, Occ),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+summary(UplusRC)
+
+# 変数と係数と係数の順番を表示
+pickCoef(UplusRC, "[.]Educ")
+pickCoef(UplusRC, "[.]Occ")
+data.frame(var = names(UplusRC$coefficients),
+           estimate = UplusRC$coefficients) |> 
+  mutate(estimate = estimate,
+         number = row_number())
+
+mu <- getContrasts(UplusRC, 
+                   pickCoef(UplusRC, "[.]Educ"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+nu <- getContrasts(UplusRC, 
+                   pickCoef(UplusRC, "[.]Occ"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+
+# 中心化制約と尺度化制約の確認
+sum(mu$qvframe[,1]) |> round()
+sum(mu$qvframe[,1]^2)
+sum(nu$qvframe[,1]) |> round()
+sum(nu$qvframe[,1]^2)
+
+# 行スコアと列スコアの両端の値を固定する
+con <- c(mu$qvframe[,1][c(1,4)],nu$qvframe[,1][c(1,5)])
+
+set.seed(1234567)
+UplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Cscore + 
+        Mult(1, Educ, Occ),
+      constrain = c(11,14,15,19),
+      constrainTo = con,
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+summary(UplusRC)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Rscore|Cscore|Mult",
+                      Variable))
+```
+
+
+## 表2.7B
+
+
+```{r}
+RplusRC.un <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Cscore:Educ + 
+        Mult(1, Educ, Occ),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+summary(RplusRC.un)
+pickCoef(RplusRC.un, "[:]Cscore")
+
+RplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Cscore:Educ + 
+        Mult(1, Educ, Occ),
+      constrain = c(9,12),
+      constrainTo = c(0,0),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+summary(RplusRC)
+
+# 変数と係数と係数の順番を表示
+pickCoef(RplusRC.un, "[.]Educ")
+pickCoef(RplusRC.un, "[.]Occ")
+data.frame(var = names(RplusRC$coefficients),
+           estimate = RplusRC$coefficients) |> 
+  mutate(estimate = estimate,
+         number = row_number())
+
+mu <- getContrasts(RplusRC, 
+                   pickCoef(RplusRC, "[.]Educ"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+nu <- getContrasts(RplusRC, 
+                   pickCoef(RplusRC, "[.]Occ"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+con <- c(0,0,
+         mu$qvframe[,1][c(1,4)],
+         nu$qvframe[,1][c(1,5)])
+
+RplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Cscore:Educ + 
+        Mult(1, Educ, Occ),
+      constrain = c(9,12,14,17,18,22),
+      constrainTo = con,
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+summary(RplusRC)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Rscore|Cscore|Mult", Variable))
+```
+
+
+
+
+## 表2.7C
+
+`Algorithm failed - no model could be estimated`となったら再度推定すること．
+
+
+```{r}
+set.seed(1234)
+CplusRC.un <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Occ + 
+        Mult(1, Educ, Occ),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+summary(CplusRC.un)
+pickCoef(CplusRC.un, "[:]Rscore")
+
+CplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Occ + 
+        Mult(1, Educ, Occ),
+      constrain = c(9,13),
+      constrainTo = c(0,0),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+summary(CplusRC)
+
+summary(CplusRC)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Rscore|Cscore|Mult", Variable))
+
+# 変数と係数と係数の順番を表示
+data.frame(var = names(CplusRC$coefficients),
+           estimate = CplusRC$coefficients) |> 
+  mutate(estimate = estimate,
+         number = row_number())
+
+mu <- getContrasts(CplusRC, 
+                   pickCoef(CplusRC, "[.]Educ"),
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+nu <- getContrasts(CplusRC, 
+                   pickCoef(CplusRC, "[.]Occ"),
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+con <- c(0,0,
+         mu$qvframe[,1][c(1,4)],
+         nu$qvframe[,1][c(1,5)])
+
+CplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Rscore:Occ + 
+        Mult(1, Educ, Occ),
+      constrain = c(9,13,15,18,19,23),
+      constrainTo = con,
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+summary(CplusRC)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Rscore|Cscore|Mult", Variable))
+```
+
+
+
+
+## 表2.7D
+
+まずは行効果と列効果のパラメータに対して0という制約を課し，その上で推定した行スコアと列スコアを正規化し，再度推定する．
+
+
+
+```{r}
+RplusCplusRC.un <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Cscore:Educ + 
+        Rscore:Occ + 
+        Mult(1, Educ, Occ),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+summary(RplusCplusRC.un)
+pickCoef(RplusCplusRC.un, "[:]Cscore")
+pickCoef(RplusCplusRC.un, "[:]Rscore")
+
+
+RplusCplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Cscore:Educ + 
+        Rscore:Occ + 
+        Mult(1, Educ, Occ),
+      constrain = c(9,12,13,14,17), 
+      constrainTo = c(0,0,0,0,0),
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+
+# 変数と係数と係数の順番を表示
+data.frame(var = names(CplusRC$coefficients),
+           estimate = CplusRC$coefficients) |> 
+  mutate(estimate = estimate,
+         number = row_number())
+
+mu <- getContrasts(RplusCplusRC, 
+                   pickCoef(RplusCplusRC, "[.]Educ"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+nu <- getContrasts(RplusCplusRC,
+                   pickCoef(RplusCplusRC, "[.]Occ"), 
+                   ref = "mean",
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
+con <- c(0,0,0,0,0,
+         mu$qvframe[,1][c(1,4)],
+         nu$qvframe[,1][c(1,5)])
+
+RplusCplusRC <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        Cscore:Educ + 
+        Rscore:Occ + 
+        Mult(1, Educ, Occ),
+      constrain = c(9,12,13,14,17,19,22,23,27), 
+      constrainTo = con,
+      family = poisson, 
+      data = _, 
+      tolerance = 1e-12)
+mu
+nu
+summary(RplusCplusRC)$coefficients |>
+  data.frame() |>
+  rownames_to_column("Variable") |>
+  dplyr::filter(grepl("Rscore|Cscore|Mult", Variable))
+```
+
+
+
+## 表2.7E
+
+Wongのサポートページにあるように，`gnm`を用いてRC(2)の係数を推定することは難しい．ここではKateri, Maria. 2014.  {\it Contingency Table Analysis: Methods and Implementation Using R}. New York: Birkhäuser. のsupportページにあるプログラムを使用して係数を求める．
+
+$M > 1$のRC(M)を推定するためには`gnm`の`instances`を用いる．
+今は`instances = 2`としており，RC(2)を用いている．
+なお，式(2.35)のように$\phi$は推定されない．
+これらスコアは求まるものの，直交という次元間制約が課されてない．
+そこで，特異値分解（SVD: singular value decomposition）によって行スコアと列スコアのそれぞれが次元間で直行するような変換を行う．
+
+まず次元間制約が課されてない行スコアの行列（$I\times m$）と列スコアの行列（$J\times m$）の積を求め，モデル化での2元交互作用パラメータを求める．
+
+
+
+
+```{r}
+RC2 <- freq_tab_2.3B |>
+  gnm(Freq ~ Educ + Occ + 
+        instances(Mult(Educ, Occ), instances = 2),
+      family = poisson, data = _, 
+      tolerance = 1e-12)
+summary(RC2)
+
+RCmodel_coef <- function(RCmodel, row, col, m, data){
+  NI <- RCmodel$xlevels[[1]] |> length()
+  NJ <- RCmodel$xlevels[[2]] |> length()
+  iflag <- 0
+  y <- length(RCmodel$y)
+  X <- gl(NI,NJ,length = y)
+  Y <- gl(NJ,1,length = y)
+  IX <- pickCoef(RCmodel, 
+                 paste0("[.]",deparse(substitute(row))))
+  IY <- pickCoef(RCmodel,
+                 paste0("[.]",deparse(substitute(col))))
+  X <- RCmodel$coefficients[IX]
+  Y <- RCmodel$coefficients[IY]
+  mu0 <- matrix(X,nrow = NI,ncol = m)
+  nu0 <- matrix(Y,nrow = NJ,ncol = m)
+  mu <- mu0
+  nu <- nu0
+  A <- mu %*% t(nu) # [NI, M] [M. NJ]
+  R1 <- diag(1,NI)
+  C1 <- diag(1,NJ)
+  Rone <- matrix(rep(1,NI^2),nrow = NI)
+  Cone <- matrix(rep(1,NJ^2),nrow = NJ)
+  rowP <- c(rep(1,NI))
+  colP <- c(rep(1,NJ));
+  data <- RC2$model
+  list(y,X,Y,IX,IY,data)
+  if (iflag == 1) {
+    rowP <- with(data, tapply(freq,row,sum)/sum(freq))
+    colP <- with(data, tapply(freq,col,sum)/sum(freq))}
+  DR <- diag(rowP^(-1/2),NI)
+  DC <- diag(colP^(-1/2),NJ)
+  RWsqr <- diag(rowP^(1/2),NI)
+  CWsqr <- diag(colP^(1/2),NJ)
+  RW <- RWsqr^2
+  CW <- CWsqr^2
+  L <- (R1 - (Rone %*% RW)/sum(RW)) %*% A %*% t(C1 - (Cone %*% CW)/sum(CW))
+  phiv <- svd(RWsqr %*% L %*% CWsqr)$d[1:m]
+  mu <- svd(RWsqr %*% L %*% CWsqr)$u[,1:m]
+  nu <- svd(RWsqr %*% L %*% CWsqr)$v[,1:m]
+  mu <- DR %*% mu
+  nu <- DC %*% nu
+  phi <- diag(phiv, m)
+  L2 <- RCmodel$deviance
+  df <- RCmodel$df.residual
+  p.value <- 1 - pchisq(L2,df)
+  fit.freq <- predict(RCmodel, 
+                      type = "response", 
+                      se.fit = TRUE)
+  
+  print(list(model = RCmodel, 
+     L2 = L2, 
+     df = df,
+     p.value = p.value,
+     obs_freq = summary(RC2)$y, 
+     fit.freq = fit.freq,
+     phi = phi, 
+     mu = mu, 
+     nu = nu,
+     cor(mu) |> round(3),
+     cor(nu) |> round(3)))
+  }
+
+RCmodel_coef(RC2, row = Educ, col = Occ, m =  2)
+```
+
+
+
+`logmult`パッケージの`rc`によってRC(2)を推定する．まずは`anoas`で連関分析を行う．表2.6Aと同じ結果になっていることを確認する．正規化だけではなく，次元間制約が課されており，表2.7の結果と一致する．
+
+
+
+```{r}
+anoas(tab_2.3B)
+```
+
+```{r}
+RC2 <- rc(tab_2.3B, 
+          nd = 2, 
+          weighting = "none", 
+          se = "bootstrap",
+          nreplicates = 1000, 
+          ncpus = getOption("boot.ncpus"))
+summary(RC2)
+RC2 |> 
+  summary() |>
+  pluck(coefficients) |>
+  data.frame() |>
+  rownames_to_column(var = "Parameter") |>
+  arrange(Parameter)
+# getS3method("assoc","rc")
+```
+

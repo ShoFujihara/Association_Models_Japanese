@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="藤原翔（東京大学社会科学研究所）">
-<meta name="dcterms.date" content="2023-10-16">
+<meta name="dcterms.date" content="2023-11-06">
 
 <title>『カテゴリカルデータのための連関モデル』</title>
 <style>
@@ -242,7 +242,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 16, 2023</p>
+      <p class="date">November 6, 2023</p>
     </div>
   </div>
   
@@ -257,17 +257,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="目的" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="目的">目的</h2>
 <p>このページは</p>
-<p>共立出版の「計量分析One Point」シリーズ（https://www.kyoritsu-pub.co.jp/series/100268/）のひとつとして出版された</p>
+<p>共立出版の<a href="https://www.kyoritsu-pub.co.jp/series/100268/">「計量分析One Point」シリーズ</a>のひとつとして出版された</p>
 <p>Raymond Wong著・藤原翔訳．2021．『カテゴリカルデータの連関分析』共立出版．</p>
 <p>のためのサポートページです．本書の付録や補遺とすることも検討しましたが，<em>Association Models</em>は他のQASSに比べて分量が多いため（156ページ！），そしてRのバージョンアップやパッケージの更新などに備えるため，正誤表もあわせて公開するためにオンラインで公開することにしました．本書と関連した連関モデルの適用例の情報についても，このサポートページで補うことができればと思います．</p>
 <p>このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．</p>
-<p>なおこのサポートページの内容は英語版のサポートページ https://studysites.sagepub.com/wongstudy/ が元になっています．そちらもぜひ参考にしてください．</p>
+<p>なおこのサポートページの内容は英語版の<a href="https://studysites.sagepub.com/wongstudy/">サポートページ</a> が元になっています．そちらもぜひ参考にしてください．</p>
 </section>
 <section id="rのスクリプト" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="rのスクリプト">Rのスクリプト</h2>
 <p>本サポートページのスクリプトはそのままコピー・アンド・ペーストすることが可能です． スクリプトを選択してコピーしても良いですし，各スクリプトの右上の図をクリックしてもコピーされます．</p>
 <p><img src="figures/copy_and_paste2.png"></p>
-<p>なおRのスクリプトについては https://github.com/ShoFujihara/Association_Models_Japanese の scripts というフォルダに保存されているので，そちらを参照してください．Googleドライブにもスクリプトを保存しておきます． https://drive.google.com/drive/folders/1oP0EURmoD8-dIkC6MCqDS3_0ysOz7t-0?usp=sharing</p>
+<p>なおRのスクリプトについては <a href="https://github.com/ShoFujihara/Association_Models_Japanese">訳者のGitHubページ</a> の scripts というフォルダに保存されているので，そちらを参照してください．<a href="https://drive.google.com/drive/folders/1oP0EURmoD8-dIkC6MCqDS3_0ysOz7t-0?usp=sharing">Googleドライブ</a>にもスクリプトを保存しておきます．</p>
 </section>
 <section id="正誤表" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="正誤表">正誤表</h2>
@@ -570,6 +570,20 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
 });
 </script>
 <nav class="page-navigation">
@@ -587,7 +601,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>このページは</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>共立出版の「計量分析One Point」シリーズ（https://www.kyoritsu-pub.co.jp/series/100268/）のひとつとして出版された</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>共立出版の<span class="co">[</span><span class="ot">「計量分析One Point」シリーズ</span><span class="co">](https://www.kyoritsu-pub.co.jp/series/100268/)</span>のひとつとして出版された</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Raymond Wong著・藤原翔訳．2021．『カテゴリカルデータの連関分析』共立出版．</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
@@ -595,7 +609,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>なおこのサポートページの内容は英語版のサポートページ https://studysites.sagepub.com/wongstudy/ が元になっています．そちらもぜひ参考にしてください．</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>なおこのサポートページの内容は英語版の<span class="co">[</span><span class="ot">サポートページ</span><span class="co">](https://studysites.sagepub.com/wongstudy/)</span> が元になっています．そちらもぜひ参考にしてください．</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rのスクリプト {-}</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
@@ -604,17 +618,16 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"figures/copy_and_paste2.png"</span><span class="kw">/&gt;</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>なおRのスクリプトについては https://github.com/ShoFujihara/Association_Models_Japanese の scripts というフォルダに保存されているので，そちらを参照してください．Googleドライブにもスクリプトを保存しておきます．</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a> https://drive.google.com/drive/folders/1oP0EURmoD8-dIkC6MCqDS3_0ysOz7t-0?usp=sharing </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>なおRのスクリプトについては <span class="co">[</span><span class="ot">訳者のGitHubページ</span><span class="co">](https://github.com/ShoFujihara/Association_Models_Japanese)</span> の scripts というフォルダに保存されているので，そちらを参照してください．<span class="co">[</span><span class="ot">Googleドライブ</span><span class="co">](https://drive.google.com/drive/folders/1oP0EURmoD8-dIkC6MCqDS3_0ysOz7t-0?usp=sharing)</span>にもスクリプトを保存しておきます．</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## 正誤表 {-}</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>特になし．</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## サポートページバージョン情報 {-}</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2023年5月1日: version 0.1.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## 正誤表 {-}</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>特になし．</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## サポートページバージョン情報 {-}</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2023年5月1日: version 0.1.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

@@ -170,10 +170,11 @@ Margins(tab_expected)
 
 ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．
 
-$\chi^2 = \sum_i \sum_j \frac{\left(f_{ij} - F_{ij}\right)^2}{F_{ij}}$
 
-$L^2 = 2 \sum_i \sum_j f_{ij} \log \frac{f_{ij}}{F_{ij}}$
-
+\begin{align}
+\chi^2 &= \sum_i \sum_j \frac{\left(f_{ij} - F_{ij}\right)^2}{F_{ij}}\\
+L^2 &= 2 \sum_i \sum_j f_{ij} \log \frac{f_{ij}}{F_{ij}}
+\end{align}
 
 - 自由度についても`nrow`と`ncol`を用いて計算（`prod(dim(tab) -1)`でもよい）．
 `list`関数は様々なもの（値，ベクトル，データ，リスト等）をまとめ，並べて表示するときに用いる．
@@ -189,15 +190,15 @@ L2 <- 2*sum((tab * log(tab / tab_expected)))
 df <- (nrow(tab) - 1) * (ncol(tab) - 1)
 # df <- prod(dim(tab) -1)
 # 結果をリストで表示
-list("自由度" = df,
-     "ピアソンのカイ2乗統計量" = X2, 
-     "尤度比統計量" = L2)
+fit_1.1 <- list("自由度" = df,
+                "ピアソンのカイ2乗統計量" = X2, 
+                "尤度比統計量" = L2)
 ```
 
 
 
 ### 一様連関モデル {-}
-- ページixの一様連関モデルを再現する．
+- ページixの一様連関モデルを再現する．分析上はどのようなデータにも当てはまることができるが，少なくとも行変数のカテゴリと列変数のカテゴリの両方に序列があると理論的に仮定できる場合しか利用できないモデルであることには注意が必要である．もし序列が仮定できない場合は，後ほど紹介されるRC2モデルを用いればよい．
 
 #### データの準備 {-}
 - 多元表の分析は表形式（table form）ではなく，度数，行変数，列変数からなる集計データを作成して行うことが多い．このデータの形式は度数形式（frequency form）と呼ばれる．
@@ -336,7 +337,7 @@ list("自由度" = df_O,
 - `summary(O)`では`Residual deviance: 47.418 on 15 degrees of freedom`となっており，先程の分析と適合度は一致する．
 
 
-#### 一様連関モデル {-}
+#### 一様連関モデルによる分析 {-}
 
 - 次に一様連関モデル（Uniform association model）による分析を行う．
 - `PSES`を`as.integer`関数で整数にしたものを`Rscore`，`MHS`を`as.integer`関数で整数にしたものを`Cscore`として，`mutate`関数でデータに新たに変数を作成している．更に平均値を引いて中心化している．`d <- d |>`は`mutate`変数を追加して元のデータに上書きをしている．
@@ -440,6 +441,73 @@ df_dstarwars
 ```
 
 
+別の例で分析してみる．`palmerpenguins`パッケージには`penguins`というデータが含まれている．
+
+```{r}
+#install.packages("palmerpenguins")
+library(palmerpenguins)
+penguins
+```
+
+これをもとに集計データを作成する．ここでは種と性別のクロス表を作成する．
+
+```{r}
+# クロス表を作成
+tab_penguines <- xtabs(~ species + sex, data = penguins)
+tab_penguines
+```
+
+なお，このクロス表からえられる独立性の検定についての指標や連関の係数は次のようになる．
+
+```{r}
+assocstats(tab_penguines)
+```
+
+```{r}
+# クロス表をdata.frameとして読み込む
+freq_penguines_1 <- data.frame(tab_penguines)
+freq_penguines_1
+```
+
+`count`を使うこともできる．
+
+```{r}
+freq_penguines_2 <- penguins |> 
+  count(species, sex) |> 
+  rename(Freq = n)
+freq_penguines_2
+
+# 欠損値を処理する
+freq_penguines_2 <- penguins |> 
+  count(species, sex) |> 
+  drop_na() |> 
+  rename(Freq = n)
+freq_penguines_2
+```
+
+
+では`glm`関数を用いて対数線形モデルをあてはめる．
+
+```{r}
+# 独立モデル
+fit_penguines_O <- 
+  freq_penguines_2 |> 
+  glm(Freq ~ species + sex, family = "poisson", data = _)
+
+# 飽和モデル
+fit_penguines_FI <- 
+  freq_penguines_2 |> 
+  glm(Freq ~ species * sex, family = "poisson", data = _)
+
+# 適合度を確認する
+fit_penguines_O |> summary()
+fit_penguines_FI |> summary()
+anova(fit_penguines_O, fit_penguines_FI)
+```
+
+独立モデルの尤度比カイ2乗統計量は`assocstats(tab_penguines)`の値と一致している．
+
+
 ## 集計データを個票データに変換
 
 集計データを個票データに変換したいときには`vcdExtra`パッケージの`expand.dft`を用いる．
@@ -504,6 +572,9 @@ Friendly and Meyer (2016) を参考に表を作成．
 |度数形式|表形式| `xtabs(Freq ~ A + B)`|
 |表形式|ケース形式|`expand.dfr(X)`|
 |表形式|度数形式|`data.frame(tab)`|
+
+
+
 
 
 ## 練習問題 {-}

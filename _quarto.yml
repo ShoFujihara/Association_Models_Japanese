@@ -27,6 +27,7 @@ format:
     code-tools: true
     code-block-bg: true
     code-block-border-left: "#0ABAB5"
+    link-external-icon: true
 
 crossref:
   fig-title: 図     # (default is "Figure")

@@ -50,4 +50,26 @@ DescTools::UncertCoef(tab, conf.level = 0.95)
 ```
 
 
+## クラメールのV
+
+クラメールの$V$も連関の強さをみる指標であり，次のように定義される．
+
+\begin{equation}
+V = \sqrt{\frac{\chi^2/n}{{\rm min}(I-1,J-1)}}
+\end{equation}
+
+${\rm min}(I-1,J-1)$は括弧内の最小の値であり，${\rm min}(I,J)-1$と考えても良い．
+値の取りうる範囲は$$0 \leq V \leq 1$$となり，値が大きいほど2つの変数の連関は強いといえる．
+
+ではクラメールのVを自分で求めてみよう．`chisq.test(tab)$statistic`でカイ2乗値を取り出すことができるが，
+名前がついているので`unname`関数で取り除く．`as.numeric`としても取り除くことができる．
+
+```{r}
+tab
+X2 <- chisq.test(tab)$statistic |> unname()   # あるいはas.numeric()
+V <- sqrt(X2/sum(tab)/(min(dim(tab)) - 1))
+V
+```
+
+
 

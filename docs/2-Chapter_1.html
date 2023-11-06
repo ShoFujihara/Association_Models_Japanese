@@ -96,6 +96,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -205,7 +207,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">目次</h2>
+   
+  <ul>
+  <li><a href="#クラメールのv" id="toc-クラメールのv" class="nav-link active" data-scroll-target="#クラメールのv"><span class="header-section-number">1.1</span> クラメールのV</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -393,10 +401,38 @@ Mutual Information       0.0206       -       -</code></pre>
 0.009135369 0.004068778 0.014201959 </code></pre>
 </div>
 </div>
+<section id="クラメールのv" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="クラメールのv"><span class="header-section-number">1.1</span> クラメールのV</h2>
+<p>クラメールの<span class="math inline">\(V\)</span>も連関の強さをみる指標であり，次のように定義される．</p>
+<p><span class="math display">\[\begin{equation}
+V = \sqrt{\frac{\chi^2/n}{{\rm min}(I-1,J-1)}}
+\end{equation}\]</span></p>
+<p><span class="math inline">\({\rm min}(I-1,J-1)\)</span>は括弧内の最小の値であり，<span class="math inline">\({\rm min}(I,J)-1\)</span>と考えても良い． 値の取りうる範囲は<span class="math display">\[0 \leq V \leq 1\]</span>となり，値が大きいほど2つの変数の連関は強いといえる．</p>
+<p>ではクラメールのVを自分で求めてみよう．<code>chisq.test(tab)$statistic</code>でカイ2乗値を取り出すことができるが， 名前がついているので<code>unname</code>関数で取り除く．<code>as.numeric</code>としても取り除くことができる．</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   MHS
+SES well mild modelrate impared
+  A   64   94        58      46
+  B   57   94        54      40
+  C   57  105        65      60
+  D   72  141        77      94
+  E   36   97        54      78
+  F   21   71        54      71</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tab)<span class="sc">$</span>statistic <span class="sc">|&gt;</span> <span class="fu">unname</span>()   <span class="co"># あるいはas.numeric()</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(X2<span class="sc">/</span><span class="fu">sum</span>(tab)<span class="sc">/</span>(<span class="fu">min</span>(<span class="fu">dim</span>(tab)) <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>V</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09609364</code></pre>
+</div>
+</div>
 
 
 <!-- -->
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -681,6 +717,20 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // default icon
+          link.classList.add("external");
+      }
+    }
 });
 </script>
 <nav class="page-navigation">
@@ -695,58 +745,80 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb23" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># 第1章</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>本章ですこし触れられてる連関の尺度のいくつかは<span class="in">`DescTools`</span>パッケージの<span class="in">`Assocs`</span>で求めることができる．</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>「シリーズ編者による内容紹介」の精神的健康と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）を用いて分析する．</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 元データの入力（xページ）</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>Freq <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">64</span>,  <span class="dv">94</span>, <span class="dv">58</span>, <span class="dv">46</span>,</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>,  <span class="dv">94</span>, <span class="dv">54</span>, <span class="dv">40</span>,</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>, <span class="dv">105</span>, <span class="dv">65</span>, <span class="dv">60</span>,</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>           <span class="dv">72</span>, <span class="dv">141</span>, <span class="dv">77</span>, <span class="dv">94</span>,</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>           <span class="dv">36</span>,  <span class="dv">97</span>, <span class="dv">54</span>, <span class="dv">78</span>,</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>           <span class="dv">21</span>,  <span class="dv">71</span>, <span class="dv">54</span>, <span class="dv">71</span>)</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co"># データを表形式に変換</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  Freq,</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">6</span>,</span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">4</span>,</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">SES =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>],</span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>,</span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mild"</span>,</span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">"modelrate"</span>,</span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">"impared"</span>)</span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>tab</span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Desc</span>(tab)</span>
-<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Assocs</span>(tab)</span>
-<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>次のように個別に尺度を求めることもできる．</span>
-<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>詳しくは<span class="in">`?DescTools`</span>の<span class="in">`Statistics:`</span>を確認してほしい．</span>
-<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">CramerV</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Lambda</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalTau</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">KendallTauB</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">StuartTauC</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalGamma</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">SomersDelta</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">UncertCoef</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode" id="cb27" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># 第1章</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>本章ですこし触れられてる連関の尺度のいくつかは<span class="in">`DescTools`</span>パッケージの<span class="in">`Assocs`</span>で求めることができる．</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>「シリーズ編者による内容紹介」の精神的健康と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）を用いて分析する．</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 元データの入力（xページ）</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>Freq <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">64</span>,  <span class="dv">94</span>, <span class="dv">58</span>, <span class="dv">46</span>,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>,  <span class="dv">94</span>, <span class="dv">54</span>, <span class="dv">40</span>,</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>, <span class="dv">105</span>, <span class="dv">65</span>, <span class="dv">60</span>,</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>           <span class="dv">72</span>, <span class="dv">141</span>, <span class="dv">77</span>, <span class="dv">94</span>,</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>           <span class="dv">36</span>,  <span class="dv">97</span>, <span class="dv">54</span>, <span class="dv">78</span>,</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>           <span class="dv">21</span>,  <span class="dv">71</span>, <span class="dv">54</span>, <span class="dv">71</span>)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># データを表形式に変換</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  Freq,</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">6</span>,</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">4</span>,</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">SES =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>],</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>,</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mild"</span>,</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">"modelrate"</span>,</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">"impared"</span>)</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Desc</span>(tab)</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Assocs</span>(tab)</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>次のように個別に尺度を求めることもできる．</span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>詳しくは<span class="in">`?DescTools`</span>の<span class="in">`Statistics:`</span>を確認してほしい．</span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">CramerV</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Lambda</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalTau</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">KendallTauB</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">StuartTauC</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalGamma</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">SomersDelta</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">UncertCoef</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-58"><a href="#cb27-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-59"><a href="#cb27-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## クラメールのV</span></span>
+<span id="cb27-60"><a href="#cb27-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-61"><a href="#cb27-61" aria-hidden="true" tabindex="-1"></a>クラメールの$V$も連関の強さをみる指標であり，次のように定義される．</span>
+<span id="cb27-62"><a href="#cb27-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-63"><a href="#cb27-63" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
+<span id="cb27-64"><a href="#cb27-64" aria-hidden="true" tabindex="-1"></a>V = \sqrt{\frac{\chi^2/n}{{\rm min}(I-1,J-1)}}</span>
+<span id="cb27-65"><a href="#cb27-65" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
+<span id="cb27-66"><a href="#cb27-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-67"><a href="#cb27-67" aria-hidden="true" tabindex="-1"></a>${\rm min}(I-1,J-1)$は括弧内の最小の値であり，${\rm min}(I,J)-1$と考えても良い．</span>
+<span id="cb27-68"><a href="#cb27-68" aria-hidden="true" tabindex="-1"></a>値の取りうる範囲は$$0 \leq V \leq 1$$となり，値が大きいほど2つの変数の連関は強いといえる．</span>
+<span id="cb27-69"><a href="#cb27-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-70"><a href="#cb27-70" aria-hidden="true" tabindex="-1"></a>ではクラメールのVを自分で求めてみよう．<span class="in">`chisq.test(tab)$statistic`</span>でカイ2乗値を取り出すことができるが，</span>
+<span id="cb27-71"><a href="#cb27-71" aria-hidden="true" tabindex="-1"></a>名前がついているので<span class="in">`unname`</span>関数で取り除く．<span class="in">`as.numeric`</span>としても取り除くことができる．</span>
+<span id="cb27-72"><a href="#cb27-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-75"><a href="#cb27-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb27-76"><a href="#cb27-76" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb27-77"><a href="#cb27-77" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tab)<span class="sc">$</span>statistic <span class="sc">|&gt;</span> <span class="fu">unname</span>()   <span class="co"># あるいはas.numeric()</span></span>
+<span id="cb27-78"><a href="#cb27-78" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(X2<span class="sc">/</span><span class="fu">sum</span>(tab)<span class="sc">/</span>(<span class="fu">min</span>(<span class="fu">dim</span>(tab)) <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb27-79"><a href="#cb27-79" aria-hidden="true" tabindex="-1"></a>V</span>
+<span id="cb27-80"><a href="#cb27-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb27-81"><a href="#cb27-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-82"><a href="#cb27-82" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
