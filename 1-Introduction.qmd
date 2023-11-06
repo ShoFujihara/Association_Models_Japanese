@@ -583,10 +583,10 @@ Friendly and Meyer (2016) を参考に表を作成．
 
 
 ## 練習問題 {-}
-- せっかくデータを入力したので，このデータを使ってGoodman（1979）の表5A，表5B，表5Cの結果を再現しよう．
+- せっかくデータを入力したので，このデータを使って @goodman1979a の表5A，表5B，表5Cの結果を再現しよう．
 - 分析方法については第2章のプログラムを参考にしてほしい．
 
 ## 参考文献 {-}
-- Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.”*Journal of the American Statistical Association* 74(367):537–52.
+
 
 

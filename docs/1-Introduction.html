@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -1605,19 +1624,21 @@ women blue        2     8    1    2
 <section id="練習問題" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="練習問題">練習問題</h2>
 <ul>
-<li>せっかくデータを入力したので，このデータを使ってGoodman（1979）の表5A，表5B，表5Cの結果を再現しよう．</li>
+<li>せっかくデータを入力したので，このデータを使って <span class="citation" data-cites="goodman1979a">Goodman (<a href="#ref-goodman1979a" role="doc-biblioref">1979</a>)</span> の表5A，表5B，表5Cの結果を再現しよう．</li>
 <li>分析方法については第2章のプログラムを参考にしてほしい．</li>
 </ul>
 </section>
 <section id="参考文献" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="参考文献">参考文献</h2>
-<ul>
-<li>Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.”<em>Journal of the American Statistical Association</em> 74(367):537–52.</li>
-</ul>
 
 
 <!-- -->
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-goodman1979a" class="csl-entry" role="listitem">
+Goodman, Leo A. 1979. <span>“Simple <span>Models</span> for the <span>Analysis</span> of <span>Association</span> in <span>Cross-Classifications</span> Having <span>Ordered Categories</span>.”</span> <em>Journal of the American Statistical Association</em> 74 (367): 537–52.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -2515,11 +2536,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb140-656"><a href="#cb140-656" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb140-657"><a href="#cb140-657" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb140-658"><a href="#cb140-658" aria-hidden="true" tabindex="-1"></a><span class="fu">## 練習問題 {-}</span></span>
-<span id="cb140-659"><a href="#cb140-659" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>せっかくデータを入力したので，このデータを使ってGoodman（1979）の表5A，表5B，表5Cの結果を再現しよう．</span>
+<span id="cb140-659"><a href="#cb140-659" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>せっかくデータを入力したので，このデータを使って @goodman1979a の表5A，表5B，表5Cの結果を再現しよう．</span>
 <span id="cb140-660"><a href="#cb140-660" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>分析方法については第2章のプログラムを参考にしてほしい．</span>
 <span id="cb140-661"><a href="#cb140-661" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb140-662"><a href="#cb140-662" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献 {-}</span></span>
-<span id="cb140-663"><a href="#cb140-663" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Goodman, Leo A. 1979. “Simple Models for the Analysis of Association in Cross-Classifications Having Ordered Categories.”*Journal of the American Statistical Association* 74(367):537–52.</span>
+<span id="cb140-663"><a href="#cb140-663" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb140-664"><a href="#cb140-664" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>

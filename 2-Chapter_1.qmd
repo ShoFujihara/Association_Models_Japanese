@@ -30,7 +30,10 @@ tab
 ```
 
 
+`DescTools`パッケージを用いる．
+
 ```{r}
+library(DescTools)
 DescTools::Desc(tab)
 DescTools::Assocs(tab)
 ```
@@ -72,4 +75,73 @@ V
 ```
 
 
+`tab`の2行目を10倍，1列目を10倍したデータを考える．これを`tab10`とする．
+
+```{r}
+tab10 <- tab
+tab10[,1] <- tab10[,1]*10
+tab10[2,] <- tab10[2,]*10
+tab
+tab10
+```
+
+この2つの表について先程の連関係数の値を確認すると，すべての係数について表によって値が異なる．
+
+```{r}
+DescTools::CramerV(tab)
+DescTools::CramerV(tab10)
+
+DescTools::GoodmanKruskalTau(tab)
+DescTools::GoodmanKruskalTau(tab10)
+
+DescTools::KendallTauB(tab)
+DescTools::KendallTauB(tab10)
+
+DescTools::StuartTauC(tab)
+DescTools::StuartTauC(tab10)
+
+DescTools::GoodmanKruskalGamma(tab)
+DescTools::GoodmanKruskalGamma(tab10)
+
+DescTools::SomersDelta(tab)
+DescTools::SomersDelta(tab10)
+
+DescTools::UncertCoef(tab)
+DescTools::UncertCoef(tab10)
+```
+
+
+オッズ比に基づく尺度では表によって値は異ならない．
+@bouchet-valat2022 や @zhou2015 を参照．
+
+```{r}
+# 2つの表をマージしたデータも作成
+tab_merge <- dplyr::bind_rows(data.frame(as.table(tab)),
+                       data.frame(as.table(tab10)),
+         .id = "Tab") |> 
+  xtabs(Freq ~ SES + MHS + Tab, data = _)
+tab_merge
+
+# intrinsic association coefficient
+logmult::iac(tab, weighting = "none")
+logmult::iac(tab10, weighting = "none")
+logmult::iac(tab_merge, weighting = "none")
+
+# Altham index
+logmult::iac(tab, weighting = "none") * sqrt(nrow(tab) * ncol(tab)) * 2
+logmult::iac(tab10, weighting = "none") * sqrt(nrow(tab) * ncol(tab)) * 2
+logmult::iac(tab_merge, weighting = "none") * sqrt(nrow(tab) * ncol(tab)) * 2
+
+# Shrinkage Estimation
+logmult::iac(tab_merge, weighting="none", shrink=TRUE) * sqrt(nrow(tab_merge) * ncol(tab_merge)) * 2 * 2
+
+# Mean absolute odds ratio
+logmult::maor(tab, weighting = "uniform")
+logmult::maor(tab10, weighting = "uniform")
+logmult::maor(tab_merge, weighting = "uniform")
+```
+
+
+
+## 参考文献 {-}
 

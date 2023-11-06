@@ -26,15 +26,16 @@ model.summary <- function(obj) {
   #Index of Dissimilarity (%)
   delta <- 100 * sum(abs(obj$y - obj$fitted.values)) / (2 * sum(obj$y))
   p <- pchisq(obj$deviance, obj$df, lower.tail = F)
-  #p<-ifelse(p<0.001,"<0.001",p)
-  result <- matrix(0, 1, 6)
-  rownames(result) <- ""
-  colnames(result) <- c("Df", "L2", "p", "AIC(L2)", "BIC(L2)", "Delta")
-  #exp.freq=obj$fitted.values
-  result[1, ] <- c(obj$df, obj$deviance, p, aic, bic, delta)
-  print("Model Summary:")
+  result <- tibble("Df" = obj$df,
+                   "L2" = obj$deviance,
+                   p,
+                   "AIC(L2)" = aic,
+                   "BIC(L2)" = bic,
+                   "Delta" = delta)
+  #print("Model Summary:")
   return(result)
 }
+
 ```
 
 
@@ -241,5 +242,11 @@ mu
 		
 # Model 8: model 6 with consistent row, column and layer scores
 # currently, this might not be fitted with gnm!
+```
+
+
+```{r}
+list(m1, m2, m3, m4, m5, m6, m7) |> 
+  map_dfr(model.summary, .id = "Model")
 ```
 

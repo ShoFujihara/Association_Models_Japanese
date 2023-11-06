@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="藤原翔（東京大学社会科学研究所）">
-<meta name="dcterms.date" content="2023-11-07">
 
-<title>『カテゴリカルデータのための連関モデル』</title>
+<title>『カテゴリカルデータのための連関モデル』 - RとRStudioのインストールと基本的な操作方法</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./1-Introduction.html" rel="next">
+<link href="./9-Note.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -97,8 +95,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -111,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">はじめに</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10-R.html">RとRStudioのインストールと基本的な操作方法</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -138,7 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">はじめに</span></a>
   </div>
 </li>
@@ -198,7 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10-R.html" class="sidebar-item-text sidebar-link">
+  <a href="./10-R.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">RとRStudioのインストールと基本的な操作方法</span></a>
   </div>
 </li>
@@ -212,13 +208,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">目次</h2>
    
   <ul>
-  <li><a href="#はじめに" id="toc-はじめに" class="nav-link active" data-scroll-target="#はじめに">はじめに</a>
-  <ul class="collapse">
-  <li><a href="#目的" id="toc-目的" class="nav-link" data-scroll-target="#目的">目的</a></li>
-  <li><a href="#rのスクリプト" id="toc-rのスクリプト" class="nav-link" data-scroll-target="#rのスクリプト">Rのスクリプト</a></li>
-  <li><a href="#正誤表" id="toc-正誤表" class="nav-link" data-scroll-target="#正誤表">正誤表</a></li>
-  <li><a href="#サポートページバージョン情報" id="toc-サポートページバージョン情報" class="nav-link" data-scroll-target="#サポートページバージョン情報">サポートページバージョン情報</a></li>
-  </ul></li>
+  <li><a href="#rとrstudioのインストール" id="toc-rとrstudioのインストール" class="nav-link active" data-scroll-target="#rとrstudioのインストール">RとRStudioのインストール</a></li>
+  <li><a href="#基本的な操作方法" id="toc-基本的な操作方法" class="nav-link" data-scroll-target="#基本的な操作方法">基本的な操作方法</a></li>
   </ul>
 </nav>
     </div>
@@ -227,26 +218,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">『カテゴリカルデータのための連関モデル』</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">RとRStudioのインストールと基本的な操作方法</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>藤原翔（東京大学社会科学研究所） </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">November 7, 2023</p>
-    </div>
-  </div>
   
     
   </div>
@@ -254,49 +233,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="はじめに" class="level1 unnumbered">
-<h1 class="unnumbered">はじめに</h1>
-<section id="目的" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="目的">目的</h2>
-<p>このページは</p>
-<p>共立出版の<a href="https://www.kyoritsu-pub.co.jp/series/100268/">「計量分析One Point」シリーズ</a>のひとつとして出版された</p>
-<p><a href="https://www.kyoritsu-pub.co.jp/book/b10039534.html">Raymond Wong著・藤原翔訳．2023．『カテゴリカルデータの連関モデル』共立出版．</a> のためのサポートページです．</p>
-<p>2023年11月29日販売</p>
-<p><img src="association_model_japanese.jpeg" class="img-fluid" style="width:30.0%"></p>
+<section id="rとrstudioのインストール" class="level2">
+<h2 class="anchored" data-anchor-id="rとrstudioのインストール">RとRStudioのインストール</h2>
 <ul>
-<li><a href="https://honto.jp/netstore/pd-book_32822793.html">honto</a></li>
-<li><a href="https://www.kinokuniya.co.jp/f/dsg-01-9784320114173">紀伊国屋書店ウェブストア</a></li>
-<li><a href="https://shop.tsutaya.co.jp/book/product/9784320114173/">TSUTAYAオンラインショッピング</a></li>
-<li><a href="https://books.rakuten.co.jp/rb/17641204/">楽天ブックス</a></li>
-<li><a href="https://www.amazon.co.jp/gp/product/4320114175/">Amazon</a></li>
-</ul>
-<p>本書の付録や補遺とすることも検討しましたが，<em>Association Models</em>は他の<a href="https://us.sagepub.com/en-us/nam/qass">Quantitative Applications in the Social Sciences (QASS)</a>に比べて分量が多いため（156ページ！），そしてRのバージョンアップやパッケージの更新などに備えるため，正誤表もあわせて公開するためにオンラインで公開することにしました．本書と関連した連関モデルの適用例の情報についても，このサポートページで補うことができればと思います．</p>
-<p>このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．</p>
-<p>なおこのサポートページの内容は英語版の<a href="https://studysites.sagepub.com/wongstudy/">サポートページ</a> が元になっています．そちらもぜひ参考にしてください．</p>
-</section>
-<section id="rのスクリプト" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="rのスクリプト">Rのスクリプト</h2>
-<p>本サポートページのスクリプトはそのままコピー・アンド・ペーストすることが可能です． スクリプトを選択してコピーしても良いですし，各スクリプトの右上の図をクリックしてもコピーされます．</p>
-<p><img src="figures/copy_and_paste2.png"></p>
-<p>なおRのスクリプトについては <a href="https://github.com/ShoFujihara/Association_Models_Japanese">訳者のGitHubページ</a> の scripts というフォルダに保存されているので，そちらを参照してください．<a href="https://drive.google.com/drive/folders/1oP0EURmoD8-dIkC6MCqDS3_0ysOz7t-0?usp=sharing">Googleドライブ</a>にもスクリプトを保存しておきます．</p>
-</section>
-<section id="正誤表" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="正誤表">正誤表</h2>
+<li><p>Rのインストールは <a href="https://cran.r-project.org/">CRAN（The Comprehensive R Archive Network）</a> から行います．</p></li>
+<li><p>RStudioのインストールは <a href="https://posit.co/download/rstudio-desktop/">Posit</a> から行います．</p>
 <ul>
-<li>原著 p.&nbsp;133，Table 5.5，訳書 p.&nbsp;XX 表5.5のモデル1の<span class="math inline">\(\Delta\)</span>の値は<code>3.85</code>ではなく<code>33.85</code>です．（2023年11月7日）</li>
+<li>「2: Install RStudio」を選択してRStudioをインストールしてください．</li>
+</ul></li>
 </ul>
 </section>
-<section id="サポートページバージョン情報" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="サポートページバージョン情報">サポートページバージョン情報</h2>
-<ul>
-<li>2023年5月1日: version 0.1.</li>
-<li>2023年11月7日: version 0.2.</li>
-</ul>
+<section id="基本的な操作方法" class="level2">
+<h2 class="anchored" data-anchor-id="基本的な操作方法">基本的な操作方法</h2>
 
 
 <!-- -->
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -600,61 +552,25 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./9-Note.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">補足のノート</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./1-Introduction.html" class="pagination-link">
-        <span class="nav-page-text">シリーズ編者による内容紹介</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># はじめに {-}</span></span>
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># RとRStudioのインストールと基本的な操作方法 {-}</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## 目的 {-}</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## RとRStudioのインストール</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>このページは</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Rのインストールは <span class="co">[</span><span class="ot">CRAN（The Comprehensive R Archive Network）</span><span class="co">](https://cran.r-project.org/)</span> から行います．</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>共立出版の<span class="co">[</span><span class="ot">「計量分析One Point」シリーズ</span><span class="co">](https://www.kyoritsu-pub.co.jp/series/100268/)</span>のひとつとして出版された</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Raymond Wong著・藤原翔訳．2023．『カテゴリカルデータの連関モデル』共立出版．</span><span class="co">](https://www.kyoritsu-pub.co.jp/book/b10039534.html)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>のためのサポートページです．</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>2023年11月29日販売</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="al">![](association_model_japanese.jpeg)</span>{width=30%}</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">honto</span><span class="co">](https://honto.jp/netstore/pd-book_32822793.html)</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">紀伊国屋書店ウェブストア</span><span class="co">](https://www.kinokuniya.co.jp/f/dsg-01-9784320114173)</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">TSUTAYAオンラインショッピング</span><span class="co">](https://shop.tsutaya.co.jp/book/product/9784320114173/)</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">楽天ブックス</span><span class="co">](https://books.rakuten.co.jp/rb/17641204/)</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Amazon</span><span class="co">](https://www.amazon.co.jp/gp/product/4320114175/)</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>本書の付録や補遺とすることも検討しましたが，*Association Models*は他の<span class="co">[</span><span class="ot">Quantitative Applications in the Social Sciences (QASS)</span><span class="co">](https://us.sagepub.com/en-us/nam/qass)</span>に比べて分量が多いため（156ページ！），そしてRのバージョンアップやパッケージの更新などに備えるため，正誤表もあわせて公開するためにオンラインで公開することにしました．本書と関連した連関モデルの適用例の情報についても，このサポートページで補うことができればと思います．</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>なおこのサポートページの内容は英語版の<span class="co">[</span><span class="ot">サポートページ</span><span class="co">](https://studysites.sagepub.com/wongstudy/)</span> が元になっています．そちらもぜひ参考にしてください．</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rのスクリプト {-}</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>本サポートページのスクリプトはそのままコピー・アンド・ペーストすることが可能です．</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>スクリプトを選択してコピーしても良いですし，各スクリプトの右上の図をクリックしてもコピーされます．</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">"figures/copy_and_paste2.png"</span><span class="kw">/&gt;</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>なおRのスクリプトについては <span class="co">[</span><span class="ot">訳者のGitHubページ</span><span class="co">](https://github.com/ShoFujihara/Association_Models_Japanese)</span> の scripts というフォルダに保存されているので，そちらを参照してください．<span class="co">[</span><span class="ot">Googleドライブ</span><span class="co">](https://drive.google.com/drive/folders/1oP0EURmoD8-dIkC6MCqDS3_0ysOz7t-0?usp=sharing)</span>にもスクリプトを保存しておきます．</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## 正誤表 {-}</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>原著 p. 133，Table 5.5，訳書 p. XX 表5.5のモデル1の$\Delta$の値は<span class="in">`3.85`</span>ではなく<span class="in">`33.85`</span>です．（2023年11月7日）</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="fu">## サポートページバージョン情報 {-}</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2023年5月1日: version 0.1.</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2023年11月7日: version 0.2.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>RStudioのインストールは <span class="co">[</span><span class="ot">Posit</span><span class="co">](https://posit.co/download/rstudio-desktop/)</span> から行います．</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>「2: Install RStudio」を選択してRStudioをインストールしてください．</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## 基本的な操作方法</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

@@ -29,6 +29,8 @@ format:
     code-block-border-left: "#0ABAB5"
     link-external-icon: true
 
+bibliography: "/Users/sf/Dropbox/Zjournal/JLPSJ.bib"
+
 crossref:
   fig-title: 図     # (default is "Figure")
   tbl-title: 表     # (default is "Table")
