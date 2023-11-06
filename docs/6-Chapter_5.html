@@ -240,6 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gnm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>モデル適合度を表示するための関数を準備する．すべてgnmによって推定を行う．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the constrasts</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Here, we use sum to zero contrast.</span></span>
@@ -301,7 +302,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations..............................................................
+Running main iterations...................................................................
+..............
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -335,7 +337,8 @@ Levels: 1 2 3 4</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations..............................................................
+Running main iterations...................................................................
+
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m3.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -364,7 +367,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations..............................................................
+Running main iterations......................................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m3);mu;nu;<span class="fu">model.summary</span>(m3.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -393,11 +396,11 @@ Situations1                          1.43713    0.08740  16.443  &lt; 2e-16 ***
 Situations2                         -0.02940    0.07766  -0.379  0.70501    
 Situations3                          0.88374    0.07261  12.172  &lt; 2e-16 ***
 Situations4                         -1.07721    0.11438  -9.418  &lt; 2e-16 ***
-Mult(., Worries.a, Situations.a).   -1.35718    0.50966  -2.663  0.00775 ** 
-Mult(1, ., Situations.a).Worries.a1 -0.42724         NA      NA       NA    
-Mult(1, ., Situations.a).Worries.a2 -0.17319    0.11548  -1.500  0.13367    
-Mult(1, ., Situations.a).Worries.a3  0.03189    0.09790   0.326  0.74459    
-Mult(1, ., Situations.a).Worries.a4  0.85113         NA      NA       NA    
+Mult(., Worries.a, Situations.a).    1.35718    0.50966   2.663  0.00775 ** 
+Mult(1, ., Situations.a).Worries.a1  0.42724         NA      NA       NA    
+Mult(1, ., Situations.a).Worries.a2  0.17319    0.11548   1.500  0.13367    
+Mult(1, ., Situations.a).Worries.a3 -0.03189    0.09790  -0.326  0.74459    
+Mult(1, ., Situations.a).Worries.a4 -0.85113         NA      NA       NA    
 Mult(1, Worries.a, .).Situations.a1  0.69874         NA      NA       NA    
 Mult(1, Worries.a, .).Situations.a2  0.29537    0.22737   1.299  0.19392    
 Mult(1, Worries.a, .).Situations.a3 -0.45726    0.41619  -1.099  0.27191    
@@ -412,14 +415,14 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 29.612 on 23 degrees of freedom
 AIC: 249.9
 
-Number of iterations: 62</code></pre>
+Number of iterations: 54</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                      Estimate Std. Error
-Mult(1, ., Situations.a).Worries.a1 -0.4272363 0.09380998
-Mult(1, ., Situations.a).Worries.a2 -0.1731936 0.04675330
-Mult(1, ., Situations.a).Worries.a3  0.0318943 0.04574940
-Mult(1, ., Situations.a).Worries.a4  0.8511342 0.03998795</code></pre>
+Mult(1, ., Situations.a).Worries.a1  0.4272363 0.09380998
+Mult(1, ., Situations.a).Worries.a2  0.1731936 0.04675330
+Mult(1, ., Situations.a).Worries.a3 -0.0318943 0.04574940
+Mult(1, ., Situations.a).Worries.a4 -0.8511342 0.03998795</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                       Estimate Std. Error
@@ -451,7 +454,7 @@ Levels: 1 2 3</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations......................................
+Running main iterations...................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m4.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -471,7 +474,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations...............................................................
+Running main iterations..................................................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m5.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -515,6 +518,7 @@ Done</code></pre>
 </section>
 <section id="表5.4" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="表5.4"><span class="header-section-number">5.2</span> 表5.4</h2>
+<p>最適尺度法として連関モデルを利用する．</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.4</span></span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>Freq<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1096</span>,  <span class="dv">1847</span>,  <span class="dv">1255</span>,  <span class="dv">925</span>,    <span class="dv">3321</span>,  <span class="dv">6123</span>,  <span class="dv">6830</span>,  <span class="dv">5524</span>,</span>
@@ -543,27 +547,25 @@ Done</code></pre>
 <span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4288</span>,  <span class="dv">4916</span>,  <span class="dv">1452</span>,  <span class="dv">766</span>,     <span class="dv">616</span>,   <span class="dv">794</span>,   <span class="dv">347</span>,   <span class="dv">300</span>,</span>
 <span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>         <span class="dv">370</span>,   <span class="dv">186</span>,     <span class="dv">3</span>,    <span class="dv">4</span>,      <span class="dv">67</span>,    <span class="dv">37</span>,     <span class="dv">5</span>,     <span class="dv">2</span>)</span>
 <span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>Income<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">192</span>)</span>
-<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>Occ<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">192</span>)</span>
-<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>E1<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">192</span>)</span>
-<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>E2<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">2</span>,<span class="dv">96</span>,<span class="dv">192</span>)</span>
-<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>Educ<span class="ot">&lt;-</span>E2<span class="sc">:</span>E1</span>
-<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Educ)<span class="ot">&lt;-</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span></span>
-<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a><span class="co">#nEduc&lt;-as.numeric(Educ)</span></span>
-<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a><span class="co">#nAttitude&lt;-as.numeric(Attitude)</span></span>
-<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a><span class="co">#Attitude.c&lt;-Attitude</span></span>
-<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="co">#levels(Attitude.c)&lt;-c("1","2","3","3")</span></span>
-<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a>Table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Freq, Income, Occ, Educ)</span>
-<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a><span class="do">########################################################################################</span></span>
-<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.5</span></span>
-<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1: Complete Independence</span></span>
-<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income, </span>
-<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
-<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
-<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m1) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>Income <span class="ot">&lt;-</span> <span class="fu">gl</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">192</span>)  <span class="co"># 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4 ...</span></span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>Occ <span class="ot">&lt;-</span> <span class="fu">gl</span>(<span class="dv">12</span>, <span class="dv">8</span>, <span class="dv">192</span>)  <span class="co"># 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 ...</span></span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>E1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">each =</span> <span class="dv">4</span>, <span class="at">length.out =</span> <span class="dv">96</span>)</span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>E2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>), <span class="at">each =</span> <span class="dv">4</span>, <span class="at">length.out =</span> <span class="dv">96</span>)</span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>Educ <span class="ot">&lt;-</span> <span class="fu">c</span>(E1, E2) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a><span class="co">#nEduc&lt;-as.numeric(Educ)</span></span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a><span class="co">#nAttitude&lt;-as.numeric(Attitude)</span></span>
+<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a><span class="co">#Attitude.c&lt;-Attitude</span></span>
+<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a><span class="co">#levels(Attitude.c)&lt;-c("1","2","3","3")</span></span>
+<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a>Table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Freq, Income, Occ, Educ)</span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="do">########################################################################################</span></span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.5</span></span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1: Complete Independence</span></span>
+<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income, </span>
+<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
+<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
+<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m1) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Model Summary:"</code></pre>
 </div>
@@ -1051,234 +1053,236 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb81-13"><a href="#cb81-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb81-14"><a href="#cb81-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb81-15"><a href="#cb81-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-18"><a href="#cb81-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-19"><a href="#cb81-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the constrasts</span></span>
-<span id="cb81-20"><a href="#cb81-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Here, we use sum to zero contrast.</span></span>
-<span id="cb81-21"><a href="#cb81-21" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">width=</span><span class="dv">90</span>, <span class="at">contrasts =</span> <span class="fu">c</span>(<span class="at">factor=</span><span class="st">"contr.sum"</span>, <span class="at">ordered=</span><span class="st">"contr.treatment"</span>))</span>
-<span id="cb81-22"><a href="#cb81-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-23"><a href="#cb81-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function which calculation BIC based on L2 statistics</span></span>
-<span id="cb81-24"><a href="#cb81-24" aria-hidden="true" tabindex="-1"></a>model.summary <span class="ot">&lt;-</span> <span class="cf">function</span>(obj) {</span>
-<span id="cb81-25"><a href="#cb81-25" aria-hidden="true" tabindex="-1"></a>  aic <span class="ot">&lt;-</span> obj<span class="sc">$</span>deviance <span class="sc">-</span> obj<span class="sc">$</span>df <span class="sc">*</span> <span class="dv">2</span>   <span class="co"># AIC(L2)</span></span>
-<span id="cb81-26"><a href="#cb81-26" aria-hidden="true" tabindex="-1"></a>  bic <span class="ot">&lt;-</span> obj<span class="sc">$</span>deviance <span class="sc">-</span> obj<span class="sc">$</span>df <span class="sc">*</span> <span class="fu">log</span>(<span class="fu">sum</span>(obj<span class="sc">$</span>y))   <span class="co">#BIC(L2)</span></span>
-<span id="cb81-27"><a href="#cb81-27" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Index of Dissimilarity (%)</span></span>
-<span id="cb81-28"><a href="#cb81-28" aria-hidden="true" tabindex="-1"></a>  delta <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">abs</span>(obj<span class="sc">$</span>y <span class="sc">-</span> obj<span class="sc">$</span>fitted.values)) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(obj<span class="sc">$</span>y))</span>
-<span id="cb81-29"><a href="#cb81-29" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">pchisq</span>(obj<span class="sc">$</span>deviance, obj<span class="sc">$</span>df, <span class="at">lower.tail =</span> F)</span>
-<span id="cb81-30"><a href="#cb81-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">#p&lt;-ifelse(p&lt;0.001,"&lt;0.001",p)</span></span>
-<span id="cb81-31"><a href="#cb81-31" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">6</span>)</span>
-<span id="cb81-32"><a href="#cb81-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(result) <span class="ot">&lt;-</span> <span class="st">""</span></span>
-<span id="cb81-33"><a href="#cb81-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(result) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Df"</span>, <span class="st">"L2"</span>, <span class="st">"p"</span>, <span class="st">"AIC(L2)"</span>, <span class="st">"BIC(L2)"</span>, <span class="st">"Delta"</span>)</span>
-<span id="cb81-34"><a href="#cb81-34" aria-hidden="true" tabindex="-1"></a>  <span class="co">#exp.freq=obj$fitted.values</span></span>
-<span id="cb81-35"><a href="#cb81-35" aria-hidden="true" tabindex="-1"></a>  result[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(obj<span class="sc">$</span>df, obj<span class="sc">$</span>deviance, p, aic, bic, delta)</span>
-<span id="cb81-36"><a href="#cb81-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Model Summary:"</span>)</span>
-<span id="cb81-37"><a href="#cb81-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
-<span id="cb81-38"><a href="#cb81-38" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb81-39"><a href="#cb81-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-40"><a href="#cb81-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-41"><a href="#cb81-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-42"><a href="#cb81-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## 表5.1</span></span>
-<span id="cb81-45"><a href="#cb81-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-46"><a href="#cb81-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.1</span></span>
-<span id="cb81-47"><a href="#cb81-47" aria-hidden="true" tabindex="-1"></a>Freq<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">118</span>, <span class="dv">28</span>,  <span class="dv">32</span>,  <span class="dv">6</span>,  <span class="dv">7</span>,</span>
-<span id="cb81-48"><a href="#cb81-48" aria-hidden="true" tabindex="-1"></a>        <span class="dv">218</span>, <span class="dv">28</span>,  <span class="dv">97</span>, <span class="dv">12</span>, <span class="dv">14</span>,</span>
-<span id="cb81-49"><a href="#cb81-49" aria-hidden="true" tabindex="-1"></a>         <span class="dv">11</span>,  <span class="dv">2</span>,   <span class="dv">4</span>,  <span class="dv">1</span>,  <span class="dv">1</span>,</span>
-<span id="cb81-50"><a href="#cb81-50" aria-hidden="true" tabindex="-1"></a>        <span class="dv">104</span>, <span class="dv">22</span>,  <span class="dv">61</span>,  <span class="dv">8</span>,  <span class="dv">5</span>,</span>
-<span id="cb81-51"><a href="#cb81-51" aria-hidden="true" tabindex="-1"></a>        <span class="dv">117</span>, <span class="dv">24</span>,  <span class="dv">70</span>,  <span class="dv">9</span>,  <span class="dv">7</span>,</span>
-<span id="cb81-52"><a href="#cb81-52" aria-hidden="true" tabindex="-1"></a>         <span class="dv">42</span>,  <span class="dv">6</span>,  <span class="dv">20</span>,  <span class="dv">2</span>,  <span class="dv">0</span>,</span>
-<span id="cb81-53"><a href="#cb81-53" aria-hidden="true" tabindex="-1"></a>         <span class="dv">48</span>, <span class="dv">16</span>, <span class="dv">104</span>, <span class="dv">14</span>,  <span class="dv">9</span>,</span>
-<span id="cb81-54"><a href="#cb81-54" aria-hidden="true" tabindex="-1"></a>        <span class="dv">128</span>, <span class="dv">52</span>,  <span class="dv">81</span>, <span class="dv">14</span>, <span class="dv">12</span>)</span>
-<span id="cb81-55"><a href="#cb81-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-56"><a href="#cb81-56" aria-hidden="true" tabindex="-1"></a>Worries<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">8</span>,<span class="dv">5</span>)</span>
-<span id="cb81-57"><a href="#cb81-57" aria-hidden="true" tabindex="-1"></a>Situations<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">8</span><span class="sc">*</span><span class="dv">5</span>)</span>
-<span id="cb81-58"><a href="#cb81-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-59"><a href="#cb81-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1 - Independence</span></span>
-<span id="cb81-60"><a href="#cb81-60" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span></span>
-<span id="cb81-61"><a href="#cb81-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations,</span>
-<span id="cb81-62"><a href="#cb81-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson,</span>
-<span id="cb81-63"><a href="#cb81-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">trace =</span> F,</span>
-<span id="cb81-64"><a href="#cb81-64" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-65"><a href="#cb81-65" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m1)</span>
-<span id="cb81-66"><a href="#cb81-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-67"><a href="#cb81-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 2 - RC(1)</span></span>
-<span id="cb81-68"><a href="#cb81-68" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span></span>
-<span id="cb81-69"><a href="#cb81-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Worries, Situations),</span>
-<span id="cb81-70"><a href="#cb81-70" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson,</span>
-<span id="cb81-71"><a href="#cb81-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">trace =</span> F,</span>
-<span id="cb81-72"><a href="#cb81-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-73"><a href="#cb81-73" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m2)</span>
-<span id="cb81-74"><a href="#cb81-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-75"><a href="#cb81-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 3 - RC(1) with equality constraints on</span></span>
-<span id="cb81-76"><a href="#cb81-76" aria-hidden="true" tabindex="-1"></a><span class="co"># MIL=ECO=MTO, ENR=SAB=OTH and ASAF=IFAA</span></span>
-<span id="cb81-77"><a href="#cb81-77" aria-hidden="true" tabindex="-1"></a>Worries.a <span class="ot">&lt;-</span> Worries</span>
-<span id="cb81-78"><a href="#cb81-78" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Worries.a) <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>))</span>
-<span id="cb81-79"><a href="#cb81-79" aria-hidden="true" tabindex="-1"></a>Worries.a</span>
-<span id="cb81-80"><a href="#cb81-80" aria-hidden="true" tabindex="-1"></a>Situations.a <span class="ot">&lt;-</span> Situations</span>
-<span id="cb81-81"><a href="#cb81-81" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Situations.a) <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>))</span>
-<span id="cb81-82"><a href="#cb81-82" aria-hidden="true" tabindex="-1"></a>Situations.a</span>
-<span id="cb81-83"><a href="#cb81-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-84"><a href="#cb81-84" aria-hidden="true" tabindex="-1"></a>m3.un<span class="ot">&lt;-</span><span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.a, Situations.a), </span>
-<span id="cb81-85"><a href="#cb81-85" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> poisson,</span>
-<span id="cb81-86"><a href="#cb81-86" aria-hidden="true" tabindex="-1"></a>           <span class="at">trace =</span> F, </span>
-<span id="cb81-87"><a href="#cb81-87" aria-hidden="true" tabindex="-1"></a>           <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-88"><a href="#cb81-88" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m3.un)</span>
-<span id="cb81-89"><a href="#cb81-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-90"><a href="#cb81-90" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(m3.un, </span>
-<span id="cb81-91"><a href="#cb81-91" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">pickCoef</span>(m3.un, <span class="st">"[.]Worries.a"</span>),</span>
-<span id="cb81-92"><a href="#cb81-92" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ref =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">8</span>, <span class="at">scaleRef =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">8</span>,</span>
-<span id="cb81-93"><a href="#cb81-93" aria-hidden="true" tabindex="-1"></a>                 <span class="at">scaleWeights =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>))</span>
-<span id="cb81-94"><a href="#cb81-94" aria-hidden="true" tabindex="-1"></a>nu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(m3.un, </span>
-<span id="cb81-95"><a href="#cb81-95" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">pickCoef</span>(m3.un, <span class="st">"[.]Situations.a"</span>),</span>
-<span id="cb81-96"><a href="#cb81-96" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ref =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">5</span>, <span class="at">scaleRef =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">5</span>,</span>
-<span id="cb81-97"><a href="#cb81-97" aria-hidden="true" tabindex="-1"></a>                 <span class="at">scaleWeights =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
-<span id="cb81-98"><a href="#cb81-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-99"><a href="#cb81-99" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">c</span>(mu<span class="sc">$</span>qvframe[, <span class="dv">1</span>][<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)], nu<span class="sc">$</span>qvframe[, <span class="dv">1</span>][<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)])</span>
-<span id="cb81-100"><a href="#cb81-100" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.a, Situations.a), </span>
-<span id="cb81-101"><a href="#cb81-101" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson,</span>
-<span id="cb81-102"><a href="#cb81-102" aria-hidden="true" tabindex="-1"></a>          <span class="at">constrain =</span> <span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">21</span>), <span class="at">constrainTo =</span> con,</span>
-<span id="cb81-103"><a href="#cb81-103" aria-hidden="true" tabindex="-1"></a>          <span class="at">trace =</span> F, </span>
-<span id="cb81-104"><a href="#cb81-104" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-105"><a href="#cb81-105" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m3);mu;nu;<span class="fu">model.summary</span>(m3.un)</span>
-<span id="cb81-106"><a href="#cb81-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-107"><a href="#cb81-107" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 4 - RC(1) with equality constraints on</span></span>
-<span id="cb81-108"><a href="#cb81-108" aria-hidden="true" tabindex="-1"></a><span class="co"># MIL=ECO=MTO=ENR=SAB=OTH and ASAF=IFAA</span></span>
-<span id="cb81-109"><a href="#cb81-109" aria-hidden="true" tabindex="-1"></a>Worries.b <span class="ot">&lt;-</span> Worries</span>
-<span id="cb81-110"><a href="#cb81-110" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Worries.b) <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
-<span id="cb81-111"><a href="#cb81-111" aria-hidden="true" tabindex="-1"></a>Worries.b</span>
-<span id="cb81-112"><a href="#cb81-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-113"><a href="#cb81-113" aria-hidden="true" tabindex="-1"></a>m4.un <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.b, Situations.a), </span>
-<span id="cb81-114"><a href="#cb81-114" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> poisson,</span>
-<span id="cb81-115"><a href="#cb81-115" aria-hidden="true" tabindex="-1"></a>           <span class="at">trace =</span> F, </span>
-<span id="cb81-116"><a href="#cb81-116" aria-hidden="true" tabindex="-1"></a>           <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-117"><a href="#cb81-117" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m4.un)</span>
-<span id="cb81-118"><a href="#cb81-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-119"><a href="#cb81-119" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 5</span></span>
-<span id="cb81-120"><a href="#cb81-120" aria-hidden="true" tabindex="-1"></a>m5.un <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> </span>
-<span id="cb81-121"><a href="#cb81-121" aria-hidden="true" tabindex="-1"></a>               <span class="fu">Mult</span>(<span class="dv">1</span>, Worries, Situations, <span class="at">inst =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb81-122"><a href="#cb81-122" aria-hidden="true" tabindex="-1"></a>               <span class="fu">Mult</span>(<span class="dv">1</span>, Worries, Situations, <span class="at">inst =</span> <span class="dv">2</span>), </span>
-<span id="cb81-123"><a href="#cb81-123" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> poisson,</span>
-<span id="cb81-124"><a href="#cb81-124" aria-hidden="true" tabindex="-1"></a>           <span class="at">trace =</span> F, <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-125"><a href="#cb81-125" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m5.un)</span>
-<span id="cb81-126"><a href="#cb81-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-127"><a href="#cb81-127" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 6 - RC(2) with equality constraints on</span></span>
-<span id="cb81-128"><a href="#cb81-128" aria-hidden="true" tabindex="-1"></a><span class="co"># ECO=MTO=MIL=ENR=SAB and ASAF=IFAA in both dimensions</span></span>
-<span id="cb81-129"><a href="#cb81-129" aria-hidden="true" tabindex="-1"></a>Worries.c<span class="ot">&lt;-</span>Worries</span>
-<span id="cb81-130"><a href="#cb81-130" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Worries.c)<span class="ot">&lt;-</span><span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
-<span id="cb81-131"><a href="#cb81-131" aria-hidden="true" tabindex="-1"></a>Worries.c</span>
-<span id="cb81-132"><a href="#cb81-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-133"><a href="#cb81-133" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
-<span id="cb81-134"><a href="#cb81-134" aria-hidden="true" tabindex="-1"></a>m6.un <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> </span>
-<span id="cb81-135"><a href="#cb81-135" aria-hidden="true" tabindex="-1"></a>               <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.c, Situations.a, <span class="at">inst =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb81-136"><a href="#cb81-136" aria-hidden="true" tabindex="-1"></a>               <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.c, Situations.a, <span class="at">inst =</span> <span class="dv">2</span>), </span>
-<span id="cb81-137"><a href="#cb81-137" aria-hidden="true" tabindex="-1"></a>             <span class="at">family =</span> poisson,</span>
-<span id="cb81-138"><a href="#cb81-138" aria-hidden="true" tabindex="-1"></a>             <span class="at">trace =</span> F, <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-139"><a href="#cb81-139" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m6.un)</span>
-<span id="cb81-140"><a href="#cb81-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-141"><a href="#cb81-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-142"><a href="#cb81-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-143"><a href="#cb81-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## 表5.4</span></span>
+<span id="cb81-16"><a href="#cb81-16" aria-hidden="true" tabindex="-1"></a>モデル適合度を表示するための関数を準備する．すべてgnmによって推定を行う．</span>
+<span id="cb81-17"><a href="#cb81-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-20"><a href="#cb81-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb81-21"><a href="#cb81-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the constrasts</span></span>
+<span id="cb81-22"><a href="#cb81-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Here, we use sum to zero contrast.</span></span>
+<span id="cb81-23"><a href="#cb81-23" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">width=</span><span class="dv">90</span>, <span class="at">contrasts =</span> <span class="fu">c</span>(<span class="at">factor=</span><span class="st">"contr.sum"</span>, <span class="at">ordered=</span><span class="st">"contr.treatment"</span>))</span>
+<span id="cb81-24"><a href="#cb81-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-25"><a href="#cb81-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a function which calculation BIC based on L2 statistics</span></span>
+<span id="cb81-26"><a href="#cb81-26" aria-hidden="true" tabindex="-1"></a>model.summary <span class="ot">&lt;-</span> <span class="cf">function</span>(obj) {</span>
+<span id="cb81-27"><a href="#cb81-27" aria-hidden="true" tabindex="-1"></a>  aic <span class="ot">&lt;-</span> obj<span class="sc">$</span>deviance <span class="sc">-</span> obj<span class="sc">$</span>df <span class="sc">*</span> <span class="dv">2</span>   <span class="co"># AIC(L2)</span></span>
+<span id="cb81-28"><a href="#cb81-28" aria-hidden="true" tabindex="-1"></a>  bic <span class="ot">&lt;-</span> obj<span class="sc">$</span>deviance <span class="sc">-</span> obj<span class="sc">$</span>df <span class="sc">*</span> <span class="fu">log</span>(<span class="fu">sum</span>(obj<span class="sc">$</span>y))   <span class="co">#BIC(L2)</span></span>
+<span id="cb81-29"><a href="#cb81-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Index of Dissimilarity (%)</span></span>
+<span id="cb81-30"><a href="#cb81-30" aria-hidden="true" tabindex="-1"></a>  delta <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">abs</span>(obj<span class="sc">$</span>y <span class="sc">-</span> obj<span class="sc">$</span>fitted.values)) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> <span class="fu">sum</span>(obj<span class="sc">$</span>y))</span>
+<span id="cb81-31"><a href="#cb81-31" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">pchisq</span>(obj<span class="sc">$</span>deviance, obj<span class="sc">$</span>df, <span class="at">lower.tail =</span> F)</span>
+<span id="cb81-32"><a href="#cb81-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">#p&lt;-ifelse(p&lt;0.001,"&lt;0.001",p)</span></span>
+<span id="cb81-33"><a href="#cb81-33" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">6</span>)</span>
+<span id="cb81-34"><a href="#cb81-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(result) <span class="ot">&lt;-</span> <span class="st">""</span></span>
+<span id="cb81-35"><a href="#cb81-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(result) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Df"</span>, <span class="st">"L2"</span>, <span class="st">"p"</span>, <span class="st">"AIC(L2)"</span>, <span class="st">"BIC(L2)"</span>, <span class="st">"Delta"</span>)</span>
+<span id="cb81-36"><a href="#cb81-36" aria-hidden="true" tabindex="-1"></a>  <span class="co">#exp.freq=obj$fitted.values</span></span>
+<span id="cb81-37"><a href="#cb81-37" aria-hidden="true" tabindex="-1"></a>  result[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(obj<span class="sc">$</span>df, obj<span class="sc">$</span>deviance, p, aic, bic, delta)</span>
+<span id="cb81-38"><a href="#cb81-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">"Model Summary:"</span>)</span>
+<span id="cb81-39"><a href="#cb81-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb81-40"><a href="#cb81-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb81-41"><a href="#cb81-41" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb81-42"><a href="#cb81-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-43"><a href="#cb81-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-44"><a href="#cb81-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## 表5.1</span></span>
+<span id="cb81-47"><a href="#cb81-47" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb81-48"><a href="#cb81-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.1</span></span>
+<span id="cb81-49"><a href="#cb81-49" aria-hidden="true" tabindex="-1"></a>Freq<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">118</span>, <span class="dv">28</span>,  <span class="dv">32</span>,  <span class="dv">6</span>,  <span class="dv">7</span>,</span>
+<span id="cb81-50"><a href="#cb81-50" aria-hidden="true" tabindex="-1"></a>        <span class="dv">218</span>, <span class="dv">28</span>,  <span class="dv">97</span>, <span class="dv">12</span>, <span class="dv">14</span>,</span>
+<span id="cb81-51"><a href="#cb81-51" aria-hidden="true" tabindex="-1"></a>         <span class="dv">11</span>,  <span class="dv">2</span>,   <span class="dv">4</span>,  <span class="dv">1</span>,  <span class="dv">1</span>,</span>
+<span id="cb81-52"><a href="#cb81-52" aria-hidden="true" tabindex="-1"></a>        <span class="dv">104</span>, <span class="dv">22</span>,  <span class="dv">61</span>,  <span class="dv">8</span>,  <span class="dv">5</span>,</span>
+<span id="cb81-53"><a href="#cb81-53" aria-hidden="true" tabindex="-1"></a>        <span class="dv">117</span>, <span class="dv">24</span>,  <span class="dv">70</span>,  <span class="dv">9</span>,  <span class="dv">7</span>,</span>
+<span id="cb81-54"><a href="#cb81-54" aria-hidden="true" tabindex="-1"></a>         <span class="dv">42</span>,  <span class="dv">6</span>,  <span class="dv">20</span>,  <span class="dv">2</span>,  <span class="dv">0</span>,</span>
+<span id="cb81-55"><a href="#cb81-55" aria-hidden="true" tabindex="-1"></a>         <span class="dv">48</span>, <span class="dv">16</span>, <span class="dv">104</span>, <span class="dv">14</span>,  <span class="dv">9</span>,</span>
+<span id="cb81-56"><a href="#cb81-56" aria-hidden="true" tabindex="-1"></a>        <span class="dv">128</span>, <span class="dv">52</span>,  <span class="dv">81</span>, <span class="dv">14</span>, <span class="dv">12</span>)</span>
+<span id="cb81-57"><a href="#cb81-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-58"><a href="#cb81-58" aria-hidden="true" tabindex="-1"></a>Worries<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">8</span>,<span class="dv">5</span>)</span>
+<span id="cb81-59"><a href="#cb81-59" aria-hidden="true" tabindex="-1"></a>Situations<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">5</span>,<span class="dv">1</span>,<span class="dv">8</span><span class="sc">*</span><span class="dv">5</span>)</span>
+<span id="cb81-60"><a href="#cb81-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-61"><a href="#cb81-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1 - Independence</span></span>
+<span id="cb81-62"><a href="#cb81-62" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span></span>
+<span id="cb81-63"><a href="#cb81-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations,</span>
+<span id="cb81-64"><a href="#cb81-64" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson,</span>
+<span id="cb81-65"><a href="#cb81-65" aria-hidden="true" tabindex="-1"></a>      <span class="at">trace =</span> F,</span>
+<span id="cb81-66"><a href="#cb81-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-67"><a href="#cb81-67" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m1)</span>
+<span id="cb81-68"><a href="#cb81-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-69"><a href="#cb81-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 2 - RC(1)</span></span>
+<span id="cb81-70"><a href="#cb81-70" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span></span>
+<span id="cb81-71"><a href="#cb81-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Worries, Situations),</span>
+<span id="cb81-72"><a href="#cb81-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">family =</span> poisson,</span>
+<span id="cb81-73"><a href="#cb81-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">trace =</span> F,</span>
+<span id="cb81-74"><a href="#cb81-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-75"><a href="#cb81-75" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m2)</span>
+<span id="cb81-76"><a href="#cb81-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-77"><a href="#cb81-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 3 - RC(1) with equality constraints on</span></span>
+<span id="cb81-78"><a href="#cb81-78" aria-hidden="true" tabindex="-1"></a><span class="co"># MIL=ECO=MTO, ENR=SAB=OTH and ASAF=IFAA</span></span>
+<span id="cb81-79"><a href="#cb81-79" aria-hidden="true" tabindex="-1"></a>Worries.a <span class="ot">&lt;-</span> Worries</span>
+<span id="cb81-80"><a href="#cb81-80" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Worries.a) <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>))</span>
+<span id="cb81-81"><a href="#cb81-81" aria-hidden="true" tabindex="-1"></a>Worries.a</span>
+<span id="cb81-82"><a href="#cb81-82" aria-hidden="true" tabindex="-1"></a>Situations.a <span class="ot">&lt;-</span> Situations</span>
+<span id="cb81-83"><a href="#cb81-83" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Situations.a) <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>))</span>
+<span id="cb81-84"><a href="#cb81-84" aria-hidden="true" tabindex="-1"></a>Situations.a</span>
+<span id="cb81-85"><a href="#cb81-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-86"><a href="#cb81-86" aria-hidden="true" tabindex="-1"></a>m3.un<span class="ot">&lt;-</span><span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.a, Situations.a), </span>
+<span id="cb81-87"><a href="#cb81-87" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> poisson,</span>
+<span id="cb81-88"><a href="#cb81-88" aria-hidden="true" tabindex="-1"></a>           <span class="at">trace =</span> F, </span>
+<span id="cb81-89"><a href="#cb81-89" aria-hidden="true" tabindex="-1"></a>           <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-90"><a href="#cb81-90" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m3.un)</span>
+<span id="cb81-91"><a href="#cb81-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-92"><a href="#cb81-92" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(m3.un, </span>
+<span id="cb81-93"><a href="#cb81-93" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">pickCoef</span>(m3.un, <span class="st">"[.]Worries.a"</span>),</span>
+<span id="cb81-94"><a href="#cb81-94" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ref =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">8</span>, <span class="at">scaleRef =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">8</span>,</span>
+<span id="cb81-95"><a href="#cb81-95" aria-hidden="true" tabindex="-1"></a>                 <span class="at">scaleWeights =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>))</span>
+<span id="cb81-96"><a href="#cb81-96" aria-hidden="true" tabindex="-1"></a>nu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(m3.un, </span>
+<span id="cb81-97"><a href="#cb81-97" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">pickCoef</span>(m3.un, <span class="st">"[.]Situations.a"</span>),</span>
+<span id="cb81-98"><a href="#cb81-98" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ref =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">5</span>, <span class="at">scaleRef =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">5</span>,</span>
+<span id="cb81-99"><a href="#cb81-99" aria-hidden="true" tabindex="-1"></a>                 <span class="at">scaleWeights =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb81-100"><a href="#cb81-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-101"><a href="#cb81-101" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">c</span>(mu<span class="sc">$</span>qvframe[, <span class="dv">1</span>][<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)], nu<span class="sc">$</span>qvframe[, <span class="dv">1</span>][<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)])</span>
+<span id="cb81-102"><a href="#cb81-102" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.a, Situations.a), </span>
+<span id="cb81-103"><a href="#cb81-103" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson,</span>
+<span id="cb81-104"><a href="#cb81-104" aria-hidden="true" tabindex="-1"></a>          <span class="at">constrain =</span> <span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">21</span>), <span class="at">constrainTo =</span> con,</span>
+<span id="cb81-105"><a href="#cb81-105" aria-hidden="true" tabindex="-1"></a>          <span class="at">trace =</span> F, </span>
+<span id="cb81-106"><a href="#cb81-106" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-107"><a href="#cb81-107" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m3);mu;nu;<span class="fu">model.summary</span>(m3.un)</span>
+<span id="cb81-108"><a href="#cb81-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-109"><a href="#cb81-109" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 4 - RC(1) with equality constraints on</span></span>
+<span id="cb81-110"><a href="#cb81-110" aria-hidden="true" tabindex="-1"></a><span class="co"># MIL=ECO=MTO=ENR=SAB=OTH and ASAF=IFAA</span></span>
+<span id="cb81-111"><a href="#cb81-111" aria-hidden="true" tabindex="-1"></a>Worries.b <span class="ot">&lt;-</span> Worries</span>
+<span id="cb81-112"><a href="#cb81-112" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Worries.b) <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">2</span>))</span>
+<span id="cb81-113"><a href="#cb81-113" aria-hidden="true" tabindex="-1"></a>Worries.b</span>
+<span id="cb81-114"><a href="#cb81-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-115"><a href="#cb81-115" aria-hidden="true" tabindex="-1"></a>m4.un <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.b, Situations.a), </span>
+<span id="cb81-116"><a href="#cb81-116" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> poisson,</span>
+<span id="cb81-117"><a href="#cb81-117" aria-hidden="true" tabindex="-1"></a>           <span class="at">trace =</span> F, </span>
+<span id="cb81-118"><a href="#cb81-118" aria-hidden="true" tabindex="-1"></a>           <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-119"><a href="#cb81-119" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m4.un)</span>
+<span id="cb81-120"><a href="#cb81-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-121"><a href="#cb81-121" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 5</span></span>
+<span id="cb81-122"><a href="#cb81-122" aria-hidden="true" tabindex="-1"></a>m5.un <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> </span>
+<span id="cb81-123"><a href="#cb81-123" aria-hidden="true" tabindex="-1"></a>               <span class="fu">Mult</span>(<span class="dv">1</span>, Worries, Situations, <span class="at">inst =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb81-124"><a href="#cb81-124" aria-hidden="true" tabindex="-1"></a>               <span class="fu">Mult</span>(<span class="dv">1</span>, Worries, Situations, <span class="at">inst =</span> <span class="dv">2</span>), </span>
+<span id="cb81-125"><a href="#cb81-125" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> poisson,</span>
+<span id="cb81-126"><a href="#cb81-126" aria-hidden="true" tabindex="-1"></a>           <span class="at">trace =</span> F, <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-127"><a href="#cb81-127" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m5.un)</span>
+<span id="cb81-128"><a href="#cb81-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-129"><a href="#cb81-129" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 6 - RC(2) with equality constraints on</span></span>
+<span id="cb81-130"><a href="#cb81-130" aria-hidden="true" tabindex="-1"></a><span class="co"># ECO=MTO=MIL=ENR=SAB and ASAF=IFAA in both dimensions</span></span>
+<span id="cb81-131"><a href="#cb81-131" aria-hidden="true" tabindex="-1"></a>Worries.c<span class="ot">&lt;-</span>Worries</span>
+<span id="cb81-132"><a href="#cb81-132" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Worries.c)<span class="ot">&lt;-</span><span class="fu">factor</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
+<span id="cb81-133"><a href="#cb81-133" aria-hidden="true" tabindex="-1"></a>Worries.c</span>
+<span id="cb81-134"><a href="#cb81-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-135"><a href="#cb81-135" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb81-136"><a href="#cb81-136" aria-hidden="true" tabindex="-1"></a>m6.un <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Worries <span class="sc">+</span> Situations <span class="sc">+</span> </span>
+<span id="cb81-137"><a href="#cb81-137" aria-hidden="true" tabindex="-1"></a>               <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.c, Situations.a, <span class="at">inst =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb81-138"><a href="#cb81-138" aria-hidden="true" tabindex="-1"></a>               <span class="fu">Mult</span>(<span class="dv">1</span>, Worries.c, Situations.a, <span class="at">inst =</span> <span class="dv">2</span>), </span>
+<span id="cb81-139"><a href="#cb81-139" aria-hidden="true" tabindex="-1"></a>             <span class="at">family =</span> poisson,</span>
+<span id="cb81-140"><a href="#cb81-140" aria-hidden="true" tabindex="-1"></a>             <span class="at">trace =</span> F, <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-141"><a href="#cb81-141" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m6.un)</span>
+<span id="cb81-142"><a href="#cb81-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb81-143"><a href="#cb81-143" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb81-144"><a href="#cb81-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-147"><a href="#cb81-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-148"><a href="#cb81-148" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.4</span></span>
-<span id="cb81-149"><a href="#cb81-149" aria-hidden="true" tabindex="-1"></a>Freq<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1096</span>,  <span class="dv">1847</span>,  <span class="dv">1255</span>,  <span class="dv">925</span>,    <span class="dv">3321</span>,  <span class="dv">6123</span>,  <span class="dv">6830</span>,  <span class="dv">5524</span>,</span>
-<span id="cb81-150"><a href="#cb81-150" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1541</span>,  <span class="dv">3134</span>,  <span class="dv">3145</span>, <span class="dv">3300</span>,    <span class="dv">1915</span>,  <span class="dv">4429</span>,  <span class="dv">7035</span>,  <span class="dv">9421</span>,</span>
-<span id="cb81-151"><a href="#cb81-151" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4183</span>,  <span class="dv">5139</span>,  <span class="dv">1857</span>, <span class="dv">1272</span>,    <span class="dv">8080</span>,  <span class="dv">8586</span>,  <span class="dv">4788</span>,  <span class="dv">4294</span>,</span>
-<span id="cb81-152"><a href="#cb81-152" aria-hidden="true" tabindex="-1"></a>        <span class="dv">6033</span>,  <span class="dv">9211</span>,  <span class="dv">5046</span>, <span class="dv">1058</span>,   <span class="dv">28130</span>, <span class="dv">44589</span>, <span class="dv">20074</span>,  <span class="dv">3408</span>,</span>
-<span id="cb81-153"><a href="#cb81-153" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4354</span>, <span class="dv">13430</span>, <span class="dv">18670</span>, <span class="dv">9821</span>,    <span class="dv">2250</span>,  <span class="dv">9075</span>, <span class="dv">18286</span>, <span class="dv">14358</span>,</span>
-<span id="cb81-154"><a href="#cb81-154" aria-hidden="true" tabindex="-1"></a>       <span class="dv">14587</span>, <span class="dv">31470</span>, <span class="dv">16390</span>, <span class="dv">3751</span>,    <span class="dv">8242</span>, <span class="dv">17532</span>, <span class="dv">12825</span>,  <span class="dv">3956</span>,</span>
-<span id="cb81-155"><a href="#cb81-155" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1517</span>,  <span class="dv">5820</span>,  <span class="dv">6197</span>, <span class="dv">2372</span>,     <span class="dv">721</span>,  <span class="dv">2909</span>,  <span class="dv">4141</span>,  <span class="dv">2070</span>,</span>
-<span id="cb81-156"><a href="#cb81-156" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3581</span>,  <span class="dv">9268</span>,  <span class="dv">5463</span>, <span class="dv">1007</span>,    <span class="dv">1341</span>,  <span class="dv">3808</span>,  <span class="dv">3163</span>,   <span class="dv">815</span>,</span>
-<span id="cb81-157"><a href="#cb81-157" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1454</span>,  <span class="dv">3109</span>,  <span class="dv">1055</span>,  <span class="dv">888</span>,     <span class="dv">563</span>,  <span class="dv">1909</span>,  <span class="dv">1018</span>,  <span class="dv">1051</span>,</span>
-<span id="cb81-158"><a href="#cb81-158" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3237</span>,  <span class="dv">3851</span>,   <span class="dv">377</span>,  <span class="dv">102</span>,     <span class="dv">731</span>,   <span class="dv">858</span>,   <span class="dv">247</span>,    <span class="dv">84</span>,</span>
-<span id="cb81-159"><a href="#cb81-159" aria-hidden="true" tabindex="-1"></a>       <span class="dv">14882</span>, <span class="dv">22182</span>,  <span class="dv">5363</span>, <span class="dv">1136</span>,   <span class="dv">11650</span>, <span class="dv">15818</span>,  <span class="dv">5524</span>,  <span class="dv">2122</span>,</span>
-<span id="cb81-160"><a href="#cb81-160" aria-hidden="true" tabindex="-1"></a>        <span class="dv">6033</span>,  <span class="dv">3475</span>,    <span class="dv">63</span>,   <span class="dv">18</span>,    <span class="dv">1603</span>,  <span class="dv">1005</span>,    <span class="dv">30</span>,    <span class="dv">16</span>,</span>
-<span id="cb81-161"><a href="#cb81-161" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb81-162"><a href="#cb81-162" aria-hidden="true" tabindex="-1"></a>        <span class="dv">5968</span>,  <span class="dv">8783</span>,  <span class="dv">7701</span>, <span class="dv">6483</span>,    <span class="dv">8733</span>, <span class="dv">14329</span>, <span class="dv">19386</span>, <span class="dv">28143</span>,</span>
-<span id="cb81-163"><a href="#cb81-163" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1011</span>,  <span class="dv">2162</span>,  <span class="dv">3536</span>, <span class="dv">6649</span>,     <span class="dv">697</span>,  <span class="dv">1299</span>,  <span class="dv">2362</span>, <span class="dv">10796</span>,</span>
-<span id="cb81-164"><a href="#cb81-164" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3214</span>,  <span class="dv">3621</span>,  <span class="dv">2485</span>, <span class="dv">3177</span>,     <span class="dv">793</span>,  <span class="dv">1134</span>,  <span class="dv">1292</span>,  <span class="dv">3597</span>,</span>
-<span id="cb81-165"><a href="#cb81-165" aria-hidden="true" tabindex="-1"></a>       <span class="dv">11532</span>, <span class="dv">16837</span>,  <span class="dv">6975</span>, <span class="dv">1839</span>,    <span class="dv">2563</span>,  <span class="dv">2995</span>,  <span class="dv">2060</span>,  <span class="dv">1600</span>,</span>
-<span id="cb81-166"><a href="#cb81-166" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1009</span>,  <span class="dv">2719</span>,  <span class="dv">3521</span>, <span class="dv">3409</span>,     <span class="dv">296</span>,   <span class="dv">503</span>,   <span class="dv">626</span>,  <span class="dv">1273</span>,</span>
-<span id="cb81-167"><a href="#cb81-167" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1586</span>,  <span class="dv">3025</span>,  <span class="dv">1726</span>,  <span class="dv">668</span>,     <span class="dv">245</span>,   <span class="dv">415</span>,   <span class="dv">238</span>,   <span class="dv">218</span>,</span>
-<span id="cb81-168"><a href="#cb81-168" aria-hidden="true" tabindex="-1"></a>         <span class="dv">387</span>,   <span class="dv">941</span>,   <span class="dv">564</span>,  <span class="dv">316</span>,      <span class="dv">86</span>,   <span class="dv">138</span>,    <span class="dv">79</span>,    <span class="dv">48</span>,</span>
-<span id="cb81-169"><a href="#cb81-169" aria-hidden="true" tabindex="-1"></a>         <span class="dv">994</span>,  <span class="dv">1988</span>,   <span class="dv">542</span>,  <span class="dv">145</span>,     <span class="dv">158</span>,   <span class="dv">259</span>,   <span class="dv">101</span>,    <span class="dv">56</span>,</span>
-<span id="cb81-170"><a href="#cb81-170" aria-hidden="true" tabindex="-1"></a>         <span class="dv">171</span>,   <span class="dv">409</span>,   <span class="dv">223</span>,  <span class="dv">245</span>,      <span class="dv">65</span>,   <span class="dv">172</span>,    <span class="dv">99</span>,   <span class="dv">174</span>,</span>
-<span id="cb81-171"><a href="#cb81-171" aria-hidden="true" tabindex="-1"></a>         <span class="dv">293</span>,   <span class="dv">290</span>,    <span class="dv">67</span>,   <span class="dv">31</span>,      <span class="dv">32</span>,    <span class="dv">62</span>,    <span class="dv">18</span>,    <span class="dv">30</span>,</span>
-<span id="cb81-172"><a href="#cb81-172" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4288</span>,  <span class="dv">4916</span>,  <span class="dv">1452</span>,  <span class="dv">766</span>,     <span class="dv">616</span>,   <span class="dv">794</span>,   <span class="dv">347</span>,   <span class="dv">300</span>,</span>
-<span id="cb81-173"><a href="#cb81-173" aria-hidden="true" tabindex="-1"></a>         <span class="dv">370</span>,   <span class="dv">186</span>,     <span class="dv">3</span>,    <span class="dv">4</span>,      <span class="dv">67</span>,    <span class="dv">37</span>,     <span class="dv">5</span>,     <span class="dv">2</span>)</span>
-<span id="cb81-174"><a href="#cb81-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-175"><a href="#cb81-175" aria-hidden="true" tabindex="-1"></a>Income<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">4</span>,<span class="dv">1</span>,<span class="dv">192</span>)</span>
-<span id="cb81-176"><a href="#cb81-176" aria-hidden="true" tabindex="-1"></a>Occ<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">12</span>,<span class="dv">8</span>,<span class="dv">192</span>)</span>
-<span id="cb81-177"><a href="#cb81-177" aria-hidden="true" tabindex="-1"></a>E1<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">192</span>)</span>
-<span id="cb81-178"><a href="#cb81-178" aria-hidden="true" tabindex="-1"></a>E2<span class="ot">&lt;-</span><span class="fu">gl</span>(<span class="dv">2</span>,<span class="dv">96</span>,<span class="dv">192</span>)</span>
-<span id="cb81-179"><a href="#cb81-179" aria-hidden="true" tabindex="-1"></a>Educ<span class="ot">&lt;-</span>E2<span class="sc">:</span>E1</span>
-<span id="cb81-180"><a href="#cb81-180" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(Educ)<span class="ot">&lt;-</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span></span>
-<span id="cb81-181"><a href="#cb81-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-182"><a href="#cb81-182" aria-hidden="true" tabindex="-1"></a><span class="co">#nEduc&lt;-as.numeric(Educ)</span></span>
-<span id="cb81-183"><a href="#cb81-183" aria-hidden="true" tabindex="-1"></a><span class="co">#nAttitude&lt;-as.numeric(Attitude)</span></span>
-<span id="cb81-184"><a href="#cb81-184" aria-hidden="true" tabindex="-1"></a><span class="co">#Attitude.c&lt;-Attitude</span></span>
-<span id="cb81-185"><a href="#cb81-185" aria-hidden="true" tabindex="-1"></a><span class="co">#levels(Attitude.c)&lt;-c("1","2","3","3")</span></span>
-<span id="cb81-186"><a href="#cb81-186" aria-hidden="true" tabindex="-1"></a>Table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Freq, Income, Occ, Educ)</span>
-<span id="cb81-187"><a href="#cb81-187" aria-hidden="true" tabindex="-1"></a><span class="do">########################################################################################</span></span>
-<span id="cb81-188"><a href="#cb81-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-189"><a href="#cb81-189" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.5</span></span>
-<span id="cb81-190"><a href="#cb81-190" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1: Complete Independence</span></span>
-<span id="cb81-191"><a href="#cb81-191" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income, </span>
-<span id="cb81-192"><a href="#cb81-192" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
-<span id="cb81-193"><a href="#cb81-193" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
-<span id="cb81-194"><a href="#cb81-194" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-195"><a href="#cb81-195" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m1) </span>
-<span id="cb81-196"><a href="#cb81-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-197"><a href="#cb81-197" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 2: Conditional Independence</span></span>
-<span id="cb81-198"><a href="#cb81-198" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">*</span> Occ <span class="sc">+</span> Income <span class="sc">*</span> Occ, </span>
-<span id="cb81-199"><a href="#cb81-199" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
-<span id="cb81-200"><a href="#cb81-200" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
-<span id="cb81-201"><a href="#cb81-201" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-202"><a href="#cb81-202" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m2)</span>
-<span id="cb81-203"><a href="#cb81-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-204"><a href="#cb81-204" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 3: All two-way interaction</span></span>
-<span id="cb81-205"><a href="#cb81-205" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">*</span> Occ <span class="sc">+</span> Income <span class="sc">*</span> Occ <span class="sc">+</span> Educ <span class="sc">*</span> Income, </span>
-<span id="cb81-206"><a href="#cb81-206" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
-<span id="cb81-207"><a href="#cb81-207" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-208"><a href="#cb81-208" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m3)</span>
-<span id="cb81-209"><a href="#cb81-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-210"><a href="#cb81-210" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 4: RC(1)+RL(1) partial association</span></span>
-<span id="cb81-211"><a href="#cb81-211" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Educ) <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Income),</span>
-<span id="cb81-212"><a href="#cb81-212" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
-<span id="cb81-213"><a href="#cb81-213" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson,</span>
-<span id="cb81-214"><a href="#cb81-214" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-215"><a href="#cb81-215" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m4)</span>
-<span id="cb81-216"><a href="#cb81-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-217"><a href="#cb81-217" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 5: Model 4 with consistent row (occupation) scores</span></span>
-<span id="cb81-218"><a href="#cb81-218" aria-hidden="true" tabindex="-1"></a>m5 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Educ <span class="sc">+</span> Income),</span>
-<span id="cb81-219"><a href="#cb81-219" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
-<span id="cb81-220"><a href="#cb81-220" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
-<span id="cb81-221"><a href="#cb81-221" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-222"><a href="#cb81-222" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m5)</span>
-<span id="cb81-223"><a href="#cb81-223" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(m5, <span class="fu">pickCoef</span>(m5, <span class="st">"[.]Occ"</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>],</span>
-<span id="cb81-224"><a href="#cb81-224" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ref =</span> <span class="st">"mean"</span>, <span class="at">scaleRef =</span> <span class="st">"mean"</span>, <span class="at">scaleWeights =</span> <span class="st">"unit"</span>)</span>
-<span id="cb81-225"><a href="#cb81-225" aria-hidden="true" tabindex="-1"></a>mu</span>
-<span id="cb81-226"><a href="#cb81-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-227"><a href="#cb81-227" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 6: RC(1)+RL(1)+CL(1) partial association</span></span>
-<span id="cb81-228"><a href="#cb81-228" aria-hidden="true" tabindex="-1"></a>m6 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Educ) <span class="sc">+</span> </span>
-<span id="cb81-229"><a href="#cb81-229" aria-hidden="true" tabindex="-1"></a>            <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Income) <span class="sc">+</span></span>
-<span id="cb81-230"><a href="#cb81-230" aria-hidden="true" tabindex="-1"></a>            <span class="fu">Mult</span>(<span class="dv">1</span>, Educ, Income),</span>
-<span id="cb81-231"><a href="#cb81-231" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
-<span id="cb81-232"><a href="#cb81-232" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
-<span id="cb81-233"><a href="#cb81-233" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-234"><a href="#cb81-234" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m6)</span>
-<span id="cb81-235"><a href="#cb81-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-236"><a href="#cb81-236" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 7: Model 6 with consistent row (occupation) scores</span></span>
-<span id="cb81-237"><a href="#cb81-237" aria-hidden="true" tabindex="-1"></a>m7 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Educ <span class="sc">+</span> Income) <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Educ, Income),</span>
-<span id="cb81-238"><a href="#cb81-238" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
-<span id="cb81-239"><a href="#cb81-239" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
-<span id="cb81-240"><a href="#cb81-240" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
-<span id="cb81-241"><a href="#cb81-241" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m7)</span>
-<span id="cb81-242"><a href="#cb81-242" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(m7, </span>
-<span id="cb81-243"><a href="#cb81-243" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">pickCoef</span>(m7, <span class="st">"[.]Occ"</span>),</span>
-<span id="cb81-244"><a href="#cb81-244" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ref =</span> <span class="st">"mean"</span>, <span class="at">scaleRef =</span> <span class="st">"mean"</span>, <span class="at">scaleWeights =</span> <span class="st">"unit"</span>)</span>
-<span id="cb81-245"><a href="#cb81-245" aria-hidden="true" tabindex="-1"></a>mu</span>
-<span id="cb81-246"><a href="#cb81-246" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb81-247"><a href="#cb81-247" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 8: model 6 with consistent row, column and layer scores</span></span>
-<span id="cb81-248"><a href="#cb81-248" aria-hidden="true" tabindex="-1"></a><span class="co"># currently, this might not be fitted with gnm!</span></span>
-<span id="cb81-249"><a href="#cb81-249" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb81-145"><a href="#cb81-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## 表5.4</span></span>
+<span id="cb81-146"><a href="#cb81-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-147"><a href="#cb81-147" aria-hidden="true" tabindex="-1"></a>最適尺度法として連関モデルを利用する．</span>
+<span id="cb81-148"><a href="#cb81-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-151"><a href="#cb81-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb81-152"><a href="#cb81-152" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.4</span></span>
+<span id="cb81-153"><a href="#cb81-153" aria-hidden="true" tabindex="-1"></a>Freq<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1096</span>,  <span class="dv">1847</span>,  <span class="dv">1255</span>,  <span class="dv">925</span>,    <span class="dv">3321</span>,  <span class="dv">6123</span>,  <span class="dv">6830</span>,  <span class="dv">5524</span>,</span>
+<span id="cb81-154"><a href="#cb81-154" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1541</span>,  <span class="dv">3134</span>,  <span class="dv">3145</span>, <span class="dv">3300</span>,    <span class="dv">1915</span>,  <span class="dv">4429</span>,  <span class="dv">7035</span>,  <span class="dv">9421</span>,</span>
+<span id="cb81-155"><a href="#cb81-155" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4183</span>,  <span class="dv">5139</span>,  <span class="dv">1857</span>, <span class="dv">1272</span>,    <span class="dv">8080</span>,  <span class="dv">8586</span>,  <span class="dv">4788</span>,  <span class="dv">4294</span>,</span>
+<span id="cb81-156"><a href="#cb81-156" aria-hidden="true" tabindex="-1"></a>        <span class="dv">6033</span>,  <span class="dv">9211</span>,  <span class="dv">5046</span>, <span class="dv">1058</span>,   <span class="dv">28130</span>, <span class="dv">44589</span>, <span class="dv">20074</span>,  <span class="dv">3408</span>,</span>
+<span id="cb81-157"><a href="#cb81-157" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4354</span>, <span class="dv">13430</span>, <span class="dv">18670</span>, <span class="dv">9821</span>,    <span class="dv">2250</span>,  <span class="dv">9075</span>, <span class="dv">18286</span>, <span class="dv">14358</span>,</span>
+<span id="cb81-158"><a href="#cb81-158" aria-hidden="true" tabindex="-1"></a>       <span class="dv">14587</span>, <span class="dv">31470</span>, <span class="dv">16390</span>, <span class="dv">3751</span>,    <span class="dv">8242</span>, <span class="dv">17532</span>, <span class="dv">12825</span>,  <span class="dv">3956</span>,</span>
+<span id="cb81-159"><a href="#cb81-159" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1517</span>,  <span class="dv">5820</span>,  <span class="dv">6197</span>, <span class="dv">2372</span>,     <span class="dv">721</span>,  <span class="dv">2909</span>,  <span class="dv">4141</span>,  <span class="dv">2070</span>,</span>
+<span id="cb81-160"><a href="#cb81-160" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3581</span>,  <span class="dv">9268</span>,  <span class="dv">5463</span>, <span class="dv">1007</span>,    <span class="dv">1341</span>,  <span class="dv">3808</span>,  <span class="dv">3163</span>,   <span class="dv">815</span>,</span>
+<span id="cb81-161"><a href="#cb81-161" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1454</span>,  <span class="dv">3109</span>,  <span class="dv">1055</span>,  <span class="dv">888</span>,     <span class="dv">563</span>,  <span class="dv">1909</span>,  <span class="dv">1018</span>,  <span class="dv">1051</span>,</span>
+<span id="cb81-162"><a href="#cb81-162" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3237</span>,  <span class="dv">3851</span>,   <span class="dv">377</span>,  <span class="dv">102</span>,     <span class="dv">731</span>,   <span class="dv">858</span>,   <span class="dv">247</span>,    <span class="dv">84</span>,</span>
+<span id="cb81-163"><a href="#cb81-163" aria-hidden="true" tabindex="-1"></a>       <span class="dv">14882</span>, <span class="dv">22182</span>,  <span class="dv">5363</span>, <span class="dv">1136</span>,   <span class="dv">11650</span>, <span class="dv">15818</span>,  <span class="dv">5524</span>,  <span class="dv">2122</span>,</span>
+<span id="cb81-164"><a href="#cb81-164" aria-hidden="true" tabindex="-1"></a>        <span class="dv">6033</span>,  <span class="dv">3475</span>,    <span class="dv">63</span>,   <span class="dv">18</span>,    <span class="dv">1603</span>,  <span class="dv">1005</span>,    <span class="dv">30</span>,    <span class="dv">16</span>,</span>
+<span id="cb81-165"><a href="#cb81-165" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb81-166"><a href="#cb81-166" aria-hidden="true" tabindex="-1"></a>        <span class="dv">5968</span>,  <span class="dv">8783</span>,  <span class="dv">7701</span>, <span class="dv">6483</span>,    <span class="dv">8733</span>, <span class="dv">14329</span>, <span class="dv">19386</span>, <span class="dv">28143</span>,</span>
+<span id="cb81-167"><a href="#cb81-167" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1011</span>,  <span class="dv">2162</span>,  <span class="dv">3536</span>, <span class="dv">6649</span>,     <span class="dv">697</span>,  <span class="dv">1299</span>,  <span class="dv">2362</span>, <span class="dv">10796</span>,</span>
+<span id="cb81-168"><a href="#cb81-168" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3214</span>,  <span class="dv">3621</span>,  <span class="dv">2485</span>, <span class="dv">3177</span>,     <span class="dv">793</span>,  <span class="dv">1134</span>,  <span class="dv">1292</span>,  <span class="dv">3597</span>,</span>
+<span id="cb81-169"><a href="#cb81-169" aria-hidden="true" tabindex="-1"></a>       <span class="dv">11532</span>, <span class="dv">16837</span>,  <span class="dv">6975</span>, <span class="dv">1839</span>,    <span class="dv">2563</span>,  <span class="dv">2995</span>,  <span class="dv">2060</span>,  <span class="dv">1600</span>,</span>
+<span id="cb81-170"><a href="#cb81-170" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1009</span>,  <span class="dv">2719</span>,  <span class="dv">3521</span>, <span class="dv">3409</span>,     <span class="dv">296</span>,   <span class="dv">503</span>,   <span class="dv">626</span>,  <span class="dv">1273</span>,</span>
+<span id="cb81-171"><a href="#cb81-171" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1586</span>,  <span class="dv">3025</span>,  <span class="dv">1726</span>,  <span class="dv">668</span>,     <span class="dv">245</span>,   <span class="dv">415</span>,   <span class="dv">238</span>,   <span class="dv">218</span>,</span>
+<span id="cb81-172"><a href="#cb81-172" aria-hidden="true" tabindex="-1"></a>         <span class="dv">387</span>,   <span class="dv">941</span>,   <span class="dv">564</span>,  <span class="dv">316</span>,      <span class="dv">86</span>,   <span class="dv">138</span>,    <span class="dv">79</span>,    <span class="dv">48</span>,</span>
+<span id="cb81-173"><a href="#cb81-173" aria-hidden="true" tabindex="-1"></a>         <span class="dv">994</span>,  <span class="dv">1988</span>,   <span class="dv">542</span>,  <span class="dv">145</span>,     <span class="dv">158</span>,   <span class="dv">259</span>,   <span class="dv">101</span>,    <span class="dv">56</span>,</span>
+<span id="cb81-174"><a href="#cb81-174" aria-hidden="true" tabindex="-1"></a>         <span class="dv">171</span>,   <span class="dv">409</span>,   <span class="dv">223</span>,  <span class="dv">245</span>,      <span class="dv">65</span>,   <span class="dv">172</span>,    <span class="dv">99</span>,   <span class="dv">174</span>,</span>
+<span id="cb81-175"><a href="#cb81-175" aria-hidden="true" tabindex="-1"></a>         <span class="dv">293</span>,   <span class="dv">290</span>,    <span class="dv">67</span>,   <span class="dv">31</span>,      <span class="dv">32</span>,    <span class="dv">62</span>,    <span class="dv">18</span>,    <span class="dv">30</span>,</span>
+<span id="cb81-176"><a href="#cb81-176" aria-hidden="true" tabindex="-1"></a>        <span class="dv">4288</span>,  <span class="dv">4916</span>,  <span class="dv">1452</span>,  <span class="dv">766</span>,     <span class="dv">616</span>,   <span class="dv">794</span>,   <span class="dv">347</span>,   <span class="dv">300</span>,</span>
+<span id="cb81-177"><a href="#cb81-177" aria-hidden="true" tabindex="-1"></a>         <span class="dv">370</span>,   <span class="dv">186</span>,     <span class="dv">3</span>,    <span class="dv">4</span>,      <span class="dv">67</span>,    <span class="dv">37</span>,     <span class="dv">5</span>,     <span class="dv">2</span>)</span>
+<span id="cb81-178"><a href="#cb81-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-179"><a href="#cb81-179" aria-hidden="true" tabindex="-1"></a>Income <span class="ot">&lt;-</span> <span class="fu">gl</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">192</span>)  <span class="co"># 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4 ...</span></span>
+<span id="cb81-180"><a href="#cb81-180" aria-hidden="true" tabindex="-1"></a>Occ <span class="ot">&lt;-</span> <span class="fu">gl</span>(<span class="dv">12</span>, <span class="dv">8</span>, <span class="dv">192</span>)  <span class="co"># 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 ...</span></span>
+<span id="cb81-181"><a href="#cb81-181" aria-hidden="true" tabindex="-1"></a>E1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="at">each =</span> <span class="dv">4</span>, <span class="at">length.out =</span> <span class="dv">96</span>)</span>
+<span id="cb81-182"><a href="#cb81-182" aria-hidden="true" tabindex="-1"></a>E2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">4</span>), <span class="at">each =</span> <span class="dv">4</span>, <span class="at">length.out =</span> <span class="dv">96</span>)</span>
+<span id="cb81-183"><a href="#cb81-183" aria-hidden="true" tabindex="-1"></a>Educ <span class="ot">&lt;-</span> <span class="fu">c</span>(E1, E2) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
+<span id="cb81-184"><a href="#cb81-184" aria-hidden="true" tabindex="-1"></a><span class="co">#nEduc&lt;-as.numeric(Educ)</span></span>
+<span id="cb81-185"><a href="#cb81-185" aria-hidden="true" tabindex="-1"></a><span class="co">#nAttitude&lt;-as.numeric(Attitude)</span></span>
+<span id="cb81-186"><a href="#cb81-186" aria-hidden="true" tabindex="-1"></a><span class="co">#Attitude.c&lt;-Attitude</span></span>
+<span id="cb81-187"><a href="#cb81-187" aria-hidden="true" tabindex="-1"></a><span class="co">#levels(Attitude.c)&lt;-c("1","2","3","3")</span></span>
+<span id="cb81-188"><a href="#cb81-188" aria-hidden="true" tabindex="-1"></a>Table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Freq, Income, Occ, Educ)</span>
+<span id="cb81-189"><a href="#cb81-189" aria-hidden="true" tabindex="-1"></a><span class="do">########################################################################################</span></span>
+<span id="cb81-190"><a href="#cb81-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-191"><a href="#cb81-191" aria-hidden="true" tabindex="-1"></a><span class="co"># Table 5.5</span></span>
+<span id="cb81-192"><a href="#cb81-192" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1: Complete Independence</span></span>
+<span id="cb81-193"><a href="#cb81-193" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income, </span>
+<span id="cb81-194"><a href="#cb81-194" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
+<span id="cb81-195"><a href="#cb81-195" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
+<span id="cb81-196"><a href="#cb81-196" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-197"><a href="#cb81-197" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m1) </span>
+<span id="cb81-198"><a href="#cb81-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-199"><a href="#cb81-199" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 2: Conditional Independence</span></span>
+<span id="cb81-200"><a href="#cb81-200" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">*</span> Occ <span class="sc">+</span> Income <span class="sc">*</span> Occ, </span>
+<span id="cb81-201"><a href="#cb81-201" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
+<span id="cb81-202"><a href="#cb81-202" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
+<span id="cb81-203"><a href="#cb81-203" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-204"><a href="#cb81-204" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m2)</span>
+<span id="cb81-205"><a href="#cb81-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-206"><a href="#cb81-206" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 3: All two-way interaction</span></span>
+<span id="cb81-207"><a href="#cb81-207" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">*</span> Occ <span class="sc">+</span> Income <span class="sc">*</span> Occ <span class="sc">+</span> Educ <span class="sc">*</span> Income, </span>
+<span id="cb81-208"><a href="#cb81-208" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
+<span id="cb81-209"><a href="#cb81-209" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-210"><a href="#cb81-210" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m3)</span>
+<span id="cb81-211"><a href="#cb81-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-212"><a href="#cb81-212" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 4: RC(1)+RL(1) partial association</span></span>
+<span id="cb81-213"><a href="#cb81-213" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Educ) <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Income),</span>
+<span id="cb81-214"><a href="#cb81-214" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
+<span id="cb81-215"><a href="#cb81-215" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson,</span>
+<span id="cb81-216"><a href="#cb81-216" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-217"><a href="#cb81-217" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m4)</span>
+<span id="cb81-218"><a href="#cb81-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-219"><a href="#cb81-219" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 5: Model 4 with consistent row (occupation) scores</span></span>
+<span id="cb81-220"><a href="#cb81-220" aria-hidden="true" tabindex="-1"></a>m5 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Educ <span class="sc">+</span> Income),</span>
+<span id="cb81-221"><a href="#cb81-221" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
+<span id="cb81-222"><a href="#cb81-222" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
+<span id="cb81-223"><a href="#cb81-223" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-224"><a href="#cb81-224" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m5)</span>
+<span id="cb81-225"><a href="#cb81-225" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(m5, <span class="fu">pickCoef</span>(m5, <span class="st">"[.]Occ"</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>],</span>
+<span id="cb81-226"><a href="#cb81-226" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ref =</span> <span class="st">"mean"</span>, <span class="at">scaleRef =</span> <span class="st">"mean"</span>, <span class="at">scaleWeights =</span> <span class="st">"unit"</span>)</span>
+<span id="cb81-227"><a href="#cb81-227" aria-hidden="true" tabindex="-1"></a>mu</span>
+<span id="cb81-228"><a href="#cb81-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-229"><a href="#cb81-229" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 6: RC(1)+RL(1)+CL(1) partial association</span></span>
+<span id="cb81-230"><a href="#cb81-230" aria-hidden="true" tabindex="-1"></a>m6 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Educ) <span class="sc">+</span> </span>
+<span id="cb81-231"><a href="#cb81-231" aria-hidden="true" tabindex="-1"></a>            <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Income) <span class="sc">+</span></span>
+<span id="cb81-232"><a href="#cb81-232" aria-hidden="true" tabindex="-1"></a>            <span class="fu">Mult</span>(<span class="dv">1</span>, Educ, Income),</span>
+<span id="cb81-233"><a href="#cb81-233" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
+<span id="cb81-234"><a href="#cb81-234" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
+<span id="cb81-235"><a href="#cb81-235" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-236"><a href="#cb81-236" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m6)</span>
+<span id="cb81-237"><a href="#cb81-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-238"><a href="#cb81-238" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 7: Model 6 with consistent row (occupation) scores</span></span>
+<span id="cb81-239"><a href="#cb81-239" aria-hidden="true" tabindex="-1"></a>m7 <span class="ot">&lt;-</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> Educ <span class="sc">+</span> Occ <span class="sc">+</span> Income <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Occ, Educ <span class="sc">+</span> Income) <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>, Educ, Income),</span>
+<span id="cb81-240"><a href="#cb81-240" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> Table, </span>
+<span id="cb81-241"><a href="#cb81-241" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> poisson, </span>
+<span id="cb81-242"><a href="#cb81-242" aria-hidden="true" tabindex="-1"></a>          <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span>
+<span id="cb81-243"><a href="#cb81-243" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m7)</span>
+<span id="cb81-244"><a href="#cb81-244" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(m7, </span>
+<span id="cb81-245"><a href="#cb81-245" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">pickCoef</span>(m7, <span class="st">"[.]Occ"</span>),</span>
+<span id="cb81-246"><a href="#cb81-246" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ref =</span> <span class="st">"mean"</span>, <span class="at">scaleRef =</span> <span class="st">"mean"</span>, <span class="at">scaleWeights =</span> <span class="st">"unit"</span>)</span>
+<span id="cb81-247"><a href="#cb81-247" aria-hidden="true" tabindex="-1"></a>mu</span>
+<span id="cb81-248"><a href="#cb81-248" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb81-249"><a href="#cb81-249" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 8: model 6 with consistent row, column and layer scores</span></span>
+<span id="cb81-250"><a href="#cb81-250" aria-hidden="true" tabindex="-1"></a><span class="co"># currently, this might not be fitted with gnm!</span></span>
+<span id="cb81-251"><a href="#cb81-251" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
