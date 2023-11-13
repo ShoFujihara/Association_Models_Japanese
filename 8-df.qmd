@@ -76,7 +76,7 @@ df &=\overbrace{IJ}^{セルの数} - [\overbrace{1}^{\lambda} + \overbrace{(I - 
  &= (I - 2)(J - 2)
 \end{align}
 
-**式（2.14）で$I=J$について$\tau_i^A=\tau_j^B$の時，
+**式（2.14）で$I=J$について$\tau_i^A=\tau_j^B$の時**
 
 \begin{align}
 df &=  \overbrace{I^2}^{セルの数} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(I - 1)}^{\lambda_j^B} + \overbrace{1}^{\beta} + \overbrace{(I - 2)}^{\tau_i^A}]\\
@@ -307,7 +307,7 @@ df &= \overbrace{IJK}^{セルの数} - [\overbrace{1}^{\lambda} + \overbrace{(I 
 
 **式（3.12）で$M_1 = M_2 = M_3 = M$かつ一貫したスコア**
 
-必要な次元間制約は$3M(M-1)/2$ではなく$M(M-1)/2$
+必要な次元間制約は$3M(M-1)/2$ではなく$M(M-1)/2$である．
 
  \begin{align}
 df &= \overbrace{IJK}^{セルの数} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B}  + \overbrace{(K - 1)}^{\lambda_k^C}\\
