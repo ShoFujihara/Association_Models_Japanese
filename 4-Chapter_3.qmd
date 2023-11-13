@@ -1,6 +1,6 @@
 # 第3章
 
-第3章は3元表に対する部分連関モデルを扱う．パッケージは`tidyverse`（データセットの処理のため），`magrittr`（パイプ演算子），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`broom`（回帰係数の整理），`gnm`（連関分析の処理のため）を使用する．
+第3章は3元表に対する部分連関モデルを扱う．パッケージは`tidyverse`（データセットの処理のため），`magrittr`（パイプ演算子），`DescTools`（記述統計を求めるため），`vcd`パッケージ（カテゴリカルデータの分析のため），`broom`（回帰係数の整理），`gnm`（連関分析の処理のため），`broom`（tidyな回帰分析の結果の表示）を使用する．
 
 
 ```{r}
@@ -8,8 +8,8 @@
 library(tidyverse)
 library(magrittr)
 library(gnm)
+library(broom)
 ```
-
 
 
 またモデル適合度を表示するための関数をここでも準備しておく．すべて`gnm`によって推定を行う．
@@ -22,7 +22,7 @@ model.summary <- function(obj, Model = NULL){
   aic <- obj$deviance - obj$df * 2 # AIC(L2)
   bic <- obj$deviance - obj$df * log(sum(obj$y)) #BIC(L2)
   delta <- 100 * sum(abs(obj$y - obj$fitted.values)) / (2 * sum(obj$y))
-  p <- pchisq(obj$deviance, obj$df, lower.tail = FALSE)     #p<-ifelse(p<0.001,"<0.001",p)
+  p <- pchisq(obj$deviance, obj$df, lower.tail = FALSE)
   result <- matrix(0, 1, 7)
   if (is.null(Model)){ 
   Model <- deparse(substitute(obj))
@@ -46,8 +46,6 @@ model.summary <- function(obj, Model = NULL){
 表3.1Aをまずベクトルとして入力する．
 
 ```{r}
-library(gnm)
-
 # 表3.1
 Freq <- c(  9, 5, 5, 1,    1, 6, 5, 1,    2, 2, 2, 1,
            17,13, 7, 4,   13,22, 9, 1,    7,13, 6, 2,
@@ -250,25 +248,28 @@ data.frame(var = names(M6$coefficients),
 各スコアの両端のカテゴリ，つまり上記推定値のリストの
 14,20,21,24,26,32,33,35番目の8つの値についてスコアを求め，固定する．
 
-
 ```{r}
 # R POLVIEWS mu1[i], i = 1 to 7
-mu1 <- getContrasts(M6, pickCoef(M6, "fefam)[.]polviews"),
+mu1 <- getContrasts(model = M6, 
+                    set = pickCoef(M6, "fefam)[.]polviews"),
                     ref = "mean",
                     scaleRef = "mean", 
                     scaleWeights = "unit")
 # C FEFAM nu[j], j = 1 to 4
-nu <- getContrasts(M6, pickCoef(M6, "[.]fefam"), 
+nu <- getContrasts(model = M6, 
+                   set = pickCoef(M6, "[.]fefam"), 
                    ref = "mean",
                    scaleRef = "mean", 
                    scaleWeights = "unit")
 # R POLVIEWS mu2[i], i = 1 to 7
-mu2 <- getContrasts(M6, pickCoef(M6, "natfare)[.]polviews"), 
+mu2 <- getContrasts(model = M6, 
+                    set = pickCoef(M6, "natfare)[.]polviews"), 
                     ref = "mean",
                     scaleRef = "mean", 
                     scaleWeights = "unit")
 # L NATFARE eta[k], k = 1 to 3
-eta <- getContrasts(M6, pickCoef(M6, "[.]natfare"), 
+eta <- getContrasts(model = M6, 
+                    set = pickCoef(M6, "[.]natfare"), 
                     ref = "mean",
                     scaleRef = "mean", 
                     scaleWeights = "unit")
@@ -287,7 +288,7 @@ con <- c(mu1$qvframe[,1][c(1,7)],
          eta$qvframe[,1][c(1,3)])
 ```
 
-`con`を用いて制約を課す．制約のあるパラメータは`constrain`で指定する．
+`con`を用いて制約を課す．制約を課す対象となるパラメータは`constrain`で指定する．
 
 ```{r}
 M6_SE <- freq_tab_3.1 |>
@@ -299,15 +300,12 @@ M6_SE <- freq_tab_3.1 |>
       family = poisson, 
       tolerance = 1e-12)
 
-M6_SE_coef <- summary(M6_SE) |>
-  coefficients() |>
-  data.frame() |>
-  rownames_to_column(var = "Variable")
-M6_SE_coef
+M6_SE_coef <- tidy(M6_SE)
+M6_SE_coef |> print(n = Inf)
 ```
 
 
-モデル7はすこし難しい．モデル7は一貫した制約を課している．このモデルからまず一貫した`polviews`について正則化した場合の値を求める．これが求まったら，次は一貫した制約を課していないモデルに，先ほどの正則化したスコアをRCとRLのそれぞれの部分に適用する．
+モデル7は少し難しい．モデル7は一貫した制約を課している．このモデルからまず一貫した`polviews`について正則化した場合の値を求める．これが求まったら，次は一貫した制約を課していないモデルに，先ほどの正則化したスコアをRCとRLのそれぞれの部分に適用する．
 
 ```{r}
 # Model 7
@@ -322,7 +320,8 @@ data.frame(var = names(M7$coefficients),
          number = row_number())
 
 # mu[i], i = 1 to 7
-mu <- getContrasts(M7, pickCoef(M7, "[.]polviews")[1:7], 
+mu <- getContrasts(model = M7, 
+                   set = pickCoef(M7, "[.]polviews")[1:7], 
                    ref = "mean",
                    scaleRef = "mean", 
                    scaleWeights = "unit")
@@ -346,14 +345,14 @@ M7_SE <- freq_tab_3.1 |>
       tolerance = 1e-12)
 
 # nu[j], j = 1 to 4
-nu <- getContrasts(M7_SE, 
-                   pickCoef(M7_SE, "[.]fefam"), 
+nu <- getContrasts(model = M7_SE, 
+                   set = pickCoef(M7_SE, "[.]fefam"), 
                    ref = "mean",
                    scaleRef = "mean", 
                    scaleWeights = "unit")
 # eta[k], k = 1 to 3
-eta <- getContrasts(M7_SE, 
-                    pickCoef(M7_SE, "[.]natfare"), 
+eta <- getContrasts(model = M7_SE, 
+                    set = pickCoef(M7_SE, "[.]natfare"), 
                     ref = "mean",
                     scaleRef = "mean", 
                     scaleWeights = "unit")
@@ -378,11 +377,8 @@ M7_SE <- freq_tab_3.1 |>
       trace = T, 
       tolerance = 1e-12)
 
-M7_SE_coef <- summary(M7_SE) |>
-  coefficients() |>
-  data.frame() |>
-  rownames_to_column(var = "Variable")
-M7_SE_coef
+M7_SE_coef <- tidy(M7_SE)
+M7_SE_coef |> print(n = Inf)
 ```
 
 
@@ -392,14 +388,14 @@ M7_SE_coef
 ```{r}
 # Model 8
 # mu[i], i = 1 to 7
-mu <- getContrasts(M8, 
-                   pickCoef(M8, "[.]polviews.c"),
+mu <- getContrasts(model = M8,
+                   set = pickCoef(M8, "[.]polviews.c"),
                    ref = c(2, 1, 2, 1, 1) / 7,
                    scaleRef = c(2, 1, 2, 1, 1) / 7,
                    scaleWeights = c(2, 1, 2, 1, 1))
 
-mu <- getContrasts(M8,
-                   pickCoef(M8, "[.]polviews.c"),
+mu <- getContrasts(model = M8,
+                   set = pickCoef(M8, "[.]polviews.c"),
                    ref = c(2, 1, 2, 1, 1) / 7,
                    scaleRef = c(2, 1, 2, 1, 1) / 7,
                    scaleWeights = c(2, 1, 2, 1, 1))
@@ -421,22 +417,23 @@ M8 <- freq_tab_3.1 |>
       data = _, 
       family = poisson, 
       tolerance = 1e-12)
-summary(M8)
+tidy(M8)
+glance(M8)
 ```
 
 次は列スコアと層スコアの正則化をおこなう．
 
 ```{r}
 # nu[j], j = 1 to 4
-nu <- getContrasts(M8, 
-                   pickCoef(M8, "[.]fefam"), 
+nu <- getContrasts(model = M8, 
+                   set = pickCoef(M8, "[.]fefam"), 
                    ref = "mean",
                    scaleRef = "mean", 
                    scaleWeights = "unit")
 
 # eta[k], k = 1 to 3
-eta <- getContrasts(M8, 
-                    pickCoef(M8, "[.]natfare"), 
+eta <- getContrasts(model = M8, 
+                    set = pickCoef(M8, "[.]natfare"), 
                     ref = "mean",
                     scaleRef = "mean", 
                     scaleWeights = "unit")
@@ -461,11 +458,8 @@ M8_SE <- freq_tab_3.1 |>
       family = poisson, 
       tolerance = 1e-12)
 
-M8_SE_coef <- summary(M8_SE) |>
-  coefficients() |>
-  data.frame() |>
-  rownames_to_column(var = "Variable")
-M8_SE_coef
+M8_SE_coef <- tidy(M8_SE)
+M8_SE_coef |> print(n = Inf)
 ```
 
 
@@ -474,10 +468,11 @@ M8_SE_coef
 
 ```{r}
 bind_cols(
-M6_SE_coef |> dplyr::select(Variable, Model6 = Estimate),
-M7_SE_coef |> dplyr::select(Model7 = Estimate),
-M8_SE_coef |> dplyr::select(Model8 = Estimate)) |>
-  dplyr::filter(grepl("Mult",Variable))
+  M6_SE_coef |> dplyr::select(term, Model6 = estimate),
+  M7_SE_coef |> dplyr::select(Model7 = estimate),
+  M8_SE_coef |> dplyr::select(Model8 = estimate)) |>
+  dplyr::filter(grepl("Mult", term)) |> 
+  print(n = Inf)
 ```
 
 
@@ -715,14 +710,6 @@ model8_se <- freq_tab_3.1 |>
     tolerance = 1e-15
   )
 summary(model8_se)
-
-
-
-
-
-
-
-
 
 
 options(contrasts = c(factor="contr.treatment",
@@ -967,8 +954,6 @@ eta2
 model.summary(model12)
 
 # Model 15
-
-
 freq_tab_3.1 <-
   freq_tab_3.1 |> mutate(cov_rcl = Rscore * Lscore + Cscore * Lscore)
 model15 <- freq_tab_3.1 |>
@@ -1050,16 +1035,16 @@ model.summary(model15)
 
 
 ```{r}
-bind_rows(model.summary(model1),
-model.summary(model2),
-model.summary(model4),
-model.summary(model6),
-model.summary(model7),
-model.summary(model8),
-model.summary(model9),
-model.summary(model10),
-model.summary(model11),
-model.summary(model12),
-model.summary(model15))
+bind_rows(model.summary(model1, "Model 1"),
+          model.summary(model2, "Model 2"),
+          model.summary(model4, "Model 4"),
+          model.summary(model6, "Model 6"),
+          model.summary(model7, "Model 7"),
+          model.summary(model8, "Model 8"),
+          model.summary(model9, "Model 9"),
+          model.summary(model10, "Model 10"),
+          model.summary(model11, "Model 11"),
+          model.summary(model12, "Model 12"),
+          model.summary(model15, "Model 15"))
 ```
 

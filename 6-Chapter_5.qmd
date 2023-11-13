@@ -9,6 +9,7 @@
 library(tidyverse)
 library(magrittr)
 library(gnm)
+library(broom)
 ```
 
 
@@ -20,19 +21,26 @@ library(gnm)
 options(width=90, contrasts = c(factor="contr.sum", ordered="contr.treatment"))
 
 # Define a function which calculation BIC based on L2 statistics
-model.summary <- function(obj) {
-  aic <- obj$deviance - obj$df * 2   # AIC(L2)
-  bic <- obj$deviance - obj$df * log(sum(obj$y))   #BIC(L2)
-  #Index of Dissimilarity (%)
+model.summary <- function(obj, Model = NULL){
+  if (sum(class(obj) == "gnm") != 1)
+    stop("estimate with gnm")
+  aic <- obj$deviance - obj$df * 2 # AIC(L2)
+  bic <- obj$deviance - obj$df * log(sum(obj$y)) #BIC(L2)
   delta <- 100 * sum(abs(obj$y - obj$fitted.values)) / (2 * sum(obj$y))
-  p <- pchisq(obj$deviance, obj$df, lower.tail = F)
-  result <- tibble("Df" = obj$df,
-                   "L2" = obj$deviance,
-                   p,
-                   "AIC(L2)" = aic,
-                   "BIC(L2)" = bic,
-                   "Delta" = delta)
-  #print("Model Summary:")
+  p <- pchisq(obj$deviance, obj$df, lower.tail = FALSE)     #p<-ifelse(p<0.001,"<0.001",p)
+  result <- matrix(0, 1, 7)
+  if (is.null(Model)){ 
+  Model <- deparse(substitute(obj))
+  }
+  result <- tibble(
+    "Model Description" = Model,
+    "df" = obj$df,
+    "L2" = obj$deviance,
+    #"AIC(L2)" = aic,
+    "BIC" = bic,
+    "Delta" = delta,
+    "p" = p
+  )
   return(result)
 }
 
@@ -42,7 +50,7 @@ model.summary <- function(obj) {
 ## 表5.1
 ```{r}
 # Table 5.1
-Freq<-c(118, 28,  32,  6,  7,
+Freq <- c(118, 28,  32,  6,  7,
         218, 28,  97, 12, 14,
          11,  2,   4,  1,  1,
         104, 22,  61,  8,  5,
@@ -51,51 +59,58 @@ Freq<-c(118, 28,  32,  6,  7,
          48, 16, 104, 14,  9,
         128, 52,  81, 14, 12)
 
-Worries<-gl(8,5)
-Situations<-gl(5,1,8*5)
+worries <- gl(8,5)
+situations <- gl(5,1,8*5)
+
+tab5.1 <- tibble(Freq, worries, situations)
 
 # Model 1 - Independence
-m1 <-
-  gnm(Freq ~ Worries + Situations,
+m1 <- tab5.1 |> 
+  gnm(Freq ~ worries + situations,
       family = poisson,
       trace = F,
-      tolerance = 1e-12)
+      tolerance = 1e-12,
+      data = _)
 model.summary(m1)
 
 # Model 2 - RC(1)
-m2 <-
-  gnm(Freq ~ Worries + Situations + Mult(1, Worries, Situations),
+m2 <- tab5.1 |> 
+  gnm(Freq ~ worries + situations + Mult(1, worries, situations),
       family = poisson,
       trace = F,
-      tolerance = 1e-12)
+      tolerance = 1e-12,
+      data = _)
 model.summary(m2)
 
 # Model 3 - RC(1) with equality constraints on
 # MIL=ECO=MTO, ENR=SAB=OTH and ASAF=IFAA
-Worries.a <- Worries
-levels(Worries.a) <- factor(c(1, 2, 2, 3, 3, 2, 4, 3))
-Worries.a
-Situations.a <- Situations
-levels(Situations.a) <- factor(c(1, 2, 3, 3, 4))
-Situations.a
+worries.a <- worries
+levels(worries.a) <- factor(c(1, 2, 2, 3, 3, 2, 4, 3))
+worries.a
+situations.a <- situations
+levels(situations.a) <- factor(c(1, 2, 3, 3, 4))
+situations.a
 
-m3.un<-gnm(Freq ~ Worries + Situations + Mult(1, Worries.a, Situations.a), 
+m3.un <- tab5.1 |> 
+  gnm(Freq ~ worries + situations + 
+        Mult(1, worries.a, situations.a), 
            family = poisson,
            trace = F, 
-           tolerance = 1e-12)
+           tolerance = 1e-12,
+      data = _)
 model.summary(m3.un)
 
 mu <- getContrasts(m3.un, 
-                 pickCoef(m3.un, "[.]Worries.a"),
+                 pickCoef(m3.un, "[.]worries.a"),
                  ref = c(1, 3, 3, 1) / 8, scaleRef = c(1, 3, 3, 1) / 8,
                  scaleWeights = c(1, 3, 3, 1))
 nu <- getContrasts(m3.un, 
-                 pickCoef(m3.un, "[.]Situations.a"),
+                 pickCoef(m3.un, "[.]situations.a"),
                  ref = c(1, 1, 2, 1) / 5, scaleRef = c(1, 1, 2, 1) / 5,
                  scaleWeights = c(1, 1, 2, 1))
 
 con <- c(mu$qvframe[, 1][c(1, 4)], nu$qvframe[, 1][c(1, 4)])
-m3 <- gnm(Freq ~ Worries + Situations + Mult(1, Worries.a, Situations.a), 
+m3 <- gnm(Freq ~ worries + situations + Mult(1, worries.a, situations.a), 
           family = poisson,
           constrain = c(14, 17, 18, 21), constrainTo = con,
           trace = F, 
@@ -104,36 +119,43 @@ summary(m3);mu;nu;model.summary(m3.un)
 
 # Model 4 - RC(1) with equality constraints on
 # MIL=ECO=MTO=ENR=SAB=OTH and ASAF=IFAA
-Worries.b <- Worries
-levels(Worries.b) <- factor(c(1, 2, 2, 2, 2, 2, 3, 2))
-Worries.b
+worries.b <- worries
+levels(worries.b) <- factor(c(1, 2, 2, 2, 2, 2, 3, 2))
+worries.b
 
-m4.un <- gnm(Freq ~ Worries + Situations + Mult(1, Worries.b, Situations.a), 
+m4.un <- tab5.1 |> 
+  gnm(Freq ~ worries + situations + Mult(1, worries.b, situations.a), 
            family = poisson,
            trace = F, 
-           tolerance = 1e-12)
+           tolerance = 1e-12,
+      data = _)
 model.summary(m4.un)
 
 # Model 5
-m5.un <- gnm(Freq ~ Worries + Situations + 
-               Mult(1, Worries, Situations, inst = 1) + 
-               Mult(1, Worries, Situations, inst = 2), 
-           family = poisson,
-           trace = F, tolerance = 1e-12)
+m5.un <- tab5.1 |> 
+  gnm(Freq ~ worries + situations + 
+        Mult(1, worries, situations, inst = 1) + 
+        Mult(1, worries, situations, inst = 2), 
+      family = poisson,
+      trace = F, tolerance = 1e-12,
+      data = _)
 model.summary(m5.un)
 
 # Model 6 - RC(2) with equality constraints on
 # ECO=MTO=MIL=ENR=SAB and ASAF=IFAA in both dimensions
-Worries.c<-Worries
-levels(Worries.c)<-factor(c(1,2,2,2,2,2,3,4))
-Worries.c
+worries.c <- worries
+levels(worries.c) <- factor(c(1,2,2,2,2,2,3,4))
+worries.c
 
 set.seed(12345)
-m6.un <- gnm(Freq ~ Worries + Situations + 
-               Mult(1, Worries.c, Situations.a, inst = 1) + 
-               Mult(1, Worries.c, Situations.a, inst = 2), 
-             family = poisson,
-             trace = F, tolerance = 1e-12)
+m6.un <- tab5.1 |> 
+  gnm(Freq ~ worries + situations + 
+        Mult(1, worries.c, situations.a, inst = 1) + 
+        Mult(1, worries.c, situations.a, inst = 2), 
+      family = poisson,
+      trace = F, 
+      tolerance = 1e-12,
+      data = _)
 model.summary(m6.un)
 ```
 
@@ -170,74 +192,92 @@ Freq<-c(1096,  1847,  1255,  925,    3321,  6123,  6830,  5524,
         4288,  4916,  1452,  766,     616,   794,   347,   300,
          370,   186,     3,    4,      67,    37,     5,     2)
 
-Income <- gl(4, 1, 192)  # 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4 ...
-Occ <- gl(12, 8, 192)  # 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 ...
-E1 <- rep(c(1,2), each = 4, length.out = 96)
-E2 <- rep(c(3,4), each = 4, length.out = 96)
-Educ <- c(E1, E2) |> factor()
-#nEduc<-as.numeric(Educ)
-#nAttitude<-as.numeric(Attitude)
-#Attitude.c<-Attitude
-#levels(Attitude.c)<-c("1","2","3","3")
-Table <- data.frame(Freq, Income, Occ, Educ)
+income <- gl(4, 1, 192)  # 1 2 3 4 1 2 3 4 1 2 3 4 1 2 3 4 ...
+occ <- gl(12, 8, 192)  # 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 ...
+edu1 <- rep(c(1,2), each = 4, length.out = 96)
+edu2 <- rep(c(3,4), each = 4, length.out = 96)
+educ <- c(edu1, edu2) |> factor()
+
+# 確認
+matrix(income, nrow = 24, ncol = 8, byrow = TRUE)
+matrix(occ, nrow = 24, ncol = 8, byrow = TRUE)
+matrix(educ, nrow = 24, ncol = 8, byrow = TRUE)
+
+# 分析用データ
+tab5.4 <- data.frame(Freq, income, occ, educ)
 ########################################################################################
 
 # Table 5.5
 # Model 1: Complete Independence
-m1 <- gnm(Freq ~ Educ + Occ + Income, 
-          data = Table, 
+m1 <- tab5.4 |> 
+  gnm(Freq ~ educ + occ + income, 
+          data = _, 
           family = poisson, 
           tolerance = 1e-12)
 model.summary(m1) 
 
 # Model 2: Conditional Independence
-m2 <- gnm(Freq ~ Educ * Occ + Income * Occ, 
-          data = Table, 
+m2 <- tab5.4 |> 
+  gnm(Freq ~ educ * occ + income * occ, 
+          data = _, 
           family = poisson, 
           tolerance = 1e-12)
 model.summary(m2)
 
 # Model 3: All two-way interaction
-m3 <- gnm(Freq ~ Educ * Occ + Income * Occ + Educ * Income, 
-          data = Table, 
+m3 <- tab5.4 |> 
+  gnm(Freq ~ educ * occ + income * occ + educ * income, 
+          data = _, 
           family = poisson, tolerance = 1e-12)
 model.summary(m3)
 
 # Model 4: RC(1)+RL(1) partial association
-m4 <- gnm(Freq ~ Educ + Occ + Income + Mult(1, Occ, Educ) + Mult(1, Occ, Income),
-          data = Table, 
+m4 <- tab5.4 |> 
+  gnm(Freq ~ educ + occ + income + Mult(1, occ, educ) + Mult(1, occ, income),
+          data = _, 
           family = poisson,
           tolerance = 1e-12)
 model.summary(m4)
 
 # Model 5: Model 4 with consistent row (occupation) scores
-m5 <- gnm(Freq ~ Educ + Occ + Income + Mult(1, Occ, Educ + Income),
-          data = Table, 
+m5 <- tab5.4 |> 
+  gnm(Freq ~ educ + occ + income + Mult(1, occ, educ + income),
+          data = _, 
           family = poisson, 
           tolerance = 1e-12)
 model.summary(m5)
-mu <- getContrasts(m5, pickCoef(m5, "[.]Occ")[1:12],
-                   ref = "mean", scaleRef = "mean", scaleWeights = "unit")
+mu <- getContrasts(model = m5, 
+                   set = pickCoef(m5, "[.]occ")[1:12],
+                   ref = "mean", 
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
 mu
 
 # Model 6: RC(1)+RL(1)+CL(1) partial association
-m6 <- gnm(Freq ~ Educ + Occ + Income + Mult(1, Occ, Educ) + 
-            Mult(1, Occ, Income) +
-            Mult(1, Educ, Income),
-          data = Table, 
-          family = poisson, 
-          tolerance = 1e-12)
+m6 <- tab5.4 |> 
+  gnm(Freq ~ educ + occ + income + 
+        Mult(1, occ, educ) + 
+        Mult(1, occ, income) +
+        Mult(1, educ, income),
+      data = _, 
+      family = poisson, 
+      tolerance = 1e-12)
 model.summary(m6)
 
 # Model 7: Model 6 with consistent row (occupation) scores
-m7 <- gnm(Freq ~ Educ + Occ + Income + Mult(1, Occ, Educ + Income) + Mult(1, Educ, Income),
-          data = Table, 
-          family = poisson, 
-          tolerance = 1e-12)
+m7 <- tab5.4 |> 
+  gnm(Freq ~ educ + occ + income + 
+        Mult(1, occ, educ + income) + 
+        Mult(1, educ, income),
+      data = _, 
+      family = poisson, 
+      tolerance = 1e-12)
 model.summary(m7)
-mu <- getContrasts(m7, 
-                   pickCoef(m7, "[.]Occ"),
-                   ref = "mean", scaleRef = "mean", scaleWeights = "unit")
+mu <- getContrasts(model = m7, 
+                   set = pickCoef(m7, "[.]occ"),
+                   ref = "mean", 
+                   scaleRef = "mean", 
+                   scaleWeights = "unit")
 mu
 		
 # Model 8: model 6 with consistent row, column and layer scores
@@ -245,8 +285,23 @@ mu
 ```
 
 
+- 表5.5のモデル1については原著および訳書ともに$\Delta$の値が間違っているので注意すること（印刷後に修正漏れに気づきました）．実際は`r model.summary(m1)$Delta |> round(2)`である．
+
 ```{r}
-list(m1, m2, m3, m4, m5, m6, m7) |> 
-  map_dfr(model.summary, .id = "Model")
+# 2つの引数についてのリストを作成
+## 第1引数はモデル
+models <- list(m1, m2, m3, m4, m5, m6, m7)
+## 第2引数はモデルの内容
+model_desctiption <- 
+  list("完全独立", 
+       "条件付き独立", 
+       "すべての2元交互作用",
+       "RC(1)+RL(1) 部分連関",
+       "一貫した行(職業)スコアのあるRC(1)+RL(1) 部分連関",
+       "RC(1)+RL(1)+CL(1) 部分連関",
+       "一貫した行(職業)スコアのあるRC(1)+RL(1)+CL(1)部分連関")
+# 結果をまとめる
+map2_dfr(models, model_desctiption, model.summary, .id = "Model") |> 
+  knitr::kable()
 ```
 

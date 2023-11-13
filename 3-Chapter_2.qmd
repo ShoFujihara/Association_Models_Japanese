@@ -67,6 +67,7 @@ gss_cat |>
 水準は`levels`関数で確認できる．1つ目の水準は`No answer`であり，最後の水準は`Married`である．
 
 ```{r}
+# 水準の確認
 gss_cat$marital |> levels()
 ```
 
@@ -81,7 +82,8 @@ options(contrasts = c(factor = "contr.treatment",
 fit_ct <- lm(tvhours ~ marital, data = gss_cat)
 # 回帰分析の結果
 summary(fit_ct)
-tidy(fit_ct)
+# 回帰分析の係数をtidyで表示
+tidy(fit_ct, conf.int = TRUE)
 # モデルマトリックス
 model.matrix(fit_ct) |> unique()
 ```
@@ -98,7 +100,8 @@ options(contrasts = c(factor = "contr.sum",
 fit_cs <- lm(tvhours ~ marital, data = gss_cat)
 # 回帰分析の結果
 summary(fit_cs)
-tidy(fit_cs)
+# 回帰分析の係数をtidyで表示
+tidy(fit_cs, conf.int = TRUE)
 # モデルマトリックス
 model.matrix(fit_cs) |> unique()
 ```
@@ -123,6 +126,7 @@ fit_cs$coefficients[pickCoef(fit_cs, "marital")] |> sum()
 ```{r}
 # デフォルトに戻す
 options(contrasts = c(factor = "contr.treatment", ordered = "contr.poly"))
+# contrastsを確認
 options("contrasts")
 ```
 
@@ -133,20 +137,24 @@ options("contrasts")
 fit_cs2_1 <- lm(tvhours ~ marital, data = gss_cat)
 # 回帰分析の結果
 summary(fit_cs2_1)
+# 回帰分析の係数をtidyで表示
+tidy(fit_cs2_1, conf.int = TRUE)
 # 回帰分析
 fit_cs2_2 <- lm(tvhours ~ marital, data = gss_cat,
               contrasts = list(marital = "contr.sum"))
 # 回帰分析の結果
 summary(fit_cs2_2)
+# 回帰分析の係数をtidyで表示
 tidy(fit_cs2_2)
 ```
 
 
 では結果を図にしてみる．
+
 ```{r}
 # termのカテゴリ名を変換し，最後に`No answer`の行を加える．
 est_ct <- fit_ct |> 
-  tidy(conf.int = TRUE) |> 
+  tidy(conf.int = TRUE) |>   # 回帰分析の係数をtidyで表示し，信頼区間もつける
   mutate(term = case_when(
     grepl("Never", term) ~ "Never married",
     grepl("Separated", term) ~ "Separated",
@@ -164,7 +172,8 @@ fig_ct <- est_ct |>
              y = estimate,
              ymin = conf.low,
              ymax = conf.high)) + 
-  geom_pointrange()
+  geom_pointrange() + 
+  theme_minimal()
 fig_ct
 
 # termのカテゴリ名を変換し，最後に`Married`の行を加える．
@@ -187,7 +196,8 @@ fit_cs <- est_cs |>
              y = estimate,
              ymin = conf.low,
              ymax = conf.high)) + 
-  geom_pointrange()
+  geom_pointrange() + 
+  theme_minimal()
 fit_cs
 
 # 図を並べる
@@ -270,7 +280,9 @@ tab_2.1 |> addmargins()
 ```{r}
 # B. Odds 
 x <- tab_2.1
+# 1行1列と1行2列
 x[1,1]/x[1,2]
+# 2行1列と2行2列
 x[2,1]/x[2,2]
 
 # C. Odds ratio
@@ -294,21 +306,24 @@ exp(CI_log_OR)
 先程計算したものと値が一致している．
 
 ```{r}
+# OddsRatio関数を用いる
 OddsRatio(tab_2.1, conf.level = 0.95)
 ```
 
 ::: {.callout-tip}
 ## 関数の中身を確認する．
 
-`OddsRatio()`がどのような処理をしているのかについては`OddsRatio`と入力し，関数の中身をみることで確認できる．
-ただし，`UseMethod("OddsRatio")`となっており，詳細が分からないことがある．その場合は，`methods()`を用いる．
-そして，`OddsRatio.default*`のように`*`がついているものについて`DescTools:::OddsRatio.default`のように入力することで中身を確認することができる．`getAnywhere(OddsRatio.default)`としてもよい．
+`OddsRatio()`がどのような処理をしているのかについては`OddsRatio`と入力し，関数の中身をみることで確認できる．ただし，`UseMethod("OddsRatio")`となっており，詳細が分からないことがある．その場合は，`methods()`を用いる．そして，`OddsRatio.default*`のように`*`がついているものについて`DescTools:::OddsRatio.default`のように入力することで中身を確認することができる．`getAnywhere(OddsRatio.default)`としてもよい．
 
 ```{r}
 #| eval: false
+# OddsRatio関数の中身を確認
 OddsRatio
+# methods関数を用いてどこにアクセスすればよいかを確認する
 methods(OddsRatio)
+# DescTools関数のOddsRatio.defaultの中身を確認する
 DescTools:::OddsRatio.default
+# getAnywhereを利用する
 getAnywhere(OddsRatio.default)
 ```
 ::::
@@ -317,6 +332,7 @@ getAnywhere(OddsRatio.default)
 さらに詳細な結果をみたければ`DescTools`パッケージの`Desc`を用いる．
 
 ```{r}
+# 詳細なクロス表の分析
 Desc(tab_2.1)
 ```
 
@@ -325,11 +341,11 @@ Desc(tab_2.1)
 ```{r}
 # 度数のベクトル
 Freq
-# 行変数
-COMM <- gl(n = 2, k = 2)
+# 行変数 1,2の水準のそれぞれを2回くりかえす
+COMM <- gl(n = 2, k = 2)   # rep(c(1, 2), each = 2) |> factor()
 COMM
-# 列変数
-SUP  <- gl(n = 2, k = 1, length = 4)
+# 列変数 1,2の水準を大きさが4となるまでそれぞれを1回くりかえす
+SUP  <- gl(n = 2, k = 1, length = 4)   # rep(c(1, 2), times = 2) |> factor()
 SUP
 # 度数，行変数，列変数からなるデータを作成
 freq_tab_2.1 <- tibble(COMM, SUP, Freq)
@@ -338,7 +354,7 @@ freq_tab_2.1
 ```
 
 
-分析には通常は`glm`を用いるが，後の分析とあわせて`gnm`によって推定する．結果は異ならない．`family = poisson`という指定を忘れないようにすること．何も指定しないと`family = gaussian`となり，通常の線形回帰分析を行ってしまうので注意する．
+分析には通常は`glm`を用いるが，後の分析とあわせて`gnm`によって推定する．結果は異ならない．`family = poisson`という指定を忘れないようにすること．何も指定しないと`family = gaussian`となり，エラーなどを出さずに通常の線形回帰分析を行ってしまうので注意する．
 
 
 ```{r}
@@ -347,10 +363,10 @@ fit <- freq_tab_2.1 |>
   gnm(Freq ~ COMM + SUP + COMM:SUP, data = _, family = poisson)
 # 結果
 summary(fit)
+tidy(fit, conf.int = TRUE)
 ```
 
 `COMM2:SUP2`の係数は1.0986である．これは対数オッズなので，指数関数`exp`を適用してオッズ比を求める．
-
 
 ```{r}
 # Odds ratios fit$coefficientsのCOMM2:SUP2の要素のみを取り出し，指数関数expを適用
@@ -361,9 +377,22 @@ fit |> confint("COMM2:SUP2") |> exp()
 次のようにしてもよい．
 
 ```{r}
+# 係数の"COMM2:SUP2"の部分のみを取り出し，expを使用
 coef(fit)["COMM2:SUP2"] |> exp()
+# 信頼区間の行が"COMM2:SUP2"の部分のみを取り出し，expを使用
 confint(fit)["COMM2:SUP2",] |> exp()
 ```
+
+他の係数についてもまとめて示したければ`tidy`関数を用いる．
+
+```{r}
+# 係数をtidyを用いて表示し，expを適用した新たな変数を作成する．
+tidy(fit, conf.int = TRUE) |> 
+  mutate(odds_ratio = exp(estimate), 
+         or_conf.high = exp(conf.high),
+         or_conf.low = exp(conf.low))
+```
+
 
 
 ## 表2.3A (p.32)
@@ -371,6 +400,7 @@ confint(fit)["COMM2:SUP2",] |> exp()
 まずは表2.3Aを作成する．値をベクトルの形式で入力する．
 
 ```{r}
+# 表2.3Aの値を入力
 Freq <- c( 39,  50,  18,   4,
           140, 178,  85,  23,
           108, 195,  97,  23,
@@ -411,18 +441,17 @@ tab_2.3A
 # 度数，行変数，列変数からなる集計データを作成
 polviews <- gl(n = 7, k = 4)   # 1-7までの各数字について4つ値を出す
 fefam <- gl(n = 4, k = 1, length = 28)   # 1-4までの数字の列を長さが28になるまで繰り返す
+# Freq, polviews, fefamからなるデータを作成
 freq_tab_2.3A <- tibble(Freq, polviews, fefam)
 freq_tab_2.3A
 ```
 
-- なお`tab_2.3A`に対して，data.frameを適用しても集計データは作成される．tableの行変数と列変数が指定されていないと，行変数は`Var1`，列変数は`Var2`となるので，必要に応じて名前を`rename`で修正する
-．
+- なお`tab_2.3A`に対して，data.frameを適用しても集計データは作成される．tableの行変数と列変数が指定されていないと，行変数は`Var1`，列変数は`Var2`となるので，必要に応じて名前を`rename`で修正する．
 
 ```{r}
-data.frame(tab_2.3A) |> 
-  tibble()
+# 表データにdata.frameを適用し，tibble形式で表示
+data.frame(tab_2.3A) |> tibble()
 ```
-
 
 以下では複数のモデルの適合度を比較する．そこで，モデル適合度を表示するための関数を作成する．モデルはすべて`gnm`によって推定されることを前提としている．`glm`の場合はエラーが出るので注意すること．
 
@@ -477,8 +506,6 @@ freq_tab_2.3A
 ```
 
 
-
-
 ### 独立モデル
 
 独立モデルは次のようになる．
@@ -493,25 +520,27 @@ O <- freq_tab_2.3A |>
       )
 # 結果
 summary(O)
+tidy(O)
+glance(O)
 ```
 
-先ほど作成した適合度の関数を用いる．2つめの引数はモデルの名前の詳細を記述可能だが，これは省略してもよい．
+先ほど作成した適合度の関数を用いる．2つめの引数はモデルの名前の詳細を記述可能だが，これは省略してもよい．省略するとモデルをフィットさせた結果のオブジェクトの名前が表示される．
 
 ```{r}
 # モデル適合度
 model.summary(O, "O:Independent")
 ```
 
-
-テキストの表2.4と同じ結果になっているのかを確認してみる．
-
-
+テキストの表2.4と同じ結果になっているのかを確認してみる．期待度数は様々な方法でとりだすことができる．ここでは元の観測度数の値も表示される`broom`パッケージの`augment`関数を用いる．
 
 ```{r}
+# broomのaugmentで期待度数を求め，それをもとにL2とBICを計算
 broom::augment(O, newdata = freq_tab_2.3A, type.predict = "response") |> 
-  dplyr::summarise(L2 = sum(Freq * log( Freq / .fitted)) * 2,
-                   BIC = L2 - summary(O)$df.residual * log(sum(freq_tab_2.3A$Freq)))
+  dplyr::summarise(L2 = sum(Freq * log(Freq /　.fitted)) * 2,
+                   BIC = L2 - summary(O)$df.residual * log(sum(Freq)))
+# predict関数で期待度数を求める
 predict(O, newdata = freq_tab_2.3A, type = "response")
+# 結果から期待度数を取り出す．
 O$fitted.values
 ```
 
@@ -532,6 +561,8 @@ U <- freq_tab_2.3A |>
 ```{r}
 # 結果
 summary(U)
+# 信頼区間もあわせてtidyで表示
+tidy(U, conf.int = TRUE)
 ```
 
 表2.4Aと同じ結果になっているのかを確認する．
@@ -540,7 +571,6 @@ summary(U)
 # モデル適合度
 model.summary(U, "U:Uniform")
 ```
-
 
 モデル行列を確認するのもよいだろう．
 
@@ -555,12 +585,11 @@ model.matrix(U) |> unique()
 contrastを修正し，polviewsの係数のすべてを足すと0になるように効果コーディングを行ってる．なお行変数と列スコアの積については`Cscore*polviews`とし，`Cscore:polviews`としない．
 
 ```{r}
-# 3. R: Row Effect Model
 # contrastを修正している．
 options(contrasts = c(factor = "contr.sum", 
                       ordered = "contr.treatment"))
 options("contrasts")
-
+# 3. R: Row Effect Model
 R <- freq_tab_2.3A |>
   gnm(Freq ~ polviews + fefam + Cscore*polviews, 
       family = poisson, 
@@ -568,6 +597,8 @@ R <- freq_tab_2.3A |>
       tolerance = 1e-12)
 # 結果
 summary(R)
+# 信頼区間もあわせてtidyで表示
+tidy(R, conf.int = TRUE)
 # モデル適合度
 model.summary(R, "R:Row effect")
 # モデル行列の確認
@@ -610,6 +641,8 @@ Ralt <- freq_tab_2.3A |>
 ```{r}
 # 結果
 summary(Ralt)
+# 信頼区間もあわせてtidyで表示
+tidy(Ralt, conf.int = TRUE)
 ```
 
 
@@ -627,22 +660,23 @@ model.matrix(Ralt) |> unique()
 ```
 
 
-
 ## 列効果モデル
 
 列効果モデルは行効果モデルと同様の方法で推定すればよい．まずは効果コーディングで推定し，その後にダミーコーディングで推定する．
 
 ```{r}
-# 4. C: Column Effect Model
 # contrast
 options(contrasts = c(factor = "contr.sum", 
                       ordered = "contr.treatment"))
+# 4. C: Column Effect Model
 C <- freq_tab_2.3A |> 
   gnm(Freq ~ polviews + fefam + Rscore*fefam, family = poisson, 
       data = _, 
       tolerance = 1e-12)
 # 結果
 summary(C)
+# 信頼区間もあわせてtidyで表示
+tidy(C, conf.int = TRUE)
 # モデル適合度
 model.summary(C, "C:Column effect")
 # モデル行列の確認
@@ -664,6 +698,7 @@ C$coefficients[pickCoef(C, ":Rscore")] |> sum()
 # alternative (default)
 options(contrasts = c(factor = "contr.treatment",
                       ordered = "contr.poly"))
+# 4. C: Column Effect Model (default)
 Calt <- freq_tab_2.3A |> 
   gnm(Freq ~ polviews + fefam + Rscore*fefam, 
       family = poisson, 
@@ -676,6 +711,8 @@ Calt <- freq_tab_2.3A |>
 ```{r}
 # 結果
 summary(Calt)
+# 信頼区間もあわせてtidyで表示
+tidy(Calt, conf.int = TRUE)
 ```
 
 

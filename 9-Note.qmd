@@ -5,16 +5,13 @@
 ```{r}
 #| message: false
 library(tidyverse)
-library(magrittr)
+library(broom)
 library(gnm)
 library(vcd)
 ```
 
 
 ## クロス表の作成
-
-
-
 
 ```{r}
 Freq <- c( 64,  94, 58, 46, 
@@ -24,7 +21,7 @@ Freq <- c( 64,  94, 58, 46,
            36,  97, 54, 78,
            21,  71, 54, 71)
 # byrow = TRUEとすることを忘れずに．
-tab <- matrix(Freq, nrow = 6, ncol = 4, byrow = TRUE) %>% as.table()
+tab <- matrix(Freq, nrow = 6, ncol = 4, byrow = TRUE) |> as.table()
 dimnames(tab)
 dimnames(tab) <- list(SES = LETTERS[1:6],
                       MHS = c("well", "mild", "modelrate", "impared"))
@@ -142,6 +139,12 @@ d
 ```{r}
 fit_glm <- glm(Freq ~ Row + Col, data = d, family = poisson)
 fit_gnm <- gnm(Freq ~ Row + Col, data = d, family = poisson)
+```
+
+
+通常の出力も少し違う．
+
+```{r}
 fit_glm
 fit_gnm
 ```
@@ -152,10 +155,25 @@ names(fit_glm)
 names(fit_gnm)
 ```
 
+係数はもちろん同じ．
+
 ```{r}
 summary(fit_glm)
 summary(fit_gnm)
 ```
+
+```{r}
+tidy(fit_glm)
+tidy(fit_gnm)
+```
+
+`null.deviance`と`df.null`が`gnm`では出力されない．
+ 
+```{r}
+glance(fit_glm)
+glance(fit_gnm)
+```
+
 
 - gnmで独立モデルと飽和モデル
 
@@ -170,6 +188,10 @@ fit_S <- gnm(Freq ~ Row + Col + Row:Col, data = d, family = poisson)
 anova(fit_O, fit_S)
 ```
 
+```{r}
+glance(fit_O)
+glance(fit_S)
+```
 
 
 ## 期待度数
@@ -177,13 +199,14 @@ anova(fit_O, fit_S)
 - 期待度数を保存すれば期待度数についてのクロス表を作成することができる．飽和モデルの場合は，観測度数のクロス表と一致する．また独立モデルでの期待度数をみると，行によって列の幅が異なっていない（列によって行の幅がことなっていない）ことがわかる．
 
 ```{r}
-d %<>% mutate(O_Freq = fit_O$fitted.values,
+d <- d |> mutate(O_Freq = fit_O$fitted.values,
               S_Freq = fit_S$fitted.values)
-d %>% xtabs(Freq ~ Row + Col, data = .) %>% mosaic(shade = TRUE)
-d %>% xtabs(O_Freq ~ Row + Col, data = .) %>% mosaic(shade = TRUE)
-d %>% xtabs(S_Freq ~ Row + Col, data = .) %>% mosaic(shade = TRUE)
+d |> xtabs(Freq ~ Row + Col, data = _) |> mosaic(shade = TRUE)
+d |> xtabs(O_Freq ~ Row + Col, data = _) |> mosaic(shade = TRUE)
+d |> xtabs(S_Freq ~ Row + Col, data = _) |> mosaic(shade = TRUE)
 ```
 
+`fit_O$fitted.values`の代わりに`predict(fit_O, type = "response")`としても良い．`type = "response"`を忘れないようにする．
 
 
 ## モザイクプロット
@@ -208,7 +231,11 @@ mosaic(tab_mentalHealth,
        shade = TRUE)
 ```
 
-- モデル適合度を表示するための関数
+
+## 正規化
+
+
+- モデル適合度を表示するための関数を準備
 
 ```{r}
 model.summary <- function(obj) {
@@ -232,20 +259,18 @@ model.summary <- function(obj) {
 ```
 
 
-- 変数と係数と係数の順番を表示するための関数
+- 変数と係数と係数の順番を表示するための関数を準備
 
 ```{r}
 # 変数と係数と係数の順番を表示
 var_num <- function(model) {
   data.frame(var = names(model$coefficients),
-             estimate = model$coefficients) %>%
+             estimate = model$coefficients) |>
     mutate(estimate = estimate,
            number = row_number())
 }
 ```
 
-
-## 正規化
 
 - 通常のRCモデルでは行スコアと列スコアが正規化されていない．
 - Agresti (2002) 
@@ -270,6 +295,7 @@ RC1 <- gnm(
 )
 # Estimateには数字があるが，Std. ErrorがNAとなっている．これらのパラメータは識別されていない．
 summary(RC1)
+tidy(RC1)
 
 # 行スコアと列スコアがどこにあるかを取り出す．
 var_num(RC1)
@@ -360,6 +386,7 @@ RC1 <- gnm(
   tolerance = 1e-12
 )
 summary(RC1)
+tidy(RC1)
 ```
 
 
@@ -381,7 +408,7 @@ tab_2.3A <-
   matrix(Freq,
          nrow = 7,
          ncol = 4,
-         byrow = TRUE) %>% as.table()
+         byrow = TRUE) |> as.table()
 
 polviews <- gl(n = 7, k = 4)
 fefam <- gl(n = 4, k = 1, length = 28)
@@ -389,21 +416,21 @@ freq_tab_2.3A <- tibble(Freq, polviews, fefam)
 freq_tab_2.3A
 
 # 独立モデル
-O <- gnm(
+O <- freq_tab_2.3A |> gnm(
   Freq ~ polviews + fefam,
   family = poisson,
-  data = freq_tab_2.3A,
+  data = _,
   tolerance = 1e-12
 )
 
 var_num(O)
 
-RC <- freq_tab_2.3A %>%
+RC <- freq_tab_2.3A |>
   gnm(
     Freq ~ polviews + fefam +
       Mult(1, polviews, fefam),
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12
   )
 var_num(RC)
@@ -412,46 +439,53 @@ mult1 <- residSVD(O, polviews, fefam)
 mult2 <- residSVD(O, polviews, fefam, d = 2)
 mult3 <- residSVD(O, polviews, fefam, d = 3)
 
-RC <- freq_tab_2.3A %>%
+RC <- freq_tab_2.3A |>
   gnm(
     Freq ~ polviews + fefam + Mult(1, polviews, fefam),
     start = c(coef(O), NA, mult1),
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12
   )
 summary(RC)
+tidy(RC)
+glance(RC)
 
-RC2 <- freq_tab_2.3A %>%
+RC2 <- freq_tab_2.3A |>
   gnm(
     Freq ~ polviews + fefam +
       Mult(1, polviews, fefam, inst = 1) +
       Mult(1, polviews, fefam, inst = 2),
     start = c(coef(O), NA, mult2[, 1], NA, mult2[, 2]),
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12
   )
 summary(RC2)
+tidy(RC2)
+glance(RC2)
 
-RC3 <- freq_tab_2.3A %>%
+RC3 <- freq_tab_2.3A |>
   gnm(
     Freq ~ polviews + fefam + Mult(1, polviews, fefam, inst = 1) +
       Mult(1, polviews, fefam, inst = 2) +
       Mult(1, polviews, fefam, inst = 3),
     start = c(coef(O), NA, mult3[, 1], NA, mult3[, 2], NA, mult3[, 3]),
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12
   )
 summary(RC3)
+tidy(RC3)
+glance(RC3)
 
 library(logmult)
 anoas_model <- anoas(tab_2.3A, nd = 3)
 anoas_model
-summary(anoas_model)
 
-rc(tab_2.3A, d = 3)
+rc(tab_2.3A, nd = 1)
+rc(tab_2.3A, nd = 2)
+rc(tab_2.3A, nd = 3)
 
 bind_rows(model.summary(O),
           model.summary(RC),
@@ -477,7 +511,7 @@ tab_2.3B <-
   matrix(Freq,
          nrow = 4,
          ncol = 5,
-         byrow = TRUE) %>% as.table()
+         byrow = TRUE) |> as.table()
 
 tab_2.3B
 # 度数，行変数，列変数からなる集計データを作成
@@ -487,51 +521,52 @@ freq_tab_2.3B <- tibble(Freq, Educ, Occ)
 freq_tab_2.3B
 
 
-O <- gnm(Freq ~ Educ + Occ,
+O <- freq_tab_2.3B |> 
+  gnm(Freq ~ Educ + Occ,
          family = poisson,
-         data = freq_tab_2.3B,
+         data = _,
          tolerance = 1e-12)
 
 mult1 <- residSVD(O, Educ, Occ)
 mult2 <- residSVD(O, Educ, Occ, d = 2)
 mult3 <- residSVD(O, Educ, Occ, d = 3)
 
-RC <- freq_tab_2.3B %>%
+RC <- freq_tab_2.3B |>
   gnm(
     Freq ~ Educ + Occ + Mult(1, Educ, Occ),
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12
   )
 
 var_num(RC)
 
-RC <- freq_tab_2.3B %>%
+RC <- freq_tab_2.3B |>
   gnm(
     Freq ~ Educ + Occ + Mult(1, Educ, Occ),
     start = c(coef(O), 10, mult1),
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12
   )
 
-RC2 <- freq_tab_2.3B %>%
+RC2 <- freq_tab_2.3B |>
   gnm(
     Freq ~ Educ + Occ + instances(Mult(1, Educ, Occ), 2),
     #      start = c(coef(O), NA, mult2[,1], NA, mult2[,2]),
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12
   )
 RC2
 
 
-RC3 <- freq_tab_2.3B %>%
+RC3 <- freq_tab_2.3B |>
   gnm(
     Freq ~ Educ + Occ + instances(Mult(1, Educ, Occ), 3),
     start = c(coef(O), NA, mult3[, 1], NA, mult3[, 2], NA, mult3[, 3]),
     family = poisson,
-    data = .,
+    data = _,
     tolerance = 1e-12
   )
 RC3
@@ -555,9 +590,9 @@ anoas_model
 ```{r}
 occupationalStatus
 freq_occupationalStatus <- data.frame(occupationalStatus)
-freq_occupationalStatus %<>%
+freq_occupationalStatus <- freq_occupationalStatus |> 
   mutate(
-    diag = ifelse(origin == destination, origin, 0) %>% factor(),
+    diag = ifelse(origin == destination, origin, 0) |> factor(),
     Rscore = scale(as.numeric(origin), scale = FALSE),
     Cscore = scale(as.numeric(destination), scale = FALSE)
   )
@@ -581,24 +616,24 @@ fit_S <-
       family = poisson,
       data = freq_occupationalStatus)
 
-freq_occupationalStatus %<>%
+freq_occupationalStatus <- freq_occupationalStatus |> 
   mutate(
     diag1 = ifelse(origin == 1 &
-                     origin == destination, 1, 0) %>% factor(),
+                     origin == destination, 1, 0) |> factor(),
     diag2 = ifelse(origin == 2 &
-                     origin == destination, 1, 0) %>% factor(),
+                     origin == destination, 1, 0) |> factor(),
     diag3 = ifelse(origin == 3 &
-                     origin == destination, 1, 0) %>% factor(),
+                     origin == destination, 1, 0) |> factor(),
     diag4 = ifelse(origin == 4 &
-                     origin == destination, 1, 0) %>% factor(),
+                     origin == destination, 1, 0) |> factor(),
     diag5 = ifelse(origin == 5 &
-                     origin == destination, 1, 0) %>% factor(),
+                     origin == destination, 1, 0) |> factor(),
     diag6 = ifelse(origin == 6 &
-                     origin == destination, 1, 0) %>% factor(),
+                     origin == destination, 1, 0) |> factor(),
     diag7 = ifelse(origin == 7 &
-                     origin == destination, 1, 0) %>% factor(),
+                     origin == destination, 1, 0) |> factor(),
     diag8 = ifelse(origin == 8 &
-                     origin == destination, 1, 0) %>% factor()
+                     origin == destination, 1, 0) |> factor()
   )
 
 fit_QI2 <-
@@ -624,8 +659,6 @@ bind_rows(
 ```
 
 
-
-
 ```{r}
 data(erikson)
 erikson
@@ -645,7 +678,7 @@ levelMatrix <- rep(c(2, 3, 4, 6, 5, 6, 6,
                      6, 6, 5, 1, 6, 5, 2,
                      4, 4, 5, 6, 3, 4, 5,
                      5, 4, 5, 5, 3, 3, 5,
-                     6, 6, 5, 3, 5, 4, 1), times = 3) %>% as.factor()
+                     6, 6, 5, 3, 5, 4, 1), times = 3) |> as.factor()
 d <- bind_cols(freq_erikson, levelMatrix = levelMatrix)
 
 fit_O <-
@@ -672,7 +705,8 @@ fit_Common_Pattern <- gnm(
   data = d
 )
 
-d %<>% mutate(
+d <- d |> 
+  mutate(
   pred1 = fit_O$fitted.values,
   pred2 = fit_Common$fitted.values,
   pred3 = fit_Common_Pattern$fitted.values
@@ -686,17 +720,83 @@ anova(fit_O, fit_Common_Pattern, fit_Common)
 ```
 
 
-## Xie
+## 連関モデルと正準相関分析
+
+@goodman1981 のTable 1のaより．
 
 ```{r}
 library(tidyverse)
-library(magrittr)
 library(gnm)
 Freq <- c(5, 3, 10, 11, 4, 5, 8, 6, 26, 11, 3, 6, 23, 11, 1, 2)
 Row <- gl(n = 4, k = 4)
 Col <- gl(n = 4, k = 1, length = 16)
-d <- tibble(Freq, Row, Col)
+d <- tibble(Freq, Row, Col) |> 
+    mutate(U = as.numeric(Row),
+         V = as.numeric(Col))
+xtabs(Freq ~ Row + Col, data = d)
+```
 
+
+```{r}
+# (1) O
+O <- d |> 
+  gnm(Freq ~ Row + Col,
+      family = poisson,
+      data = _)
+# (2) U
+U <- d |> 
+  gnm(Freq ~ Row + Col + U:V,
+      family = poisson,
+      data = _)
+# (3) R
+R <- d |> 
+  gnm(Freq ~ Row + Col + Row:V,
+      family = poisson,
+      data = _)
+# (4) C
+C <- d |> 
+  gnm(Freq ~ Row + Col + Col:U,
+      family = poisson,
+      data = _)
+# (5) RC
+RC <- d |> 
+  gnm(Freq ~ Row + Col + Mult(1, Row, Col),
+      family = poisson,
+      data = _)
+# (6) U + RC
+UplusRC <- d |> 
+    gnm(Freq ~ Row + Col + U:V + Mult(1, Row, Col),
+      family = poisson,
+      data = _)
+# (7) R + RC
+RplusRC <- d |> 
+    gnm(Freq ~ Row + Col + Row:V + Mult(1, Row, Col),
+      family = poisson,
+      data = _)
+# (8) C + RC
+CplusRC <- d |> 
+    gnm(Freq ~ Row + Col + Col:U + Mult(1, Row, Col),
+      family = poisson,
+      data = _)
+# (9) R + C + RC
+RplusCplusRC <- d |> 
+    gnm(Freq ~ Row + Col + Row:V + Col:U + Mult(1, Row, Col),
+      family = poisson,
+      data = _)
+# (10) R + C
+RplusC <- d |> 
+    gnm(Freq ~ Row + Col + Row:V + Col:U,
+      family = poisson,
+      data = _)
+
+list(O, U, R, C, RC, UplusRC, RplusRC, CplusRC, RplusCplusRC, RplusC) |> 
+  map_dfr(glance, id = "Model")
+```
+
+
+
+
+```{r}
 fit <-
   gnm(Freq ~ Row + Col + Mult(1, Row, Col),
       family = poisson,
@@ -735,10 +835,21 @@ d <- d |>  mutate(mu = mu_score,
 
 # Canonical correlation
 library(wCorr)
-with(d, weightedCorr(mu, x = nu, weights = Freq, method="polychoric"))
+with(d, weightedCorr(mu, x = nu, weights = Freq, method = "Pearson"))
+with(d, weightedCorr(U, x = V, weights = Freq, method = "Polychoric"))
 
+library(polycor)
+
+library(vcdExtra)
+d_ind <- expand.dft(d, dreq = "Freq")
+d_ind
+library(DescTools)
+CorPolychor(d_ind$U, d_ind$V, ML = TRUE)
+
+
+# 
 summary(fit)
-phi <- fit$coefficients["Mult(., Row, Col)."] %>% abs()
+phi <- fit$coefficients["Mult(., Row, Col)."] |> abs()
 rho <- (-1 + sqrt(1 + 4 * phi ^ 2)) / (2 * phi)
 eta <- (2 * phi) ^ (-1)
 tau <- (1 + eta ^ 2) ^ (1 / 2) - eta

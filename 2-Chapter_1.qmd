@@ -29,7 +29,6 @@ tab <- matrix(
 tab
 ```
 
-
 `DescTools`パッケージを用いる．
 
 ```{r}
