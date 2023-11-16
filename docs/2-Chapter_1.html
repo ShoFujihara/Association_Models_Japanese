@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>『カテゴリカルデータのための連関モデル』 - 1&nbsp; 第1章</title>
+<title>『カテゴリカルデータの連関モデル』 - 1&nbsp; 第1章</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +144,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">『カテゴリカルデータのための連関モデル』</a> 
+      <a href="./">『カテゴリカルデータの連関モデル』</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -231,8 +231,8 @@ div.csl-indent {
    
   <ul>
   <li><a href="#クラメールのv" id="toc-クラメールのv" class="nav-link active" data-scroll-target="#クラメールのv"><span class="header-section-number">1.1</span> クラメールのV</a></li>
+  <li><a href="#練習問題" id="toc-練習問題" class="nav-link" data-scroll-target="#練習問題">練習問題</a></li>
   <li><a href="#参考文献" id="toc-参考文献" class="nav-link" data-scroll-target="#参考文献">参考文献</a></li>
-  <li><a href="#練習問題" id="toc-練習問題" class="nav-link" data-scroll-target="#練習問題"><span class="header-section-number">1.2</span> 練習問題</a></li>
   </ul>
 </nav>
     </div>
@@ -598,7 +598,9 @@ SES well mild modelrate impared
 10.01629 10.01629 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrinkage Estimation</span></span>
-<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab_merge, <span class="at">weighting=</span><span class="st">"none"</span>, <span class="at">shrink=</span><span class="cn">TRUE</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab_merge) <span class="sc">*</span> <span class="fu">ncol</span>(tab_merge)) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab_merge, </span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">weighting =</span> <span class="st">"none"</span>, </span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">shrink=</span><span class="cn">TRUE</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab_merge) <span class="sc">*</span> <span class="fu">ncol</span>(tab_merge)) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       1        2 
 20.03259 20.03259 </code></pre>
@@ -618,17 +620,34 @@ SES well mild modelrate impared
 1.695377 1.695377 </code></pre>
 </div>
 </div>
+<p>ただし周辺重み付けをすれば値は異なる場合もある．</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># intrinsic association coefficient</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab, <span class="at">weighting =</span> <span class="st">"marginal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1773414</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab10, <span class="at">weighting =</span> <span class="st">"marginal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1182336</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean absolute odds ratio</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab, <span class="at">weighting =</span> <span class="st">"marginal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.577478</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab10, <span class="at">weighting =</span> <span class="st">"marginal"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.636068</code></pre>
+</div>
+</div>
+</section>
+<section id="練習問題" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="練習問題">練習問題</h2>
+<p><code>occupationalStatus</code></p>
 </section>
 <section id="参考文献" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="参考文献">参考文献</h2>
-</section>
-<section id="練習問題" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="練習問題"><span class="header-section-number">1.2</span> 練習問題</h2>
-<ul>
-<li>問題2.1 問題</li>
-<li>問題2.1.1：<span class="citation" data-cites="goodman1979a">Goodman (<a href="#ref-goodman1979a" role="doc-biblioref">1979</a>)</span> の表5Bの分析（全体効果の分解）を再現する．表5Bではまずモデル (1) と (2) の比較から一般的な効果（General Effect）を求めている．次に，モデル (2) と (5) の比較から，行・列効果を求めている． 他の効果はモデル (5) で示され，全体効果はモデル (1) となる．</li>
-<li>問題2.1.1：<span class="citation" data-cites="goodman1979a">Goodman (<a href="#ref-goodman1979a" role="doc-biblioref">1979</a>)</span> の表5Cの分析（行と列効果の分割）を再現する．モデル (2) と (3) から行効果が，さらにモデル (3) と (5) から行効果が，そして，モデル (2) と (5) から行・列効果の要素を取り出すことができる．</li>
-</ul>
 
 
 <!-- -->
@@ -636,9 +655,6 @@ SES well mild modelrate impared
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-bouchet-valat2022" class="csl-entry" role="listitem">
 Bouchet-Valat, Milan. 2022. <span>“General <span class="nocase">Marginal-free Association Indices</span> for <span>Contingency Tables</span>: <span>From</span> the <span>Altham Index</span> to the <span>Intrinsic Association Coefficient</span>.”</span> <em>Sociological Methods &amp; Research</em> 51 (1): 203–36. <a href="https://doi.org/10.1177/0049124119852389">https://doi.org/10.1177/0049124119852389</a>.
-</div>
-<div id="ref-goodman1979a" class="csl-entry" role="listitem">
-Goodman, Leo A. 1979. <span>“Simple <span>Models</span> for the <span>Analysis</span> of <span>Association</span> in <span>Cross-Classifications</span> Having <span>Ordered Categories</span>.”</span> <em>Journal of the American Statistical Association</em> 74 (367): 537–52.
 </div>
 <div id="ref-zhou2015" class="csl-entry" role="listitem">
 Zhou, Xiang. 2015. <span>“Shrinkage <span>Estimation</span> of <span class="nocase">Log-odds Ratios</span> for <span>Comparing Mobility Tables</span>.”</span> <em>Sociological Methodology</em> 45 (1): 320–56. <a href="https://doi.org/10.1177/0081175015570097">https://doi.org/10.1177/0081175015570097</a>.
@@ -957,157 +973,171 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb81" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># 第1章</span></span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>本章ですこし触れられてる連関の尺度のいくつかは<span class="in">`DescTools`</span>パッケージの<span class="in">`Assocs`</span>で求めることができる．</span>
-<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>「シリーズ編者による内容紹介」の精神的健康と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）を用いて分析する．</span>
-<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 元データの入力（xページ）</span></span>
-<span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a>Freq <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">64</span>,  <span class="dv">94</span>, <span class="dv">58</span>, <span class="dv">46</span>,</span>
-<span id="cb81-11"><a href="#cb81-11" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>,  <span class="dv">94</span>, <span class="dv">54</span>, <span class="dv">40</span>,</span>
-<span id="cb81-12"><a href="#cb81-12" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>, <span class="dv">105</span>, <span class="dv">65</span>, <span class="dv">60</span>,</span>
-<span id="cb81-13"><a href="#cb81-13" aria-hidden="true" tabindex="-1"></a>           <span class="dv">72</span>, <span class="dv">141</span>, <span class="dv">77</span>, <span class="dv">94</span>,</span>
-<span id="cb81-14"><a href="#cb81-14" aria-hidden="true" tabindex="-1"></a>           <span class="dv">36</span>,  <span class="dv">97</span>, <span class="dv">54</span>, <span class="dv">78</span>,</span>
-<span id="cb81-15"><a href="#cb81-15" aria-hidden="true" tabindex="-1"></a>           <span class="dv">21</span>,  <span class="dv">71</span>, <span class="dv">54</span>, <span class="dv">71</span>)</span>
-<span id="cb81-16"><a href="#cb81-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-17"><a href="#cb81-17" aria-hidden="true" tabindex="-1"></a><span class="co"># データを表形式に変換</span></span>
-<span id="cb81-18"><a href="#cb81-18" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb81-19"><a href="#cb81-19" aria-hidden="true" tabindex="-1"></a>  Freq,</span>
-<span id="cb81-20"><a href="#cb81-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">6</span>,</span>
-<span id="cb81-21"><a href="#cb81-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">4</span>,</span>
-<span id="cb81-22"><a href="#cb81-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb81-23"><a href="#cb81-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
-<span id="cb81-24"><a href="#cb81-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">SES =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>],</span>
-<span id="cb81-25"><a href="#cb81-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>,</span>
-<span id="cb81-26"><a href="#cb81-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mild"</span>,</span>
-<span id="cb81-27"><a href="#cb81-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">"modelrate"</span>,</span>
-<span id="cb81-28"><a href="#cb81-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">"impared"</span>)</span>
-<span id="cb81-29"><a href="#cb81-29" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb81-30"><a href="#cb81-30" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb81-31"><a href="#cb81-31" aria-hidden="true" tabindex="-1"></a>tab</span>
-<span id="cb81-32"><a href="#cb81-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-33"><a href="#cb81-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-34"><a href="#cb81-34" aria-hidden="true" tabindex="-1"></a><span class="in">`DescTools`</span>パッケージを用いる．</span>
-<span id="cb81-35"><a href="#cb81-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-38"><a href="#cb81-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-39"><a href="#cb81-39" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
-<span id="cb81-40"><a href="#cb81-40" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Desc</span>(tab)</span>
-<span id="cb81-41"><a href="#cb81-41" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Assocs</span>(tab)</span>
-<span id="cb81-42"><a href="#cb81-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-43"><a href="#cb81-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-44"><a href="#cb81-44" aria-hidden="true" tabindex="-1"></a>次のように個別に尺度を求めることもできる．</span>
-<span id="cb81-45"><a href="#cb81-45" aria-hidden="true" tabindex="-1"></a>詳しくは<span class="in">`?DescTools`</span>の<span class="in">`Statistics:`</span>を確認してほしい．</span>
-<span id="cb81-46"><a href="#cb81-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-49"><a href="#cb81-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-50"><a href="#cb81-50" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">CramerV</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb81-51"><a href="#cb81-51" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Lambda</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb81-52"><a href="#cb81-52" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalTau</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb81-53"><a href="#cb81-53" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">KendallTauB</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb81-54"><a href="#cb81-54" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">StuartTauC</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb81-55"><a href="#cb81-55" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalGamma</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb81-56"><a href="#cb81-56" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">SomersDelta</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb81-57"><a href="#cb81-57" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">UncertCoef</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
-<span id="cb81-58"><a href="#cb81-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-59"><a href="#cb81-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-60"><a href="#cb81-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-61"><a href="#cb81-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## クラメールのV</span></span>
-<span id="cb81-62"><a href="#cb81-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-63"><a href="#cb81-63" aria-hidden="true" tabindex="-1"></a>クラメールの$V$も連関の強さをみる指標であり，次のように定義される．</span>
-<span id="cb81-64"><a href="#cb81-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-65"><a href="#cb81-65" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
-<span id="cb81-66"><a href="#cb81-66" aria-hidden="true" tabindex="-1"></a>V = \sqrt{\frac{\chi^2/n}{{\rm min}(I-1,J-1)}}</span>
-<span id="cb81-67"><a href="#cb81-67" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
-<span id="cb81-68"><a href="#cb81-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-69"><a href="#cb81-69" aria-hidden="true" tabindex="-1"></a>${\rm min}(I-1,J-1)$は括弧内の最小の値であり，${\rm min}(I,J)-1$と考えても良い．</span>
-<span id="cb81-70"><a href="#cb81-70" aria-hidden="true" tabindex="-1"></a>値の取りうる範囲は$$0 \leq V \leq 1$$となり，値が大きいほど2つの変数の連関は強いといえる．</span>
-<span id="cb81-71"><a href="#cb81-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-72"><a href="#cb81-72" aria-hidden="true" tabindex="-1"></a>ではクラメールのVを自分で求めてみよう．<span class="in">`chisq.test(tab)$statistic`</span>でカイ2乗値を取り出すことができるが，</span>
-<span id="cb81-73"><a href="#cb81-73" aria-hidden="true" tabindex="-1"></a>名前がついているので<span class="in">`unname`</span>関数で取り除く．<span class="in">`as.numeric`</span>としても取り除くことができる．</span>
-<span id="cb81-74"><a href="#cb81-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-77"><a href="#cb81-77" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-78"><a href="#cb81-78" aria-hidden="true" tabindex="-1"></a>tab</span>
-<span id="cb81-79"><a href="#cb81-79" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tab)<span class="sc">$</span>statistic <span class="sc">|&gt;</span> <span class="fu">unname</span>()   <span class="co"># あるいはas.numeric()</span></span>
-<span id="cb81-80"><a href="#cb81-80" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(X2<span class="sc">/</span><span class="fu">sum</span>(tab)<span class="sc">/</span>(<span class="fu">min</span>(<span class="fu">dim</span>(tab)) <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb81-81"><a href="#cb81-81" aria-hidden="true" tabindex="-1"></a>V</span>
-<span id="cb81-82"><a href="#cb81-82" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-83"><a href="#cb81-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-84"><a href="#cb81-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-85"><a href="#cb81-85" aria-hidden="true" tabindex="-1"></a><span class="in">`tab`</span>の2行目を10倍，1列目を10倍したデータを考える．これを<span class="in">`tab10`</span>とする．</span>
-<span id="cb81-86"><a href="#cb81-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-89"><a href="#cb81-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-90"><a href="#cb81-90" aria-hidden="true" tabindex="-1"></a>tab10 <span class="ot">&lt;-</span> tab</span>
-<span id="cb81-91"><a href="#cb81-91" aria-hidden="true" tabindex="-1"></a>tab10[,<span class="dv">1</span>] <span class="ot">&lt;-</span> tab10[,<span class="dv">1</span>]<span class="sc">*</span><span class="dv">10</span></span>
-<span id="cb81-92"><a href="#cb81-92" aria-hidden="true" tabindex="-1"></a>tab10[<span class="dv">2</span>,] <span class="ot">&lt;-</span> tab10[<span class="dv">2</span>,]<span class="sc">*</span><span class="dv">10</span></span>
-<span id="cb81-93"><a href="#cb81-93" aria-hidden="true" tabindex="-1"></a>tab</span>
-<span id="cb81-94"><a href="#cb81-94" aria-hidden="true" tabindex="-1"></a>tab10</span>
-<span id="cb81-95"><a href="#cb81-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-96"><a href="#cb81-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-97"><a href="#cb81-97" aria-hidden="true" tabindex="-1"></a>この2つの表について先程の連関係数の値を確認すると，すべての係数について表によって値が異なる．</span>
-<span id="cb81-98"><a href="#cb81-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-101"><a href="#cb81-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-102"><a href="#cb81-102" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">CramerV</span>(tab)</span>
-<span id="cb81-103"><a href="#cb81-103" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">CramerV</span>(tab10)</span>
-<span id="cb81-104"><a href="#cb81-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-105"><a href="#cb81-105" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalTau</span>(tab)</span>
-<span id="cb81-106"><a href="#cb81-106" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalTau</span>(tab10)</span>
-<span id="cb81-107"><a href="#cb81-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-108"><a href="#cb81-108" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">KendallTauB</span>(tab)</span>
-<span id="cb81-109"><a href="#cb81-109" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">KendallTauB</span>(tab10)</span>
-<span id="cb81-110"><a href="#cb81-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-111"><a href="#cb81-111" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">StuartTauC</span>(tab)</span>
-<span id="cb81-112"><a href="#cb81-112" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">StuartTauC</span>(tab10)</span>
-<span id="cb81-113"><a href="#cb81-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-114"><a href="#cb81-114" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalGamma</span>(tab)</span>
-<span id="cb81-115"><a href="#cb81-115" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalGamma</span>(tab10)</span>
-<span id="cb81-116"><a href="#cb81-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-117"><a href="#cb81-117" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">SomersDelta</span>(tab)</span>
-<span id="cb81-118"><a href="#cb81-118" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">SomersDelta</span>(tab10)</span>
-<span id="cb81-119"><a href="#cb81-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-120"><a href="#cb81-120" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">UncertCoef</span>(tab)</span>
-<span id="cb81-121"><a href="#cb81-121" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">UncertCoef</span>(tab10)</span>
-<span id="cb81-122"><a href="#cb81-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-123"><a href="#cb81-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-124"><a href="#cb81-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-125"><a href="#cb81-125" aria-hidden="true" tabindex="-1"></a>オッズ比に基づく尺度では表によって値は異ならない．</span>
-<span id="cb81-126"><a href="#cb81-126" aria-hidden="true" tabindex="-1"></a>@bouchet-valat2022 や @zhou2015 を参照．</span>
-<span id="cb81-127"><a href="#cb81-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-130"><a href="#cb81-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb81-131"><a href="#cb81-131" aria-hidden="true" tabindex="-1"></a><span class="co"># 2つの表をマージしたデータも作成</span></span>
-<span id="cb81-132"><a href="#cb81-132" aria-hidden="true" tabindex="-1"></a>tab_merge <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(<span class="fu">data.frame</span>(<span class="fu">as.table</span>(tab)),</span>
-<span id="cb81-133"><a href="#cb81-133" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">data.frame</span>(<span class="fu">as.table</span>(tab10)),</span>
-<span id="cb81-134"><a href="#cb81-134" aria-hidden="true" tabindex="-1"></a>         <span class="at">.id =</span> <span class="st">"Tab"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb81-135"><a href="#cb81-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xtabs</span>(Freq <span class="sc">~</span> SES <span class="sc">+</span> MHS <span class="sc">+</span> Tab, <span class="at">data =</span> _)</span>
-<span id="cb81-136"><a href="#cb81-136" aria-hidden="true" tabindex="-1"></a>tab_merge</span>
-<span id="cb81-137"><a href="#cb81-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-138"><a href="#cb81-138" aria-hidden="true" tabindex="-1"></a><span class="co"># intrinsic association coefficient</span></span>
-<span id="cb81-139"><a href="#cb81-139" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab, <span class="at">weighting =</span> <span class="st">"none"</span>)</span>
-<span id="cb81-140"><a href="#cb81-140" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab10, <span class="at">weighting =</span> <span class="st">"none"</span>)</span>
-<span id="cb81-141"><a href="#cb81-141" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab_merge, <span class="at">weighting =</span> <span class="st">"none"</span>)</span>
-<span id="cb81-142"><a href="#cb81-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-143"><a href="#cb81-143" aria-hidden="true" tabindex="-1"></a><span class="co"># Altham index</span></span>
-<span id="cb81-144"><a href="#cb81-144" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab, <span class="at">weighting =</span> <span class="st">"none"</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab) <span class="sc">*</span> <span class="fu">ncol</span>(tab)) <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb81-145"><a href="#cb81-145" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab10, <span class="at">weighting =</span> <span class="st">"none"</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab) <span class="sc">*</span> <span class="fu">ncol</span>(tab)) <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb81-146"><a href="#cb81-146" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab_merge, <span class="at">weighting =</span> <span class="st">"none"</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab) <span class="sc">*</span> <span class="fu">ncol</span>(tab)) <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb81-147"><a href="#cb81-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-148"><a href="#cb81-148" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrinkage Estimation</span></span>
-<span id="cb81-149"><a href="#cb81-149" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab_merge, <span class="at">weighting=</span><span class="st">"none"</span>, <span class="at">shrink=</span><span class="cn">TRUE</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab_merge) <span class="sc">*</span> <span class="fu">ncol</span>(tab_merge)) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">2</span></span>
-<span id="cb81-150"><a href="#cb81-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-151"><a href="#cb81-151" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean absolute odds ratio</span></span>
-<span id="cb81-152"><a href="#cb81-152" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab, <span class="at">weighting =</span> <span class="st">"uniform"</span>)</span>
-<span id="cb81-153"><a href="#cb81-153" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab10, <span class="at">weighting =</span> <span class="st">"uniform"</span>)</span>
-<span id="cb81-154"><a href="#cb81-154" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab_merge, <span class="at">weighting =</span> <span class="st">"uniform"</span>)</span>
-<span id="cb81-155"><a href="#cb81-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb81-156"><a href="#cb81-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-157"><a href="#cb81-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-158"><a href="#cb81-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献 {-}</span></span>
-<span id="cb81-159"><a href="#cb81-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-160"><a href="#cb81-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-161"><a href="#cb81-161" aria-hidden="true" tabindex="-1"></a><span class="fu">## 練習問題</span></span>
-<span id="cb81-162"><a href="#cb81-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb81-163"><a href="#cb81-163" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>問題2.1 問題</span>
-<span id="cb81-164"><a href="#cb81-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>問題2.1.1：@goodman1979a の表5Bの分析（全体効果の分解）を再現する．表5Bではまずモデル (1) と (2) の比較から一般的な効果（General Effect）を求めている．次に，モデル (2) と (5) の比較から，行・列効果を求めている． 他の効果はモデル (5) で示され，全体効果はモデル (1) となる．</span>
-<span id="cb81-165"><a href="#cb81-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>問題2.1.1：@goodman1979a の表5Cの分析（行と列効果の分割）を再現する．モデル  (2) と (3) から行効果が，さらにモデル (3) と (5) から行効果が，そして，モデル (2) と (5) から行・列効果の要素を取り出すことができる．</span>
+<div class="sourceCode" id="cb89" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># 第1章</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>本章ですこし触れられてる連関の尺度のいくつかは<span class="in">`DescTools`</span>パッケージの<span class="in">`Assocs`</span>で求めることができる．</span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>「シリーズ編者による内容紹介」の精神的健康と親の社会経済的地位（SES）に関するミッドタウン・マンハッタンデータ（the Midtown Manhattan data）を用いて分析する．</span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-8"><a href="#cb89-8" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb89-9"><a href="#cb89-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 元データの入力（xページ）</span></span>
+<span id="cb89-10"><a href="#cb89-10" aria-hidden="true" tabindex="-1"></a>Freq <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">64</span>,  <span class="dv">94</span>, <span class="dv">58</span>, <span class="dv">46</span>,</span>
+<span id="cb89-11"><a href="#cb89-11" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>,  <span class="dv">94</span>, <span class="dv">54</span>, <span class="dv">40</span>,</span>
+<span id="cb89-12"><a href="#cb89-12" aria-hidden="true" tabindex="-1"></a>           <span class="dv">57</span>, <span class="dv">105</span>, <span class="dv">65</span>, <span class="dv">60</span>,</span>
+<span id="cb89-13"><a href="#cb89-13" aria-hidden="true" tabindex="-1"></a>           <span class="dv">72</span>, <span class="dv">141</span>, <span class="dv">77</span>, <span class="dv">94</span>,</span>
+<span id="cb89-14"><a href="#cb89-14" aria-hidden="true" tabindex="-1"></a>           <span class="dv">36</span>,  <span class="dv">97</span>, <span class="dv">54</span>, <span class="dv">78</span>,</span>
+<span id="cb89-15"><a href="#cb89-15" aria-hidden="true" tabindex="-1"></a>           <span class="dv">21</span>,  <span class="dv">71</span>, <span class="dv">54</span>, <span class="dv">71</span>)</span>
+<span id="cb89-16"><a href="#cb89-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-17"><a href="#cb89-17" aria-hidden="true" tabindex="-1"></a><span class="co"># データを表形式に変換</span></span>
+<span id="cb89-18"><a href="#cb89-18" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb89-19"><a href="#cb89-19" aria-hidden="true" tabindex="-1"></a>  Freq,</span>
+<span id="cb89-20"><a href="#cb89-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">6</span>,</span>
+<span id="cb89-21"><a href="#cb89-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">4</span>,</span>
+<span id="cb89-22"><a href="#cb89-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb89-23"><a href="#cb89-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb89-24"><a href="#cb89-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">SES =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>],</span>
+<span id="cb89-25"><a href="#cb89-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>,</span>
+<span id="cb89-26"><a href="#cb89-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mild"</span>,</span>
+<span id="cb89-27"><a href="#cb89-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">"modelrate"</span>,</span>
+<span id="cb89-28"><a href="#cb89-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">"impared"</span>)</span>
+<span id="cb89-29"><a href="#cb89-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb89-30"><a href="#cb89-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb89-31"><a href="#cb89-31" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb89-32"><a href="#cb89-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb89-33"><a href="#cb89-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-34"><a href="#cb89-34" aria-hidden="true" tabindex="-1"></a><span class="in">`DescTools`</span>パッケージを用いる．</span>
+<span id="cb89-35"><a href="#cb89-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-38"><a href="#cb89-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb89-39"><a href="#cb89-39" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescTools)</span>
+<span id="cb89-40"><a href="#cb89-40" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Desc</span>(tab)</span>
+<span id="cb89-41"><a href="#cb89-41" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Assocs</span>(tab)</span>
+<span id="cb89-42"><a href="#cb89-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb89-43"><a href="#cb89-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-44"><a href="#cb89-44" aria-hidden="true" tabindex="-1"></a>次のように個別に尺度を求めることもできる．</span>
+<span id="cb89-45"><a href="#cb89-45" aria-hidden="true" tabindex="-1"></a>詳しくは<span class="in">`?DescTools`</span>の<span class="in">`Statistics:`</span>を確認してほしい．</span>
+<span id="cb89-46"><a href="#cb89-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-49"><a href="#cb89-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb89-50"><a href="#cb89-50" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">CramerV</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-51"><a href="#cb89-51" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">Lambda</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-52"><a href="#cb89-52" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalTau</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-53"><a href="#cb89-53" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">KendallTauB</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-54"><a href="#cb89-54" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">StuartTauC</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-55"><a href="#cb89-55" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalGamma</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-56"><a href="#cb89-56" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">SomersDelta</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-57"><a href="#cb89-57" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">UncertCoef</span>(tab, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb89-58"><a href="#cb89-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb89-59"><a href="#cb89-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-60"><a href="#cb89-60" aria-hidden="true" tabindex="-1"></a><span class="fu">## クラメールのV</span></span>
+<span id="cb89-61"><a href="#cb89-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-62"><a href="#cb89-62" aria-hidden="true" tabindex="-1"></a>クラメールの$V$も連関の強さをみる指標であり，次のように定義される．</span>
+<span id="cb89-63"><a href="#cb89-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-64"><a href="#cb89-64" aria-hidden="true" tabindex="-1"></a>\begin{equation}</span>
+<span id="cb89-65"><a href="#cb89-65" aria-hidden="true" tabindex="-1"></a>V = \sqrt{\frac{\chi^2/n}{{\rm min}(I-1,J-1)}}</span>
+<span id="cb89-66"><a href="#cb89-66" aria-hidden="true" tabindex="-1"></a>\end{equation}</span>
+<span id="cb89-67"><a href="#cb89-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-68"><a href="#cb89-68" aria-hidden="true" tabindex="-1"></a>${\rm min}(I-1,J-1)$は括弧内の最小の値であり，${\rm min}(I,J)-1$と考えても良い．</span>
+<span id="cb89-69"><a href="#cb89-69" aria-hidden="true" tabindex="-1"></a>値の取りうる範囲は$$0 \leq V \leq 1$$となり，値が大きいほど2つの変数の連関は強いといえる．</span>
+<span id="cb89-70"><a href="#cb89-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-71"><a href="#cb89-71" aria-hidden="true" tabindex="-1"></a>ではクラメールのVを自分で求めてみよう．<span class="in">`chisq.test(tab)$statistic`</span>でカイ2乗値を取り出すことができるが，</span>
+<span id="cb89-72"><a href="#cb89-72" aria-hidden="true" tabindex="-1"></a>名前がついているので<span class="in">`unname`</span>関数で取り除く．<span class="in">`as.numeric`</span>としても取り除くことができる．</span>
+<span id="cb89-73"><a href="#cb89-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-76"><a href="#cb89-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb89-77"><a href="#cb89-77" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb89-78"><a href="#cb89-78" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(tab)<span class="sc">$</span>statistic <span class="sc">|&gt;</span> <span class="fu">unname</span>()   <span class="co"># あるいはas.numeric()</span></span>
+<span id="cb89-79"><a href="#cb89-79" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(X2<span class="sc">/</span><span class="fu">sum</span>(tab)<span class="sc">/</span>(<span class="fu">min</span>(<span class="fu">dim</span>(tab)) <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb89-80"><a href="#cb89-80" aria-hidden="true" tabindex="-1"></a>V</span>
+<span id="cb89-81"><a href="#cb89-81" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb89-82"><a href="#cb89-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-83"><a href="#cb89-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-84"><a href="#cb89-84" aria-hidden="true" tabindex="-1"></a><span class="in">`tab`</span>の2行目を10倍，1列目を10倍したデータを考える．これを<span class="in">`tab10`</span>とする．</span>
+<span id="cb89-85"><a href="#cb89-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-88"><a href="#cb89-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb89-89"><a href="#cb89-89" aria-hidden="true" tabindex="-1"></a>tab10 <span class="ot">&lt;-</span> tab</span>
+<span id="cb89-90"><a href="#cb89-90" aria-hidden="true" tabindex="-1"></a>tab10[,<span class="dv">1</span>] <span class="ot">&lt;-</span> tab10[,<span class="dv">1</span>]<span class="sc">*</span><span class="dv">10</span></span>
+<span id="cb89-91"><a href="#cb89-91" aria-hidden="true" tabindex="-1"></a>tab10[<span class="dv">2</span>,] <span class="ot">&lt;-</span> tab10[<span class="dv">2</span>,]<span class="sc">*</span><span class="dv">10</span></span>
+<span id="cb89-92"><a href="#cb89-92" aria-hidden="true" tabindex="-1"></a>tab</span>
+<span id="cb89-93"><a href="#cb89-93" aria-hidden="true" tabindex="-1"></a>tab10</span>
+<span id="cb89-94"><a href="#cb89-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb89-95"><a href="#cb89-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-96"><a href="#cb89-96" aria-hidden="true" tabindex="-1"></a>この2つの表について先程の連関係数の値を確認すると，すべての係数について表によって値が異なる．</span>
+<span id="cb89-97"><a href="#cb89-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-100"><a href="#cb89-100" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb89-101"><a href="#cb89-101" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">CramerV</span>(tab)</span>
+<span id="cb89-102"><a href="#cb89-102" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">CramerV</span>(tab10)</span>
+<span id="cb89-103"><a href="#cb89-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-104"><a href="#cb89-104" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalTau</span>(tab)</span>
+<span id="cb89-105"><a href="#cb89-105" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalTau</span>(tab10)</span>
+<span id="cb89-106"><a href="#cb89-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-107"><a href="#cb89-107" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">KendallTauB</span>(tab)</span>
+<span id="cb89-108"><a href="#cb89-108" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">KendallTauB</span>(tab10)</span>
+<span id="cb89-109"><a href="#cb89-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-110"><a href="#cb89-110" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">StuartTauC</span>(tab)</span>
+<span id="cb89-111"><a href="#cb89-111" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">StuartTauC</span>(tab10)</span>
+<span id="cb89-112"><a href="#cb89-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-113"><a href="#cb89-113" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalGamma</span>(tab)</span>
+<span id="cb89-114"><a href="#cb89-114" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">GoodmanKruskalGamma</span>(tab10)</span>
+<span id="cb89-115"><a href="#cb89-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-116"><a href="#cb89-116" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">SomersDelta</span>(tab)</span>
+<span id="cb89-117"><a href="#cb89-117" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">SomersDelta</span>(tab10)</span>
+<span id="cb89-118"><a href="#cb89-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-119"><a href="#cb89-119" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">UncertCoef</span>(tab)</span>
+<span id="cb89-120"><a href="#cb89-120" aria-hidden="true" tabindex="-1"></a>DescTools<span class="sc">::</span><span class="fu">UncertCoef</span>(tab10)</span>
+<span id="cb89-121"><a href="#cb89-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb89-122"><a href="#cb89-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-123"><a href="#cb89-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-124"><a href="#cb89-124" aria-hidden="true" tabindex="-1"></a>オッズ比に基づく尺度では表によって値は異ならない．</span>
+<span id="cb89-125"><a href="#cb89-125" aria-hidden="true" tabindex="-1"></a>@bouchet-valat2022 や @zhou2015 を参照．</span>
+<span id="cb89-126"><a href="#cb89-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-129"><a href="#cb89-129" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb89-130"><a href="#cb89-130" aria-hidden="true" tabindex="-1"></a><span class="co"># 2つの表をマージしたデータも作成</span></span>
+<span id="cb89-131"><a href="#cb89-131" aria-hidden="true" tabindex="-1"></a>tab_merge <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(<span class="fu">data.frame</span>(<span class="fu">as.table</span>(tab)),</span>
+<span id="cb89-132"><a href="#cb89-132" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">data.frame</span>(<span class="fu">as.table</span>(tab10)),</span>
+<span id="cb89-133"><a href="#cb89-133" aria-hidden="true" tabindex="-1"></a>         <span class="at">.id =</span> <span class="st">"Tab"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb89-134"><a href="#cb89-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xtabs</span>(Freq <span class="sc">~</span> SES <span class="sc">+</span> MHS <span class="sc">+</span> Tab, <span class="at">data =</span> _)</span>
+<span id="cb89-135"><a href="#cb89-135" aria-hidden="true" tabindex="-1"></a>tab_merge</span>
+<span id="cb89-136"><a href="#cb89-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-137"><a href="#cb89-137" aria-hidden="true" tabindex="-1"></a><span class="co"># intrinsic association coefficient</span></span>
+<span id="cb89-138"><a href="#cb89-138" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab, <span class="at">weighting =</span> <span class="st">"none"</span>)</span>
+<span id="cb89-139"><a href="#cb89-139" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab10, <span class="at">weighting =</span> <span class="st">"none"</span>)</span>
+<span id="cb89-140"><a href="#cb89-140" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab_merge, <span class="at">weighting =</span> <span class="st">"none"</span>)</span>
+<span id="cb89-141"><a href="#cb89-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-142"><a href="#cb89-142" aria-hidden="true" tabindex="-1"></a><span class="co"># Altham index</span></span>
+<span id="cb89-143"><a href="#cb89-143" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab, <span class="at">weighting =</span> <span class="st">"none"</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab) <span class="sc">*</span> <span class="fu">ncol</span>(tab)) <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb89-144"><a href="#cb89-144" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab10, <span class="at">weighting =</span> <span class="st">"none"</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab) <span class="sc">*</span> <span class="fu">ncol</span>(tab)) <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb89-145"><a href="#cb89-145" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab_merge, <span class="at">weighting =</span> <span class="st">"none"</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab) <span class="sc">*</span> <span class="fu">ncol</span>(tab)) <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb89-146"><a href="#cb89-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-147"><a href="#cb89-147" aria-hidden="true" tabindex="-1"></a><span class="co"># Shrinkage Estimation</span></span>
+<span id="cb89-148"><a href="#cb89-148" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab_merge, </span>
+<span id="cb89-149"><a href="#cb89-149" aria-hidden="true" tabindex="-1"></a>             <span class="at">weighting =</span> <span class="st">"none"</span>, </span>
+<span id="cb89-150"><a href="#cb89-150" aria-hidden="true" tabindex="-1"></a>             <span class="at">shrink=</span><span class="cn">TRUE</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fu">nrow</span>(tab_merge) <span class="sc">*</span> <span class="fu">ncol</span>(tab_merge)) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb89-151"><a href="#cb89-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-152"><a href="#cb89-152" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean absolute odds ratio</span></span>
+<span id="cb89-153"><a href="#cb89-153" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab, <span class="at">weighting =</span> <span class="st">"uniform"</span>)</span>
+<span id="cb89-154"><a href="#cb89-154" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab10, <span class="at">weighting =</span> <span class="st">"uniform"</span>)</span>
+<span id="cb89-155"><a href="#cb89-155" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab_merge, <span class="at">weighting =</span> <span class="st">"uniform"</span>)</span>
+<span id="cb89-156"><a href="#cb89-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb89-157"><a href="#cb89-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-158"><a href="#cb89-158" aria-hidden="true" tabindex="-1"></a>ただし周辺重み付けをすれば値は異なる場合もある．</span>
+<span id="cb89-159"><a href="#cb89-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-162"><a href="#cb89-162" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb89-163"><a href="#cb89-163" aria-hidden="true" tabindex="-1"></a><span class="co"># intrinsic association coefficient</span></span>
+<span id="cb89-164"><a href="#cb89-164" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab, <span class="at">weighting =</span> <span class="st">"marginal"</span>)</span>
+<span id="cb89-165"><a href="#cb89-165" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">iac</span>(tab10, <span class="at">weighting =</span> <span class="st">"marginal"</span>)</span>
+<span id="cb89-166"><a href="#cb89-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-167"><a href="#cb89-167" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean absolute odds ratio</span></span>
+<span id="cb89-168"><a href="#cb89-168" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab, <span class="at">weighting =</span> <span class="st">"marginal"</span>)</span>
+<span id="cb89-169"><a href="#cb89-169" aria-hidden="true" tabindex="-1"></a>logmult<span class="sc">::</span><span class="fu">maor</span>(tab10, <span class="at">weighting =</span> <span class="st">"marginal"</span>)</span>
+<span id="cb89-170"><a href="#cb89-170" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb89-171"><a href="#cb89-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-172"><a href="#cb89-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-173"><a href="#cb89-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## 練習問題 {-}</span></span>
+<span id="cb89-174"><a href="#cb89-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-175"><a href="#cb89-175" aria-hidden="true" tabindex="-1"></a><span class="in">`occupationalStatus`</span></span>
+<span id="cb89-176"><a href="#cb89-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-177"><a href="#cb89-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-178"><a href="#cb89-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献 {-}</span></span>
+<span id="cb89-179"><a href="#cb89-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-180"><a href="#cb89-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-181"><a href="#cb89-181" aria-hidden="true" tabindex="-1"></a></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
