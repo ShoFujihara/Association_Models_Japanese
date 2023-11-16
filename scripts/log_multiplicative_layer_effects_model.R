@@ -3,7 +3,6 @@
 
 # packages
 library(tidyverse)
-library(magrittr)
 library(gnm)
 
 # Data
@@ -37,7 +36,7 @@ df$D <- as.factor(df$D)
 df$C <- as.factor(df$C)
 
 # Diagonal parameters
-df %<>% mutate(Diag = ifelse(O == D, O, 0) %>% factor())
+df <- df |> mutate(Diag = ifelse(O == D, O, 0) %>% factor())
 
 # Row and column scores
 df$U <- as.numeric(df$O)

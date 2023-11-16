@@ -234,6 +234,8 @@ div.csl-indent {
    
   <ul>
   <li><a href="#duncan-1979" id="toc-duncan-1979" class="nav-link active" data-scroll-target="#duncan-1979">Duncan (1979)</a></li>
+  <li><a href="#yamaguchi-1987" id="toc-yamaguchi-1987" class="nav-link" data-scroll-target="#yamaguchi-1987">Yamaguchi (1987)</a></li>
+  <li><a href="#xie-1992" id="toc-xie-1992" class="nav-link" data-scroll-target="#xie-1992">Xie (1992)</a></li>
   <li><a href="#参考文献" id="toc-参考文献" class="nav-link" data-scroll-target="#参考文献">参考文献</a></li>
   </ul>
 </nav>
@@ -258,9 +260,18 @@ div.csl-indent {
 
 </header>
 
+<p><a href="https://github.com/ShoFujihara/Association_Models_Japanese/tree/main/scripts">訳者のGitHubのスクリプトのフォルダ</a> にRのスクリプトファイルを保存しているのでそれも活用してください．</p>
 <section id="duncan-1979" class="level2">
 <h2 class="anchored" data-anchor-id="duncan-1979">Duncan (1979)</h2>
 <p><span class="citation" data-cites="duncan1979">Duncan (<a href="#ref-duncan1979" role="doc-biblioref">1979</a>)</span> の結果を再現する．</p>
+</section>
+<section id="yamaguchi-1987" class="level2">
+<h2 class="anchored" data-anchor-id="yamaguchi-1987">Yamaguchi (1987)</h2>
+<p><span class="citation" data-cites="yamaguchi1987">Yamaguchi (<a href="#ref-yamaguchi1987" role="doc-biblioref">1987</a>)</span> の結果を再現する．</p>
+</section>
+<section id="xie-1992" class="level2">
+<h2 class="anchored" data-anchor-id="xie-1992">Xie (1992)</h2>
+<p><span class="citation" data-cites="xie1992">Xie (<a href="#ref-xie1992" role="doc-biblioref">1992</a>)</span> の結果を再現する．</p>
 </section>
 <section id="参考文献" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="参考文献">参考文献</h2>
@@ -271,6 +282,12 @@ div.csl-indent {
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-duncan1979" class="csl-entry" role="listitem">
 Duncan, Otis Dudley. 1979. <span>“How <span>Destination Depends</span> on <span>Origin</span> in the <span>Occupational Mobility Table</span>.”</span> <em>The American Journal of Sociology</em> 84 (4): 793–803. <a href="https://www.jstor.org/stable/2778024">https://www.jstor.org/stable/2778024</a>.
+</div>
+<div id="ref-xie1992" class="csl-entry" role="listitem">
+Xie, Yu. 1992. <span>“The <span>Log-Multiplicative Layer Effect Model</span> for <span>Comparing Mobility Tables</span>.”</span> <em>American Sociological Review</em> 57 (3): 380–95. <a href="https://doi.org/10.2307/2096242">https://doi.org/10.2307/2096242</a>.
+</div>
+<div id="ref-yamaguchi1987" class="csl-entry" role="listitem">
+Yamaguchi, Kazuo. 1987. <span>“Models for <span>Comparing Mobility Tables</span>: <span>Toward Parsimony</span> and <span>Substance</span>.”</span> <em>American Sociological Review</em> 52 (4): 482–94. <a href="https://doi.org/10.2307/2095293">https://doi.org/10.2307/2095293</a>.
 </div>
 </div>
 </section>
@@ -586,16 +603,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># 先行研究の再現 {-}</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">訳者のGitHubのスクリプトのフォルダ</span><span class="co">](https://github.com/ShoFujihara/Association_Models_Japanese/tree/main/scripts)</span> にRのスクリプトファイルを保存しているのでそれも活用してください．</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Duncan (1979)</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>@duncan1979 の結果を再現する．</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>@duncan1979 の結果を再現する．</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## Yamaguchi (1987)</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献 {-}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>@yamaguchi1987 の結果を再現する．</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">## Xie (1992)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>@xie1992 の結果を再現する．</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献 {-}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

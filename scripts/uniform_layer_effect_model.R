@@ -4,7 +4,6 @@
 # packages
 library(tidyverse)
 library(MASS)
-library(magrittr)
 library(knitr)
 library(vcdExtra)
 library(car)
@@ -40,7 +39,7 @@ df$D <- as.factor(df$D)
 df$C <- as.factor(df$C)
 
 # Diagonal parameters
-df %<>% mutate(Diag = ifelse(O == D, O, 0) %>% factor())
+df <- df |> mutate(Diag = ifelse(O == D, O, 0) %>% factor())
 
 # Row and column scores
 df$U <- as.numeric(df$O)
@@ -169,3 +168,4 @@ fit_22 <- glm(Freq ~ O*C + D*C + Diag*C + O:D + U:V*C12, data = df, family = poi
 summary(fit_22)
 b_22 <- fit_22$coefficients[grep("U:V", names(fit_22$coefficients))]
 b_22
+

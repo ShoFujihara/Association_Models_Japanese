@@ -3,13 +3,21 @@
 # 先行研究の再現 {-}
 
 
-
+[訳者のGitHubのスクリプトのフォルダ](https://github.com/ShoFujihara/Association_Models_Japanese/tree/main/scripts) にRのスクリプトファイルを保存しているのでそれも活用してください．
 
 
 ## Duncan (1979)
 
-
 @duncan1979 の結果を再現する．
+
+## Yamaguchi (1987)
+
+@yamaguchi1987 の結果を再現する．
+
+## Xie (1992)
+
+@xie1992 の結果を再現する．
+
 
 
 
