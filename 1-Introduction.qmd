@@ -583,8 +583,92 @@ Friendly and Meyer (2016) を参考に表を作成．
 
 
 ## 練習問題 {-}
-- せっかくデータを入力したので，このデータを使って @goodman1979a の表5A，表5B，表5Cの結果を再現しよう．
-- 分析方法については第2章のプログラムを参考にしてほしい．
+
+**問題0.1** せっかくデータを入力したので，このデータを使って @goodman1979a の表5A，表5B，表5Cの結果を再現する．使用するデータは`mentalHealth`のデータである．`gnm`パッケージに含まれているので呼び出すこと．
+
+```{r}
+library(gnm)
+mentalHealth
+```
+
+
+- 問題0.1.1：`xtabs`を使用して，行を`SES`の列を`MHS`としたクロス表を作成せよ．`mentalHealth`では度数が`Freq`ではなく`count`という変数になっていることに注意せよ．
+
+```{r}
+#| echo: false
+xtabs(count ~ SES + MHS, data = mentalHealth)
+```
+
+- 問題0.1.2：行パーセントと列パーセントを求めよ．またモザイクプロットを作成せよ．これらの情報をもとに変数間やカテゴリ間にどのような関連があるのかを考察せよ．
+
+
+- 問題0.1.3：`mentalHealth`のデータに，`SES`のAからFを順に6から1となるような整数に変換した変数`U`を作成して加えよ．また`MHS`のwellからimpairedを順に4から1となるように変換した変数`V`を作成して加えよ．
+
+```{r}
+d_mentalHealth <- mentalHealth |> 
+  mutate(U = case_match(SES,
+                        "A" ~ 6,
+                        "B" ~ 5,
+                        "C" ~ 4,
+                        "D" ~ 3,
+                        "E" ~ 2,
+                        "F" ~ 1,
+                        .default = NA),
+         V = case_match(MHS,
+                        "well" ~ 4,
+                        "mild" ~ 3,
+                        "moderate" ~ 2,
+                        "impaired" ~ 1,
+                        .default = NA)) |> 
+  tibble()
+d_mentalHealth
+```
+
+
+
+- 問題0.1.3：@goodman1979a の表5Aの分析を再現する．表5Aのモデルは，
+   - (1) Null Association
+   - (2) Uniform Association
+   - (3) Row-Effect Association
+   - (4) Column-Effect Association
+   - (5) Row and Column Effects (I)
+   - (6) Row and Column Effects (II) 
+   
+   の6つである．(1) Null Association と (2) Uniform Association を`gnm`（あるいは`glm`）によって分析せよ．
+
+
+**問題0.2** `occupationalStatus`は父親と息子の職業の関連をみたクロス表であり，移動表とも呼ばれる．
+
+```{r}
+occupationalStatus
+```
+
+- 問題0.2.1：`data.frame`を使用して，度数，行変数，列変数からなる集計データを作成せよ．更にそれを`tibble()`形式に変換せよ（分析を行う上では必須ではない）．
+
+```{r}
+#| echo: false
+d_occupationalStatus <- data.frame(occupationalStatus)
+# data.frame形式
+d_occupationalStatus
+# tibble形式
+d_occupationalStatus |> tibble()
+```
+
+- 問題0.2.2：行パーセントと列パーセントを求めよ．またモザイクプロットを作成せよ．これらの情報をもとに変数間やカテゴリ間にどのような関連があるのかを考察せよ．
+
+- 問題0.2.3：問題0.2.1で作成したデータについて`gnm`を適用して(1) 独立モデルと (2) 一様連関モデルを用いた分析を行う．
+
+```{r}
+fit_O <- d_occupationalStatus |> 
+  gnm(Freq ~ origin + destination, data = _)
+fit_U <- d_occupationalStatus |> 
+  gnm(Freq ~ origin + destination, data = _)
+
+```
+
+
+
+
 
 ## 参考文献 {-}
 

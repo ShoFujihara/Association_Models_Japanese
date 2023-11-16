@@ -1048,3 +1048,17 @@ bind_rows(model.summary(model1, "Model 1"),
           model.summary(model15, "Model 15"))
 ```
 
+
+## 練習問題 {-}
+
+**問題3.1** @goodman1979a の表5A，表5B，表5Cの結果を再現しよう．使用するデータは`mentalHealth`のデータである．表5Aのモデルは，(1) Null Association，(2) Uniform Association，(3) Row-Effect Association，(4) Column-Effect Association，(5) Row and Column Effects (I)， (6) Row and Column Effects (II) の6つである．
+
+- 問題3.1.1：@goodman1979a の表5Bの分析（全体効果の分解）を再現する．表5Bではまずモデル (1) と (2) の比較から一般的な効果（General Effect）を求めている．次に，モデル (2) と (5) の比較から，行・列効果を求めている． 他の効果はモデル (5) で示され，全体効果はモデル (1) となる．
+- 問題3.1.2：@goodman1979a の表5Cの分析（行と列効果の分割）を再現する．モデル  (2) と (3) から行効果が，さらにモデル (3) と (5) から行効果が，そして，モデル (2) と (5) から行・列効果の要素を取り出すことができる．
+
+
+
+
+
+
+## 参考文献 {-}

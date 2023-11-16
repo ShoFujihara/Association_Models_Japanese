@@ -51,7 +51,6 @@ DescTools::SomersDelta(tab, conf.level = 0.95)
 DescTools::UncertCoef(tab, conf.level = 0.95)
 ```
 
-
 ## クラメールのV
 
 クラメールの$V$も連関の強さをみる指標であり，次のように定義される．
@@ -132,7 +131,9 @@ logmult::iac(tab10, weighting = "none") * sqrt(nrow(tab) * ncol(tab)) * 2
 logmult::iac(tab_merge, weighting = "none") * sqrt(nrow(tab) * ncol(tab)) * 2
 
 # Shrinkage Estimation
-logmult::iac(tab_merge, weighting="none", shrink=TRUE) * sqrt(nrow(tab_merge) * ncol(tab_merge)) * 2 * 2
+logmult::iac(tab_merge, 
+             weighting = "none", 
+             shrink=TRUE) * sqrt(nrow(tab_merge) * ncol(tab_merge)) * 2 * 2
 
 # Mean absolute odds ratio
 logmult::maor(tab, weighting = "uniform")
@@ -140,7 +141,26 @@ logmult::maor(tab10, weighting = "uniform")
 logmult::maor(tab_merge, weighting = "uniform")
 ```
 
+ただし周辺重み付けをすれば値は異なる場合もある．
+
+```{r}
+# intrinsic association coefficient
+logmult::iac(tab, weighting = "marginal")
+logmult::iac(tab10, weighting = "marginal")
+
+# Mean absolute odds ratio
+logmult::maor(tab, weighting = "marginal")
+logmult::maor(tab10, weighting = "marginal")
+```
+
+
+## 練習問題 {-}
+
+`occupationalStatus`
 
 
 ## 参考文献 {-}
+
+
+
 
