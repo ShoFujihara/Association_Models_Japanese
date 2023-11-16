@@ -18,6 +18,7 @@ book:
     - 8-DF.qmd
     - 9-Note.qmd
     - 10-R.qmd
+    - 11-Replication.qmd
 
 format:
   html:
@@ -29,7 +30,7 @@ format:
     code-block-border-left: "#0ABAB5"
     link-external-icon: true
 
-bibliography: "/Users/sf/Dropbox/Zjournal/JLPSJ.bib"
+bibliography: "/Users/sf/Dropbox/Zjournal/My Library.bib"
 
 crossref:
   fig-title: 図     # (default is "Figure")
