@@ -3,9 +3,7 @@
 
 ## 目的 {-}
 
-このページは
-
-共立出版の[「計量分析One Point」シリーズ](https://www.kyoritsu-pub.co.jp/series/100268/)のひとつとして出版された
+このページは共立出版の[「計量分析One Point」シリーズ](https://www.kyoritsu-pub.co.jp/series/100268/)のひとつとして出版された
 
 [Raymond Wong著・藤原翔訳．2023．『カテゴリカルデータの連関モデル』共立出版．](https://www.kyoritsu-pub.co.jp/book/b10039534.html)
 のためのサポートページです．
