@@ -218,6 +218,12 @@ div.csl-indent {
  <span class="menu-text">RとRStudioのインストールと基本的な操作方法</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11-Replication.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">先行研究の再現</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -416,8 +422,7 @@ div.csl-indent {
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.........................................................
-...
+Running main iterations.....................................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 7 - RC(1)+RL(1) 部分連関 (一貫した行スコア - polviews)</span></span>
@@ -433,7 +438,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations............................................
+Running main iterations...........................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 8 - RC(1)+RL(1) 部分連関 (一貫した行スコア - polviews)</span></span>
@@ -462,7 +467,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.....................................................
+Running main iterations...................................................
 Done</code></pre>
 </div>
 </div>
@@ -571,42 +576,42 @@ Mult(1, polviews, .).natfare3
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">estimate =</span> estimate,</span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">number =</span> <span class="fu">row_number</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                        var   estimate number
-(Intercept)                                     (Intercept)  0.4861315      1
-polviews2                                         polviews2  1.0932548      2
-polviews3                                         polviews3  1.0496702      3
-polviews4                                         polviews4  2.3644377      4
-polviews5                                         polviews5  1.3525753      5
-polviews6                                         polviews6  1.2797836      6
-polviews7                                         polviews7 -0.1024772      7
-fefam2                                               fefam2  0.9725186      8
-fefam3                                               fefam3  0.4170015      9
-fefam4                                               fefam4 -0.8937396     10
-natfare2                                           natfare2  0.3496155     11
-natfare3                                           natfare3  0.2872968     12
-Mult(., polviews, fefam).         Mult(., polviews, fefam). -0.1167216     13
-Mult(1, ., fefam).polviews1     Mult(1, ., fefam).polviews1 -0.7250328     14
-Mult(1, ., fefam).polviews2     Mult(1, ., fefam).polviews2 -2.0335218     15
-Mult(1, ., fefam).polviews3     Mult(1, ., fefam).polviews3 -1.5876309     16
-Mult(1, ., fefam).polviews4     Mult(1, ., fefam).polviews4  0.1367426     17
-Mult(1, ., fefam).polviews5     Mult(1, ., fefam).polviews5 -0.1066383     18
-Mult(1, ., fefam).polviews6     Mult(1, ., fefam).polviews6  2.2621806     19
-Mult(1, ., fefam).polviews7     Mult(1, ., fefam).polviews7  3.4540537     20
-Mult(1, polviews, .).fefam1     Mult(1, polviews, .).fefam1  2.2260156     21
-Mult(1, polviews, .).fefam2     Mult(1, polviews, .).fefam2  0.5104101     22
-Mult(1, polviews, .).fefam3     Mult(1, polviews, .).fefam3 -1.2539835     23
-Mult(1, polviews, .).fefam4     Mult(1, polviews, .).fefam4 -2.3295803     24
-Mult(., polviews, natfare).     Mult(., polviews, natfare). -0.4148027     25
-Mult(1, ., natfare).polviews1 Mult(1, ., natfare).polviews1 -4.9821491     26
-Mult(1, ., natfare).polviews2 Mult(1, ., natfare).polviews2 -2.3921708     27
-Mult(1, ., natfare).polviews3 Mult(1, ., natfare).polviews3 -1.4758934     28
-Mult(1, ., natfare).polviews4 Mult(1, ., natfare).polviews4  0.2693865     29
-Mult(1, ., natfare).polviews5 Mult(1, ., natfare).polviews5 -0.6322625     30
-Mult(1, ., natfare).polviews6 Mult(1, ., natfare).polviews6  3.7701669     31
-Mult(1, ., natfare).polviews7 Mult(1, ., natfare).polviews7  3.7864501     32
-Mult(1, polviews, .).natfare1 Mult(1, polviews, .).natfare1  0.3173691     33
-Mult(1, polviews, .).natfare2 Mult(1, polviews, .).natfare2  0.1059332     34
-Mult(1, polviews, .).natfare3 Mult(1, polviews, .).natfare3 -0.3498942     35</code></pre>
+<pre><code>                                                        var    estimate number
+(Intercept)                                     (Intercept)  0.48448576      1
+polviews2                                         polviews2  1.08330617      2
+polviews3                                         polviews3  1.03518606      3
+polviews4                                         polviews4  2.34033634      4
+polviews5                                         polviews5  1.33271867      5
+polviews6                                         polviews6  1.23788213      6
+polviews7                                         polviews7 -0.14578273      7
+fefam2                                               fefam2  0.98879928      8
+fefam3                                               fefam3  0.45002585      9
+fefam4                                               fefam4 -0.85050811     10
+natfare2                                           natfare2  0.35194103     11
+natfare3                                           natfare3  0.29463587     12
+Mult(., polviews, fefam).         Mult(., polviews, fefam). -0.14376662     13
+Mult(1, ., fefam).polviews1     Mult(1, ., fefam).polviews1 -1.84205742     14
+Mult(1, ., fefam).polviews2     Mult(1, ., fefam).polviews2 -4.83127537     15
+Mult(1, ., fefam).polviews3     Mult(1, ., fefam).polviews3 -3.81264625     16
+Mult(1, ., fefam).polviews4     Mult(1, ., fefam).polviews4  0.12665199     17
+Mult(1, ., fefam).polviews5     Mult(1, ., fefam).polviews5 -0.42934713     18
+Mult(1, ., fefam).polviews6     Mult(1, ., fefam).polviews6  4.98217425     19
+Mult(1, ., fefam).polviews7     Mult(1, ., fefam).polviews7  7.70498542     20
+Mult(1, polviews, .).fefam1     Mult(1, polviews, .).fefam1  0.78770099     21
+Mult(1, polviews, .).fefam2     Mult(1, polviews, .).fefam2  0.17799129     22
+Mult(1, polviews, .).fefam3     Mult(1, polviews, .).fefam3 -0.44905727     23
+Mult(1, polviews, .).fefam4     Mult(1, polviews, .).fefam4 -0.83131404     24
+Mult(., polviews, natfare).     Mult(., polviews, natfare).  2.54341902     25
+Mult(1, ., natfare).polviews1 Mult(1, ., natfare).polviews1  0.95518683     26
+Mult(1, ., natfare).polviews2 Mult(1, ., natfare).polviews2  0.46126014     27
+Mult(1, ., natfare).polviews3 Mult(1, ., natfare).polviews3  0.28651973     28
+Mult(1, ., natfare).polviews4 Mult(1, ., natfare).polviews4 -0.04631716     29
+Mult(1, ., natfare).polviews5 Mult(1, ., natfare).polviews5  0.12563351     30
+Mult(1, ., natfare).polviews6 Mult(1, ., natfare).polviews6 -0.71394007     31
+Mult(1, ., natfare).polviews7 Mult(1, ., natfare).polviews7 -0.71704539     32
+Mult(1, polviews, .).natfare1 Mult(1, polviews, .).natfare1  0.26232404     33
+Mult(1, polviews, .).natfare2 Mult(1, polviews, .).natfare2  0.08150836     34
+Mult(1, polviews, .).natfare3 Mult(1, polviews, .).natfare3 -0.30830583     35</code></pre>
 </div>
 </div>
 <p>各スコアの両端のカテゴリ，つまり上記推定値のリストの 14,20,21,24,26,32,33,35番目の8つの値についてスコアを求め，固定する．</p>
@@ -658,13 +663,13 @@ Mult(1, polviews, .).fefam4 -0.6104483 0.09158453
 
 $mu2
                                  Estimate Std. Error
-Mult(1, ., natfare).polviews1 -0.60584367 0.12394769
-Mult(1, ., natfare).polviews2 -0.27518966 0.11469790
-Mult(1, ., natfare).polviews3 -0.15821154 0.11316687
-Mult(1, ., natfare).polviews4  0.06460260 0.07187236
-Mult(1, ., natfare).polviews5 -0.05050796 0.10030828
-Mult(1, ., natfare).polviews6  0.51153570 0.10405220
-Mult(1, ., natfare).polviews7  0.51361453 0.12512860
+Mult(1, ., natfare).polviews1  0.60584367 0.12394769
+Mult(1, ., natfare).polviews2  0.27518966 0.11469790
+Mult(1, ., natfare).polviews3  0.15821154 0.11316687
+Mult(1, ., natfare).polviews4 -0.06460260 0.07187236
+Mult(1, ., natfare).polviews5  0.05050796 0.10030828
+Mult(1, ., natfare).polviews6 -0.51153570 0.10405220
+Mult(1, ., natfare).polviews7 -0.51361453 0.12512860
 
 $eta
                                 Estimate Std. Error
@@ -694,7 +699,7 @@ Mult(1, polviews, .).natfare3 -0.7762692 0.03533078</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-..............
+......................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>M6_SE_coef <span class="ot">&lt;-</span> <span class="fu">tidy</span>(M6_SE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -732,14 +737,14 @@ This warning is displayed once per session.</code></pre>
 22 Mult(1, polviews, .).fefam2     0.208      0.152    1.37    1.71e- 1
 23 Mult(1, polviews, .).fefam3    -0.300      0.185   -1.62    1.05e- 1
 24 Mult(1, polviews, .).fefam4    -0.610     NA       NA      NA       
-25 Mult(., polviews, natfare).    -1.57       0.405   -3.87    1.10e- 4
-26 Mult(1, ., natfare).polviews1  -0.606     NA       NA      NA       
-27 Mult(1, ., natfare).polviews2  -0.275      0.200   -1.38    1.68e- 1
-28 Mult(1, ., natfare).polviews3  -0.158      0.191   -0.828   4.08e- 1
-29 Mult(1, ., natfare).polviews4   0.0646     0.156    0.414   6.79e- 1
-30 Mult(1, ., natfare).polviews5  -0.0505     0.177   -0.286   7.75e- 1
-31 Mult(1, ., natfare).polviews6   0.512      0.211    2.43    1.53e- 2
-32 Mult(1, ., natfare).polviews7   0.514     NA       NA      NA       
+25 Mult(., polviews, natfare).     1.57       0.405    3.87    1.10e- 4
+26 Mult(1, ., natfare).polviews1   0.606     NA       NA      NA       
+27 Mult(1, ., natfare).polviews2   0.275      0.200    1.38    1.68e- 1
+28 Mult(1, ., natfare).polviews3   0.158      0.191    0.828   4.08e- 1
+29 Mult(1, ., natfare).polviews4  -0.0646     0.156   -0.414   6.79e- 1
+30 Mult(1, ., natfare).polviews5   0.0505     0.177    0.286   7.75e- 1
+31 Mult(1, ., natfare).polviews6  -0.512      0.211   -2.43    1.53e- 2
+32 Mult(1, ., natfare).polviews7  -0.514     NA       NA      NA       
 33 Mult(1, polviews, .).natfare1   0.607     NA       NA      NA       
 34 Mult(1, polviews, .).natfare2   0.169      0.175    0.967   3.34e- 1
 35 Mult(1, polviews, .).natfare3  -0.776     NA       NA      NA       </code></pre>
@@ -806,32 +811,32 @@ Mult(1, polviews, . + natfare).fefam4 Mult(1, polviews, . + natfare).fefam4
 Mult(1, polviews, fefam + .).natfare2 Mult(1, polviews, fefam + .).natfare2
 Mult(1, polviews, fefam + .).natfare3 Mult(1, polviews, fefam + .).natfare3
                                           estimate number
-(Intercept)                            0.567351504      1
-polviews2                              1.054001341      2
-polviews3                              0.981404139      3
-polviews4                              2.201417072      4
-polviews5                              1.213071084      5
-polviews6                              0.979390153      6
-polviews7                             -0.433775790      7
-fefam2                                 1.018431680      8
-fefam3                                 0.500001874      9
-fefam4                                -0.780805551     10
-natfare2                               0.361957352     11
-natfare3                               0.353145866     12
-Mult(., polviews, fefam + natfare).   -2.241938087     13
-Mult(1, ., fefam + natfare).polviews1  0.555536236     14
-Mult(1, ., fefam + natfare).polviews2  0.521734396     15
-Mult(1, ., fefam + natfare).polviews3  0.375942467     16
-Mult(1, ., fefam + natfare).polviews4  0.005971434     17
-Mult(1, ., fefam + natfare).polviews5  0.109598264     18
-Mult(1, ., fefam + natfare).polviews6 -0.576872610     19
-Mult(1, ., fefam + natfare).polviews7 -0.709917798     20
-Mult(1, polviews, . + natfare).fefam1 -0.688680675     21
-Mult(1, polviews, . + natfare).fefam2 -0.301447113     22
-Mult(1, polviews, . + natfare).fefam3  0.028598006     23
-Mult(1, polviews, . + natfare).fefam4  0.229896051     24
-Mult(1, polviews, fefam + .).natfare2  0.191440622     25
-Mult(1, polviews, fefam + .).natfare3  0.702392142     26</code></pre>
+(Intercept)                            0.605346711      1
+polviews2                              1.052645113      2
+polviews3                              0.974198318      3
+polviews4                              2.179366942      4
+polviews5                              1.195178762      5
+polviews6                              0.933954633      6
+polviews7                             -0.484549467      7
+fefam2                                 1.009365140      8
+fefam3                                 0.483207783      9
+fefam4                                -0.802312758     10
+natfare2                               0.357475034     11
+natfare3                               0.336700323     12
+Mult(., polviews, fefam + natfare).    3.911006485     13
+Mult(1, ., fefam + natfare).polviews1  0.665896101     14
+Mult(1, ., fefam + natfare).polviews2  0.624603106     15
+Mult(1, ., fefam + natfare).polviews3  0.446500801     16
+Mult(1, ., fefam + natfare).polviews4 -0.005463131     17
+Mult(1, ., fefam + natfare).polviews5  0.121129454     18
+Mult(1, ., fefam + natfare).polviews6 -0.717476945     19
+Mult(1, ., fefam + natfare).polviews7 -0.880007579     20
+Mult(1, polviews, . + natfare).fefam1  0.314761652     21
+Mult(1, polviews, . + natfare).fefam2  0.133054504     22
+Mult(1, polviews, . + natfare).fefam3 -0.021817293     23
+Mult(1, polviews, . + natfare).fefam4 -0.116275256     24
+Mult(1, polviews, fefam + .).natfare2 -0.089832424     25
+Mult(1, polviews, fefam + .).natfare3 -0.329593522     26</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mu[i], i = 1 to 7</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(<span class="at">model =</span> M7, </span>
@@ -892,15 +897,14 @@ Done</code></pre>
 <span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">tolerance =</span> <span class="fl">1e-12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
-Initial Deviance = 178.656975
+Initial Deviance = 177.137902
 Running start-up iterations
-Start-up iteration 1. Deviance = 77.036491
-Start-up iteration 2. Deviance = 73.163928
+Start-up iteration 1. Deviance = 74.458231
+Start-up iteration 2. Deviance = 72.909858
 Running main iterations
-Iteration 1. Deviance = 72.776320
+Iteration 1. Deviance = 72.773928
 Iteration 2. Deviance = 72.773834
 Iteration 3. Deviance = 72.773834
-Iteration 4. Deviance = 72.773834
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>M7_SE_coef <span class="ot">&lt;-</span> <span class="fu">tidy</span>(M7_SE)</span>
@@ -921,7 +925,7 @@ Done</code></pre>
 10 fefam4                         -0.864     0.150     -5.77   7.72e- 9
 11 natfare2                        0.345     0.0853     4.04   5.28e- 5
 12 natfare3                        0.290     0.0869     3.33   8.54e- 4
-13 Mult(., polviews, fefam).       1.95      0.374      5.21   1.92e- 7
+13 Mult(., polviews, fefam).      -1.95      0.374     -5.21   1.92e- 7
 14 Mult(1, ., fefam).polviews1     0.413    NA         NA     NA       
 15 Mult(1, ., fefam).polviews2     0.386    NA         NA     NA       
 16 Mult(1, ., fefam).polviews3     0.269    NA         NA     NA       
@@ -929,11 +933,11 @@ Done</code></pre>
 18 Mult(1, ., fefam).polviews5     0.0555   NA         NA     NA       
 19 Mult(1, ., fefam).polviews6    -0.494    NA         NA     NA       
 20 Mult(1, ., fefam).polviews7    -0.601    NA         NA     NA       
-21 Mult(1, polviews, .).fefam1     0.726    NA         NA     NA       
-22 Mult(1, polviews, .).fefam2     0.170     0.150      1.14   2.55e- 1
-23 Mult(1, polviews, .).fefam3    -0.304     0.189     -1.61   1.08e- 1
-24 Mult(1, polviews, .).fefam4    -0.593    NA         NA     NA       
-25 Mult(., polviews, natfare).    -1.44      0.226     -6.36   2.03e-10
+21 Mult(1, polviews, .).fefam1    -0.726    NA         NA     NA       
+22 Mult(1, polviews, .).fefam2    -0.170     0.150     -1.14   2.55e- 1
+23 Mult(1, polviews, .).fefam3     0.304     0.189      1.61   1.08e- 1
+24 Mult(1, polviews, .).fefam4     0.593    NA         NA     NA       
+25 Mult(., polviews, natfare).     1.44      0.226      6.36   2.03e-10
 26 Mult(1, ., natfare).polviews1   0.413    NA         NA     NA       
 27 Mult(1, ., natfare).polviews2   0.386    NA         NA     NA       
 28 Mult(1, ., natfare).polviews3   0.269    NA         NA     NA       
@@ -941,9 +945,9 @@ Done</code></pre>
 30 Mult(1, ., natfare).polviews5   0.0555   NA         NA     NA       
 31 Mult(1, ., natfare).polviews6  -0.494    NA         NA     NA       
 32 Mult(1, ., natfare).polviews7  -0.601    NA         NA     NA       
-33 Mult(1, polviews, .).natfare1  -0.580    NA         NA     NA       
-34 Mult(1, polviews, .).natfare2  -0.207     0.186     -1.12   2.64e- 1
-35 Mult(1, polviews, .).natfare3   0.788    NA         NA     NA       </code></pre>
+33 Mult(1, polviews, .).natfare1   0.580    NA         NA     NA       
+34 Mult(1, polviews, .).natfare2   0.207     0.186      1.12   2.64e- 1
+35 Mult(1, polviews, .).natfare3  -0.788    NA         NA     NA       </code></pre>
 </div>
 </div>
 <p>モデル8は<code>1,1,2,3,3,4,5</code>という制約があり，結局は<code>1,2,3,4,5</code>の5つのパラメータを推定することになる．しかし，あくまで<code>1,1,2,3,3,4,5</code>という7つのパラメータにウェイトをかける必要がある．そこで<code>c(2,1,2,1,1)/7</code>とすることで，等値制約をかけている部分は平均を2倍にし，<code>c(2,1,2,1,1)</code>とすることでウェイトも2倍にしている．</p>
@@ -1003,13 +1007,13 @@ Done</code></pre>
 <pre><code># A tibble: 35 × 5
    term        estimate std.error statistic   p.value
    &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
- 1 (Intercept)    0.491   NA          NA    NA       
+ 1 (Intercept)    0.503   NA          NA    NA       
  2 polviews2      1.05     0.184       5.70  1.20e- 8
- 3 polviews3      1.02    NA          NA    NA       
- 4 polviews4      2.33    NA          NA    NA       
- 5 polviews5      1.32    NA          NA    NA       
- 6 polviews6      1.26    NA          NA    NA       
- 7 polviews7     -0.116   NA          NA    NA       
+ 3 polviews3      1.01    NA          NA    NA       
+ 4 polviews4      2.32    NA          NA    NA       
+ 5 polviews5      1.31    NA          NA    NA       
+ 6 polviews6      1.23    NA          NA    NA       
+ 7 polviews7     -0.146   NA          NA    NA       
  8 fefam2         0.993    0.0956     10.4   2.62e-25
  9 fefam3         0.451    0.104       4.33  1.52e- 5
 10 fefam4        -0.840    0.149      -5.64  1.72e- 8
@@ -1116,7 +1120,7 @@ Done</code></pre>
 <pre><code># A tibble: 23 × 4
    term                           Model6  Model7   Model8
    &lt;chr&gt;                           &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
- 1 Mult(., polviews, fefam).     -1.98    1.95    1.94   
+ 1 Mult(., polviews, fefam).     -1.98   -1.95    1.94   
  2 Mult(1, ., fefam).polviews1   -0.189   0.413  -0.403  
  3 Mult(1, ., fefam).polviews2   -0.456   0.386  -0.403  
  4 Mult(1, ., fefam).polviews3   -0.365   0.269  -0.279  
@@ -1124,21 +1128,21 @@ Done</code></pre>
  6 Mult(1, ., fefam).polviews5   -0.0626  0.0555 -0.00196
  7 Mult(1, ., fefam).polviews6    0.421  -0.494   0.492  
  8 Mult(1, ., fefam).polviews7    0.665  -0.601   0.597  
- 9 Mult(1, polviews, .).fefam1    0.703   0.726  -0.733  
-10 Mult(1, polviews, .).fefam2    0.208   0.170  -0.162  
-11 Mult(1, polviews, .).fefam3   -0.300  -0.304   0.313  
-12 Mult(1, polviews, .).fefam4   -0.610  -0.593   0.582  
-13 Mult(., polviews, natfare).   -1.57   -1.44    1.41   
-14 Mult(1, ., natfare).polviews1 -0.606   0.413  -0.403  
-15 Mult(1, ., natfare).polviews2 -0.275   0.386  -0.403  
-16 Mult(1, ., natfare).polviews3 -0.158   0.269  -0.279  
-17 Mult(1, ., natfare).polviews4  0.0646 -0.0275 -0.00196
-18 Mult(1, ., natfare).polviews5 -0.0505  0.0555 -0.00196
-19 Mult(1, ., natfare).polviews6  0.512  -0.494   0.492  
-20 Mult(1, ., natfare).polviews7  0.514  -0.601   0.597  
-21 Mult(1, polviews, .).natfare1  0.607  -0.580  -0.569  
-22 Mult(1, polviews, .).natfare2  0.169  -0.207  -0.222  
-23 Mult(1, polviews, .).natfare3 -0.776   0.788   0.791  </code></pre>
+ 9 Mult(1, polviews, .).fefam1    0.703  -0.726  -0.733  
+10 Mult(1, polviews, .).fefam2    0.208  -0.170  -0.162  
+11 Mult(1, polviews, .).fefam3   -0.300   0.304   0.313  
+12 Mult(1, polviews, .).fefam4   -0.610   0.593   0.582  
+13 Mult(., polviews, natfare).    1.57    1.44    1.41   
+14 Mult(1, ., natfare).polviews1  0.606   0.413  -0.403  
+15 Mult(1, ., natfare).polviews2  0.275   0.386  -0.403  
+16 Mult(1, ., natfare).polviews3  0.158   0.269  -0.279  
+17 Mult(1, ., natfare).polviews4 -0.0646 -0.0275 -0.00196
+18 Mult(1, ., natfare).polviews5  0.0505  0.0555 -0.00196
+19 Mult(1, ., natfare).polviews6 -0.512  -0.494   0.492  
+20 Mult(1, ., natfare).polviews7 -0.514  -0.601   0.597  
+21 Mult(1, polviews, .).natfare1  0.607   0.580  -0.569  
+22 Mult(1, polviews, .).natfare2  0.169   0.207  -0.222  
+23 Mult(1, polviews, .).natfare3 -0.776  -0.788   0.791  </code></pre>
 </div>
 </div>
 </section>
@@ -1302,7 +1306,7 @@ Done</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-......................................
+..............................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 3 - Restricted RC(1)+RL(1)+CL(1) with consistent score</span></span>
@@ -1323,7 +1327,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations...............................................
+Running main iterations.......................................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 5 - Model 3 with consistent cells fitted exactly</span></span>
@@ -1491,7 +1495,7 @@ Number of iterations: 5</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-................
+........................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model8)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1509,46 +1513,46 @@ Deviance Residuals:
 
 Coefficients:
                  Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)       3.57622         NA      NA       NA    
-R2               -0.96409         NA      NA       NA    
-R3               -0.73520         NA      NA       NA    
-R4               -1.57096         NA      NA       NA    
-C2               -1.62568         NA      NA       NA    
-C3               -2.05072         NA      NA       NA    
-C4               -3.42192         NA      NA       NA    
-L2               -1.46732         NA      NA       NA    
-L3               -2.26769         NA      NA       NA    
-L4               -3.79836         NA      NA       NA    
+(Intercept)       3.58346         NA      NA       NA    
+R2               -0.97612         NA      NA       NA    
+R3               -0.74881         NA      NA       NA    
+R4               -1.57628         NA      NA       NA    
+C2               -1.60411         NA      NA       NA    
+C3               -2.05230         NA      NA       NA    
+C4               -3.43379         NA      NA       NA    
+L2               -1.46290         NA      NA       NA    
+L3               -2.27847         NA      NA       NA    
+L4               -3.79832         NA      NA       NA    
 Rscore:Cscore     0.12964    0.02728   4.752 2.01e-06 ***
-Mult(., R, C).    3.50097         NA      NA       NA    
-Mult(1, ., C).R1  0.10486         NA      NA       NA    
-Mult(1, ., C).R2 -0.27858         NA      NA       NA    
-Mult(1, ., C).R3 -0.13196         NA      NA       NA    
-Mult(1, ., C).R4  0.13658         NA      NA       NA    
-Mult(1, R, .).C1  0.07204         NA      NA       NA    
-Mult(1, R, .).C2 -0.44235         NA      NA       NA    
-Mult(1, R, .).C3 -0.03185         NA      NA       NA    
-Mult(1, R, .).C4  0.34289         NA      NA       NA    
+Mult(., R, C).    0.67979         NA      NA       NA    
+Mult(1, ., C).R1  0.31389         NA      NA       NA    
+Mult(1, ., C).R2 -0.70805         NA      NA       NA    
+Mult(1, ., C).R3 -0.31730         NA      NA       NA    
+Mult(1, ., C).R4  0.39844         NA      NA       NA    
+Mult(1, R, .).C1  0.15432         NA      NA       NA    
+Mult(1, R, .).C2 -0.83966         NA      NA       NA    
+Mult(1, R, .).C3 -0.04643         NA      NA       NA    
+Mult(1, R, .).C4  0.67770         NA      NA       NA    
 Rscore:Lscore     0.25450    0.02803   9.080  &lt; 2e-16 ***
-Mult(., R, L).    3.97839         NA      NA       NA    
-Mult(1, ., L).R1  0.38212         NA      NA       NA    
-Mult(1, ., L).R2 -0.41065         NA      NA       NA    
-Mult(1, ., L).R3 -0.32511         NA      NA       NA    
-Mult(1, ., L).R4  0.22527         NA      NA       NA    
-Mult(1, R, .).L1  0.03290         NA      NA       NA    
-Mult(1, R, .).L2 -0.26385         NA      NA       NA    
-Mult(1, R, .).L3 -0.04423         NA      NA       NA    
-Mult(1, R, .).L4  0.32313         NA      NA       NA    
+Mult(., R, L).   -2.09693         NA      NA       NA    
+Mult(1, ., L).R1  0.41546         NA      NA       NA    
+Mult(1, ., L).R2 -0.44828         NA      NA       NA    
+Mult(1, ., L).R3 -0.35509         NA      NA       NA    
+Mult(1, ., L).R4  0.24457         NA      NA       NA    
+Mult(1, R, .).L1 -0.04485         NA      NA       NA    
+Mult(1, R, .).L2  0.47189         NA      NA       NA    
+Mult(1, R, .).L3  0.08946         NA      NA       NA    
+Mult(1, R, .).L4 -0.55024         NA      NA       NA    
 Cscore:Lscore     0.20172    0.02585   7.802  &lt; 2e-16 ***
-Mult(., C, L).   -1.56157         NA      NA       NA    
-Mult(1, ., L).C1 -0.06062         NA      NA       NA    
-Mult(1, ., L).C2  0.04273         NA      NA       NA    
-Mult(1, ., L).C3  0.32488         NA      NA       NA    
-Mult(1, ., L).C4 -0.08310         NA      NA       NA    
-Mult(1, C, .).L1  0.09820         NA      NA       NA    
-Mult(1, C, .).L2  0.35986         NA      NA       NA    
-Mult(1, C, .).L3 -0.41701         NA      NA       NA    
-Mult(1, C, .).L4  0.05531         NA      NA       NA    
+Mult(., C, L).    1.01102         NA      NA       NA    
+Mult(1, ., L).C1  0.09800         NA      NA       NA    
+Mult(1, ., L).C2 -0.11513         NA      NA       NA    
+Mult(1, ., L).C3 -0.69697         NA      NA       NA    
+Mult(1, ., L).C4  0.14434         NA      NA       NA    
+Mult(1, C, .).L1  0.06575         NA      NA       NA    
+Mult(1, C, .).L2  0.26174         NA      NA       NA    
+Mult(1, C, .).L3 -0.32014         NA      NA       NA    
+Mult(1, C, .).L4  0.03363         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -1559,7 +1563,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 45.854 on 36 degrees of freedom
 AIC: 396.17
 
-Number of iterations: 73</code></pre>
+Number of iterations: 81</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pickCoef</span>(model8, <span class="st">"[.]R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1588,46 +1592,46 @@ Mult(1, C, .).L1 Mult(1, C, .).L2 Mult(1, C, .).L3 Mult(1, C, .).L4
 <span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">number =</span> <span class="fu">row_number</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                              var    estimate number
-(Intercept)           (Intercept)  3.57622325      1
-R2                             R2 -0.96409391      2
-R3                             R3 -0.73519913      3
-R4                             R4 -1.57095599      4
-C2                             C2 -1.62567787      5
-C3                             C3 -2.05072491      6
-C4                             C4 -3.42191521      7
-L2                             L2 -1.46731753      8
-L3                             L3 -2.26768683      9
-L4                             L4 -3.79836393     10
+(Intercept)           (Intercept)  3.58346273      1
+R2                             R2 -0.97612071      2
+R3                             R3 -0.74880998      3
+R4                             R4 -1.57628137      4
+C2                             C2 -1.60410522      5
+C3                             C3 -2.05229531      6
+C4                             C4 -3.43379362      7
+L2                             L2 -1.46290106      8
+L3                             L3 -2.27847289      9
+L4                             L4 -3.79832442     10
 Rscore:Cscore       Rscore:Cscore  0.12964400     11
-Mult(., R, C).     Mult(., R, C).  3.50097269     12
-Mult(1, ., C).R1 Mult(1, ., C).R1  0.10486231     13
-Mult(1, ., C).R2 Mult(1, ., C).R2 -0.27857695     14
-Mult(1, ., C).R3 Mult(1, ., C).R3 -0.13196369     15
-Mult(1, ., C).R4 Mult(1, ., C).R4  0.13658372     16
-Mult(1, R, .).C1 Mult(1, R, .).C1  0.07204080     17
-Mult(1, R, .).C2 Mult(1, R, .).C2 -0.44235405     18
-Mult(1, R, .).C3 Mult(1, R, .).C3 -0.03185178     19
-Mult(1, R, .).C4 Mult(1, R, .).C4  0.34289499     20
+Mult(., R, C).     Mult(., R, C).  0.67979337     12
+Mult(1, ., C).R1 Mult(1, ., C).R1  0.31389361     13
+Mult(1, ., C).R2 Mult(1, ., C).R2 -0.70805486     14
+Mult(1, ., C).R3 Mult(1, ., C).R3 -0.31729884     15
+Mult(1, ., C).R4 Mult(1, ., C).R4  0.39843802     16
+Mult(1, R, .).C1 Mult(1, R, .).C1  0.15431948     17
+Mult(1, R, .).C2 Mult(1, R, .).C2 -0.83965671     18
+Mult(1, R, .).C3 Mult(1, R, .).C3 -0.04643439     19
+Mult(1, R, .).C4 Mult(1, R, .).C4  0.67769683     20
 Rscore:Lscore       Rscore:Lscore  0.25449639     21
-Mult(., R, L).     Mult(., R, L).  3.97838937     22
-Mult(1, ., L).R1 Mult(1, ., L).R1  0.38211555     23
-Mult(1, ., L).R2 Mult(1, ., L).R2 -0.41065475     24
-Mult(1, ., L).R3 Mult(1, ., L).R3 -0.32511460     25
-Mult(1, ., L).R4 Mult(1, ., L).R4  0.22526835     26
-Mult(1, R, .).L1 Mult(1, R, .).L1  0.03289732     27
-Mult(1, R, .).L2 Mult(1, R, .).L2 -0.26385066     28
-Mult(1, R, .).L3 Mult(1, R, .).L3 -0.04423065     29
-Mult(1, R, .).L4 Mult(1, R, .).L4  0.32312923     30
+Mult(., R, L).     Mult(., R, L). -2.09693119     22
+Mult(1, ., L).R1 Mult(1, ., L).R1  0.41545949     23
+Mult(1, ., L).R2 Mult(1, ., L).R2 -0.44828431     24
+Mult(1, ., L).R3 Mult(1, ., L).R3 -0.35508610     25
+Mult(1, ., L).R4 Mult(1, ., L).R4  0.24457039     26
+Mult(1, R, .).L1 Mult(1, R, .).L1 -0.04484851     27
+Mult(1, R, .).L2 Mult(1, R, .).L2  0.47189295     28
+Mult(1, R, .).L3 Mult(1, R, .).L3  0.08945812     29
+Mult(1, R, .).L4 Mult(1, R, .).L4 -0.55024323     30
 Cscore:Lscore       Cscore:Lscore  0.20172487     31
-Mult(., C, L).     Mult(., C, L). -1.56157490     32
-Mult(1, ., L).C1 Mult(1, ., L).C1 -0.06062473     33
-Mult(1, ., L).C2 Mult(1, ., L).C2  0.04272677     34
-Mult(1, ., L).C3 Mult(1, ., L).C3  0.32487805     35
-Mult(1, ., L).C4 Mult(1, ., L).C4 -0.08309643     36
-Mult(1, C, .).L1 Mult(1, C, .).L1  0.09819935     37
-Mult(1, C, .).L2 Mult(1, C, .).L2  0.35985625     38
-Mult(1, C, .).L3 Mult(1, C, .).L3 -0.41701041     39
-Mult(1, C, .).L4 Mult(1, C, .).L4  0.05531406     40</code></pre>
+Mult(., C, L).     Mult(., C, L).  1.01101565     32
+Mult(1, ., L).C1 Mult(1, ., L).C1  0.09799528     33
+Mult(1, ., L).C2 Mult(1, ., L).C2 -0.11513016     34
+Mult(1, ., L).C3 Mult(1, ., L).C3 -0.69696613     35
+Mult(1, ., L).C4 Mult(1, ., L).C4  0.14433511     36
+Mult(1, C, .).L1 Mult(1, C, .).L1  0.06575487     37
+Mult(1, C, .).L2 Mult(1, C, .).L2  0.26173796     38
+Mult(1, C, .).L3 Mult(1, C, .).L3 -0.32014132     39
+Mult(1, C, .).L4 Mult(1, C, .).L4  0.03363345     40</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mu1: 13-16</span></span>
 <span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>mu1 <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(</span>
@@ -1688,10 +1692,10 @@ Mult(1, ., L).R4  0.3766193 0.10554742</code></pre>
 <span id="cb113-9"><a href="#cb113-9" aria-hidden="true" tabindex="-1"></a>eta1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    Estimate Std. Error
-Mult(1, R, .).L1  0.04977493 0.08992116
-Mult(1, R, .).L2 -0.65658058 0.06234704
-Mult(1, R, .).L3 -0.13381443 0.08765352
-Mult(1, R, .).L4  0.74062008 0.04970264</code></pre>
+Mult(1, R, .).L1 -0.04977493 0.08992116
+Mult(1, R, .).L2  0.65658058 0.06234704
+Mult(1, R, .).L3  0.13381443 0.08765352
+Mult(1, R, .).L4 -0.74062008 0.04970264</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="co"># nu2: 33-36</span></span>
 <span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>nu2 <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(</span>
@@ -1704,10 +1708,10 @@ Mult(1, R, .).L4  0.74062008 0.04970264</code></pre>
 <span id="cb115-9"><a href="#cb115-9" aria-hidden="true" tabindex="-1"></a>nu2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    Estimate Std. Error
-Mult(1, ., L).C1 -0.35910324  0.2995712
-Mult(1, ., L).C2 -0.04079069  0.3606231
-Mult(1, ., L).C3  0.82820782  0.1075525
-Mult(1, ., L).C4 -0.42831389  0.3177968</code></pre>
+Mult(1, ., L).C1  0.35910324  0.2995712
+Mult(1, ., L).C2  0.04079069  0.3606231
+Mult(1, ., L).C3 -0.82820782  0.1075525
+Mult(1, ., L).C4  0.42831389  0.3177968</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co"># eta2: 37-40</span></span>
 <span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>eta2 <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(</span>
@@ -1780,47 +1784,47 @@ Deviance Residuals:
 -1.64348  -0.68031  -0.02712   0.48954   2.01814  
 
 Coefficients:
-                  Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)       3.590901         NA      NA       NA    
-R2               -0.973885         NA      NA       NA    
-R3               -0.756501         NA      NA       NA    
-R4               -1.585741         NA      NA       NA    
-C2               -1.626581         NA      NA       NA    
-C3               -2.024686         NA      NA       NA    
-C4               -3.419142         NA      NA       NA    
-L2               -1.455671         NA      NA       NA    
-L3               -2.278156         NA      NA       NA    
-L4               -3.804826         NA      NA       NA    
-Rscore:Cscore     0.129644   0.027279   4.752 2.01e-06 ***
-Mult(., R, C).    1.977419         NA      NA       NA    
-Mult(1, ., C).R1 -0.203936         NA      NA       NA    
-Mult(1, ., C).R2  0.576214         NA      NA       NA    
-Mult(1, ., C).R3  0.277913         NA      NA       NA    
-Mult(1, ., C).R4 -0.268477         NA      NA       NA    
-Mult(1, R, .).C1 -0.092371         NA      NA       NA    
-Mult(1, R, .).C2  0.355245         NA      NA       NA    
-Mult(1, R, .).C3 -0.001966         NA      NA       NA    
-Mult(1, R, .).C4 -0.328062         NA      NA       NA    
-Rscore:Lscore     0.254496   0.028029   9.080  &lt; 2e-16 ***
-Mult(., R, L).    5.986300         NA      NA       NA    
-Mult(1, ., L).R1 -0.244917         NA      NA       NA    
-Mult(1, ., L).R2  0.256988         NA      NA       NA    
-Mult(1, ., L).R3  0.202832         NA      NA       NA    
-Mult(1, ., L).R4 -0.145617         NA      NA       NA    
-Mult(1, R, .).L1 -0.016034         NA      NA       NA    
-Mult(1, R, .).L2  0.295469         NA      NA       NA    
-Mult(1, R, .).L3  0.064929         NA      NA       NA    
-Mult(1, R, .).L4 -0.320697         NA      NA       NA    
-Cscore:Lscore     0.201725   0.025855   7.802  &lt; 2e-16 ***
-Mult(., C, L).   -0.142382         NA      NA       NA    
-Mult(1, ., L).C1 -0.571843         NA      NA       NA    
-Mult(1, ., L).C2  0.718395         NA      NA       NA    
-Mult(1, ., L).C3  4.240764         NA      NA       NA    
-Mult(1, ., L).C4 -0.852379         NA      NA       NA    
-Mult(1, C, .).L1  0.126728         NA      NA       NA    
-Mult(1, C, .).L2  0.356600         NA      NA       NA    
-Mult(1, C, .).L3 -0.325897         NA      NA       NA    
-Mult(1, C, .).L4  0.089052         NA      NA       NA    
+                 Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)       3.62403         NA      NA       NA    
+R2               -0.98016         NA      NA       NA    
+R3               -0.75880         NA      NA       NA    
+R4               -1.58361         NA      NA       NA    
+C2               -1.64273         NA      NA       NA    
+C3               -1.99498         NA      NA       NA    
+C4               -3.40775         NA      NA       NA    
+L2               -1.37979         NA      NA       NA    
+L3               -2.35639         NA      NA       NA    
+L4               -3.84326         NA      NA       NA    
+Rscore:Cscore     0.12964    0.02728   4.752 2.01e-06 ***
+Mult(., R, C).    0.28077         NA      NA       NA    
+Mult(1, ., C).R1  0.24725         NA      NA       NA    
+Mult(1, ., C).R2 -0.85414         NA      NA       NA    
+Mult(1, ., C).R3 -0.43301         NA      NA       NA    
+Mult(1, ., C).R4  0.33836         NA      NA       NA    
+Mult(1, R, .).C1  0.42189         NA      NA       NA    
+Mult(1, R, .).C2 -1.81110         NA      NA       NA    
+Mult(1, R, .).C3 -0.02911         NA      NA       NA    
+Mult(1, R, .).C4  1.59766         NA      NA       NA    
+Rscore:Lscore     0.25450    0.02803   9.080  &lt; 2e-16 ***
+Mult(., R, L).   -0.94795         NA      NA       NA    
+Mult(1, ., L).R1 -1.27451         NA      NA       NA    
+Mult(1, ., L).R2  1.16663         NA      NA       NA    
+Mult(1, ., L).R3  0.90323         NA      NA       NA    
+Mult(1, ., L).R4 -0.79154         NA      NA       NA    
+Mult(1, R, .).L1  0.02331         NA      NA       NA    
+Mult(1, R, .).L2 -0.38114         NA      NA       NA    
+Mult(1, R, .).L3 -0.08181         NA      NA       NA    
+Mult(1, R, .).L4  0.41887         NA      NA       NA    
+Cscore:Lscore     0.20172    0.02585   7.802  &lt; 2e-16 ***
+Mult(., C, L).    0.62988         NA      NA       NA    
+Mult(1, ., L).C1 -0.13545         NA      NA       NA    
+Mult(1, ., L).C2 -0.36215         NA      NA       NA    
+Mult(1, ., L).C3 -0.98103         NA      NA       NA    
+Mult(1, ., L).C4 -0.08616         NA      NA       NA    
+Mult(1, C, .).L1  0.22849         NA      NA       NA    
+Mult(1, C, .).L2  0.52423         NA      NA       NA    
+Mult(1, C, .).L3 -0.35384         NA      NA       NA    
+Mult(1, C, .).L4  0.18002         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -1853,7 +1857,7 @@ Number of iterations: 500</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-....................
+...............
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model9)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1869,41 +1873,41 @@ Deviance Residuals:
 -1.56526  -0.67024  -0.02438   0.54037   1.98333  
 
 Coefficients:
-                      Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)           3.545794         NA      NA       NA    
-R2                   -0.877374         NA      NA       NA    
-R3                   -0.661009         NA      NA       NA    
-R4                   -1.546235         NA      NA       NA    
-C2                   -1.620849         NA      NA       NA    
-C3                   -2.027594         NA      NA       NA    
-C4                   -3.461238         NA      NA       NA    
-L2                   -1.430237         NA      NA       NA    
-L3                   -2.276450         NA      NA       NA    
-L4                   -3.761934         NA      NA       NA    
-Rscore:Cscore         0.133527   0.025355   5.266 1.39e-07 ***
-Mult(., R, C + L).    2.474314         NA      NA       NA    
-Mult(1, ., C + L).R1 -0.467658         NA      NA       NA    
-Mult(1, ., C + L).R2  0.623121         NA      NA       NA    
-Mult(1, ., C + L).R3  0.432608         NA      NA       NA    
-Mult(1, ., C + L).R4 -0.337541         NA      NA       NA    
-Mult(1, R, . + L).C1 -0.106300         NA      NA       NA    
-Mult(1, R, . + L).C2  0.147161         NA      NA       NA    
-Mult(1, R, . + L).C3 -0.039531         NA      NA       NA    
-Mult(1, R, . + L).C4 -0.245879         NA      NA       NA    
-Mult(1, R, C + .).L2  0.346282         NA      NA       NA    
-Mult(1, R, C + .).L3  0.086039         NA      NA       NA    
-Mult(1, R, C + .).L4 -0.334020         NA      NA       NA    
-Rscore:Lscore         0.248478   0.027223   9.127  &lt; 2e-16 ***
-Cscore:Lscore         0.202702   0.025617   7.913  &lt; 2e-16 ***
-Mult(., C, L).        1.558683         NA      NA       NA    
-Mult(1, ., L).C1     -0.001769         NA      NA       NA    
-Mult(1, ., L).C2      0.107401         NA      NA       NA    
-Mult(1, ., L).C3      0.518224         NA      NA       NA    
-Mult(1, ., L).C4     -0.036235         NA      NA       NA    
-Mult(1, C, .).L1     -0.116206         NA      NA       NA    
-Mult(1, C, .).L2     -0.334967         NA      NA       NA    
-Mult(1, C, .).L3      0.240327         NA      NA       NA    
-Mult(1, C, .).L4     -0.105875         NA      NA       NA    
+                     Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)           3.59433         NA      NA       NA    
+R2                   -1.00187         NA      NA       NA    
+R3                   -0.76376         NA      NA       NA    
+R4                   -1.56109         NA      NA       NA    
+C2                   -1.63019         NA      NA       NA    
+C3                   -2.06273         NA      NA       NA    
+C4                   -3.45780         NA      NA       NA    
+L2                   -1.44930         NA      NA       NA    
+L3                   -2.25073         NA      NA       NA    
+L4                   -3.75843         NA      NA       NA    
+Rscore:Cscore         0.13353    0.02535   5.266 1.39e-07 ***
+Mult(., R, C + L).   -0.02012         NA      NA       NA    
+Mult(1, ., C + L).R1  3.82261         NA      NA       NA    
+Mult(1, ., C + L).R2 -5.15709         NA      NA       NA    
+Mult(1, ., C + L).R3 -3.58871         NA      NA       NA    
+Mult(1, ., C + L).R4  2.75145         NA      NA       NA    
+Mult(1, R, . + L).C1 -0.89908         NA      NA       NA    
+Mult(1, R, . + L).C2  2.88800         NA      NA       NA    
+Mult(1, R, . + L).C3  0.09854         NA      NA       NA    
+Mult(1, R, . + L).C4 -2.98460         NA      NA       NA    
+Mult(1, R, C + .).L2  5.17398         NA      NA       NA    
+Mult(1, R, C + .).L3  1.28555         NA      NA       NA    
+Mult(1, R, C + .).L4 -4.99076         NA      NA       NA    
+Rscore:Lscore         0.24848    0.02722   9.127  &lt; 2e-16 ***
+Cscore:Lscore         0.20270    0.02562   7.913  &lt; 2e-16 ***
+Mult(., C, L).        1.61046         NA      NA       NA    
+Mult(1, ., L).C1      0.05189         NA      NA       NA    
+Mult(1, ., L).C2     -0.06297         NA      NA       NA    
+Mult(1, ., L).C3     -0.49522         NA      NA       NA    
+Mult(1, ., L).C4      0.08816         NA      NA       NA    
+Mult(1, C, .).L1      0.06764         NA      NA       NA    
+Mult(1, C, .).L2      0.26888         NA      NA       NA    
+Mult(1, C, .).L3     -0.26032         NA      NA       NA    
+Mult(1, C, .).L4      0.05814         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -1914,7 +1918,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 47.134 on 38 degrees of freedom
 AIC: 393.45
 
-Number of iterations: 77</code></pre>
+Number of iterations: 72</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(</span>
 <span id="cb128-2"><a href="#cb128-2" aria-hidden="true" tabindex="-1"></a>  model9,</span>
@@ -1960,7 +1964,7 @@ Number of iterations: 77</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-......
+..............
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model9.extended)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1979,46 +1983,46 @@ Deviance Residuals:
 
 Coefficients:
                  Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)       3.59318         NA      NA       NA    
-R2               -1.00125         NA      NA       NA    
-R3               -0.76325         NA      NA       NA    
-R4               -1.56101         NA      NA       NA    
-C2               -1.58265         NA      NA       NA    
-C3               -2.02237         NA      NA       NA    
-C4               -3.48253         NA      NA       NA    
-L2               -1.36937         NA      NA       NA    
-L3               -2.27486         NA      NA       NA    
-L4               -3.81404         NA      NA       NA    
+(Intercept)       3.58417         NA      NA       NA    
+R2               -0.98060         NA      NA       NA    
+R3               -0.74621         NA      NA       NA    
+R4               -1.55855         NA      NA       NA    
+C2               -1.58351         NA      NA       NA    
+C3               -2.02648         NA      NA       NA    
+C4               -3.48226         NA      NA       NA    
+L2               -1.36690         NA      NA       NA    
+L3               -2.27888         NA      NA       NA    
+L4               -3.81415         NA      NA       NA    
 Rscore:Cscore     0.13353    0.02520   5.300 1.16e-07 ***
-Mult(., R, C).    0.13124         NA      NA       NA    
-Mult(1, ., C).R1 -0.56136         NA      NA       NA    
-Mult(1, ., C).R2  0.59333         NA      NA       NA    
-Mult(1, ., C).R3  0.39165         NA      NA       NA    
-Mult(1, ., C).R4 -0.42362         NA      NA       NA    
-Mult(1, R, .).C1 -0.76011         NA      NA       NA    
-Mult(1, R, .).C2  3.75407         NA      NA       NA    
-Mult(1, R, .).C3  0.42905         NA      NA       NA    
-Mult(1, R, .).C4 -3.24604         NA      NA       NA    
+Mult(., R, C).   -0.21368         NA      NA       NA    
+Mult(1, ., C).R1  0.56136         NA      NA       NA    
+Mult(1, ., C).R2 -0.59333         NA      NA       NA    
+Mult(1, ., C).R3 -0.39165         NA      NA       NA    
+Mult(1, ., C).R4  0.42362         NA      NA       NA    
+Mult(1, R, .).C1 -0.50810         NA      NA       NA    
+Mult(1, R, .).C2  2.26447         NA      NA       NA    
+Mult(1, R, .).C3  0.22227         NA      NA       NA    
+Mult(1, R, .).C4 -2.03494         NA      NA       NA    
 Rscore:Lscore     0.24848    0.02521   9.856  &lt; 2e-16 ***
-Mult(., R, L).    0.17765         NA      NA       NA    
-Mult(1, ., L).R1 -0.56136         NA      NA       NA    
-Mult(1, ., L).R2  0.59333         NA      NA       NA    
-Mult(1, ., L).R3  0.39165         NA      NA       NA    
-Mult(1, ., L).R4 -0.42362         NA      NA       NA    
-Mult(1, R, .).L1 -0.23319         NA      NA       NA    
-Mult(1, R, .).L2  4.32303         NA      NA       NA    
-Mult(1, R, .).L3  0.89887         NA      NA       NA    
-Mult(1, R, .).L4 -4.62806         NA      NA       NA    
+Mult(., R, L).    0.90944         NA      NA       NA    
+Mult(1, ., L).R1  0.56136         NA      NA       NA    
+Mult(1, ., L).R2 -0.59333         NA      NA       NA    
+Mult(1, ., L).R3 -0.39165         NA      NA       NA    
+Mult(1, ., L).R4  0.42362         NA      NA       NA    
+Mult(1, R, .).L1  0.05552         NA      NA       NA    
+Mult(1, R, .).L2 -0.83446         NA      NA       NA    
+Mult(1, R, .).L3 -0.16561         NA      NA       NA    
+Mult(1, R, .).L4  0.91399         NA      NA       NA    
 Cscore:Lscore     0.20270    0.02560   7.919  &lt; 2e-16 ***
-Mult(., C, L).   -0.37666         NA      NA       NA    
-Mult(1, ., L).C1 -0.05950         NA      NA       NA    
-Mult(1, ., L).C2 -0.39495         NA      NA       NA    
-Mult(1, ., L).C3 -1.65728         NA      NA       NA    
-Mult(1, ., L).C4  0.04640         NA      NA       NA    
-Mult(1, C, .).L1 -0.14799         NA      NA       NA    
-Mult(1, C, .).L2 -0.44261         NA      NA       NA    
-Mult(1, C, .).L3  0.33217         NA      NA       NA    
-Mult(1, C, .).L4 -0.13408         NA      NA       NA    
+Mult(., C, L).    1.56859         NA      NA       NA    
+Mult(1, ., L).C1 -0.03539         NA      NA       NA    
+Mult(1, ., L).C2 -0.18065         NA      NA       NA    
+Mult(1, ., L).C3 -0.72727         NA      NA       NA    
+Mult(1, ., L).C4  0.01047         NA      NA       NA    
+Mult(1, C, .).L1  0.07828         NA      NA       NA    
+Mult(1, C, .).L2  0.24166         NA      NA       NA    
+Mult(1, C, .).L3 -0.18799         NA      NA       NA    
+Mult(1, C, .).L4  0.07056         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -2029,7 +2033,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 47.134 on 40 degrees of freedom
 AIC: 389.45
 
-Number of iterations: 63</code></pre>
+Number of iterations: 71</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>nu1 <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(</span>
 <span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>  model9.extended,</span>
@@ -2072,7 +2076,7 @@ Number of iterations: 63</code></pre>
 <span id="cb132-39"><a href="#cb132-39" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
-Running main iterations.................
+Running main iterations.
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model9.phis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2103,35 +2107,35 @@ L2               -1.42666    0.10739 -13.285  &lt; 2e-16 ***
 L3               -2.18148    0.17791 -12.262  &lt; 2e-16 ***
 L4               -3.81133    0.27937 -13.643  &lt; 2e-16 ***
 Rscore:Cscore     0.13353    0.02486   5.371 7.83e-08 ***
-Mult(., R, C).    0.66121    0.14008   4.720 2.36e-06 ***
-Mult(1, ., C).R1 -0.56136         NA      NA       NA    
-Mult(1, ., C).R2  0.59333         NA      NA       NA    
-Mult(1, ., C).R3  0.39165         NA      NA       NA    
-Mult(1, ., C).R4 -0.42362         NA      NA       NA    
+Mult(., R, C).   -0.66121    0.14008  -4.720 2.36e-06 ***
+Mult(1, ., C).R1  0.56136         NA      NA       NA    
+Mult(1, ., C).R2 -0.59333         NA      NA       NA    
+Mult(1, ., C).R3 -0.39165         NA      NA       NA    
+Mult(1, ., C).R4  0.42362         NA      NA       NA    
 Mult(1, R, .).C1 -0.15965         NA      NA       NA    
 Mult(1, R, .).C2  0.73633         NA      NA       NA    
 Mult(1, R, .).C3  0.07638         NA      NA       NA    
 Mult(1, R, .).C4 -0.65306         NA      NA       NA    
 Rscore:Lscore     0.24848    0.02515   9.879  &lt; 2e-16 ***
 Mult(., R, L).    1.13662    0.13964   8.140  &lt; 2e-16 ***
-Mult(1, ., L).R1 -0.56136         NA      NA       NA    
-Mult(1, ., L).R2  0.59333         NA      NA       NA    
-Mult(1, ., L).R3  0.39165         NA      NA       NA    
-Mult(1, ., L).R4 -0.42362         NA      NA       NA    
-Mult(1, R, .).L1 -0.05054         NA      NA       NA    
-Mult(1, R, .).L2  0.66157         NA      NA       NA    
-Mult(1, R, .).L3  0.12640         NA      NA       NA    
-Mult(1, R, .).L4 -0.73743         NA      NA       NA    
+Mult(1, ., L).R1  0.56136         NA      NA       NA    
+Mult(1, ., L).R2 -0.59333         NA      NA       NA    
+Mult(1, ., L).R3 -0.39165         NA      NA       NA    
+Mult(1, ., L).R4  0.42362         NA      NA       NA    
+Mult(1, R, .).L1  0.05054         NA      NA       NA    
+Mult(1, R, .).L2 -0.66157         NA      NA       NA    
+Mult(1, R, .).L3 -0.12640         NA      NA       NA    
+Mult(1, R, .).L4  0.73743         NA      NA       NA    
 Cscore:Lscore     0.20270    0.02315   8.756  &lt; 2e-16 ***
 Mult(., C, L).    0.28351    0.10068   2.816  0.00486 ** 
-Mult(1, ., L).C1 -0.33661         NA      NA       NA    
-Mult(1, ., L).C2 -0.08944         NA      NA       NA    
-Mult(1, ., L).C3  0.84069         NA      NA       NA    
-Mult(1, ., L).C4 -0.41464         NA      NA       NA    
-Mult(1, C, .).L1 -0.08991         NA      NA       NA    
-Mult(1, C, .).L2 -0.62111         NA      NA       NA    
-Mult(1, C, .).L3  0.77584         NA      NA       NA    
-Mult(1, C, .).L4 -0.06482         NA      NA       NA    
+Mult(1, ., L).C1  0.33661         NA      NA       NA    
+Mult(1, ., L).C2  0.08944         NA      NA       NA    
+Mult(1, ., L).C3 -0.84069         NA      NA       NA    
+Mult(1, ., L).C4  0.41464         NA      NA       NA    
+Mult(1, C, .).L1  0.08991         NA      NA       NA    
+Mult(1, C, .).L2  0.62111         NA      NA       NA    
+Mult(1, C, .).L3 -0.77584         NA      NA       NA    
+Mult(1, C, .).L4  0.06482         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -2142,15 +2146,15 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 47.134 on 48 degrees of freedom
 AIC: 373.45
 
-Number of iterations: 17</code></pre>
+Number of iterations: 1</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb136"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a>mu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                       Estimate Std. Error
-Mult(1, ., C + L).R1 -0.5613577 0.07946201
-Mult(1, ., C + L).R2  0.5933253 0.06976100
-Mult(1, ., C + L).R3  0.3916506 0.08375491
-Mult(1, ., C + L).R4 -0.4236182 0.08896023</code></pre>
+Mult(1, ., C + L).R1  0.5613577 0.07946201
+Mult(1, ., C + L).R2 -0.5933253 0.06976100
+Mult(1, ., C + L).R3 -0.3916506 0.08375491
+Mult(1, ., C + L).R4  0.4236182 0.08896023</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a>nu1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2163,26 +2167,26 @@ Mult(1, R, .).C4 -0.65306187 0.10868144</code></pre>
 <div class="sourceCode cell-code" id="cb140"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a>eta1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    Estimate Std. Error
-Mult(1, R, .).L1 -0.05053742 0.08981862
-Mult(1, R, .).L2  0.66156822 0.06038098
-Mult(1, R, .).L3  0.12639555 0.08679365
-Mult(1, R, .).L4 -0.73742635 0.04940126</code></pre>
+Mult(1, R, .).L1  0.05053742 0.08981862
+Mult(1, R, .).L2 -0.66156822 0.06038098
+Mult(1, R, .).L3 -0.12639555 0.08679365
+Mult(1, R, .).L4  0.73742635 0.04940126</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a>nu2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    Estimate Std. Error
-Mult(1, ., L).C1 -0.33661004 0.30087703
-Mult(1, ., L).C2 -0.08944163 0.36058729
-Mult(1, ., L).C3  0.84069369 0.08936905
-Mult(1, ., L).C4 -0.41464201 0.32252708</code></pre>
+Mult(1, ., L).C1  0.33661004 0.30087703
+Mult(1, ., L).C2  0.08944163 0.36058729
+Mult(1, ., L).C3 -0.84069369 0.08936905
+Mult(1, ., L).C4  0.41464201 0.32252708</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb144"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a>eta2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    Estimate Std. Error
-Mult(1, C, .).L1 -0.08990831  0.3610226
-Mult(1, C, .).L2 -0.62111332  0.2399524
-Mult(1, C, .).L3  0.77584334  0.1519881
-Mult(1, C, .).L4 -0.06482171  0.3227342</code></pre>
+Mult(1, C, .).L1  0.08990831  0.3610226
+Mult(1, C, .).L2  0.62111332  0.2399524
+Mult(1, C, .).L3 -0.77584334  0.1519881
+Mult(1, C, .).L4  0.06482171  0.3227342</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb146"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model9)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2209,8 +2213,7 @@ Mult(1, C, .).L4 -0.06482171  0.3227342</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-................................................................................
-........
+......................................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb150"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model10)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2238,7 +2241,7 @@ Done</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-..........................
+...........................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model11)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2270,7 +2273,7 @@ Done</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-..........................................
+...........................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(model12)</span></span>
@@ -2326,7 +2329,7 @@ Done</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-..............................
+.....................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model12.extended)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2343,46 +2346,46 @@ Deviance Residuals:
 -1.58844  -0.76809   0.02278   0.56330   1.92999  
 
 Coefficients:
-                   Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)        3.587527         NA      NA       NA    
-R2                -1.000455         NA      NA       NA    
-R3                -0.700489         NA      NA       NA    
-R4                -1.398823         NA      NA       NA    
-C2                -1.631303         NA      NA       NA    
-C3                -2.130833         NA      NA       NA    
-C4                -3.660203         NA      NA       NA    
-L2                -1.347440         NA      NA       NA    
-L3                -2.186855         NA      NA       NA    
-L4                -3.738478         NA      NA       NA    
-Rscore:Cscore      0.133358   0.025419   5.246 1.55e-07 ***
-Mult(., R, C).    -0.012293         NA      NA       NA    
-Mult(1, ., C).R1   0.538271         NA      NA       NA    
-Mult(1, ., C).R2  -0.597665         NA      NA       NA    
-Mult(1, ., C).R3  -0.389408         NA      NA       NA    
-Mult(1, ., C).R4   0.448801         NA      NA       NA    
-Mult(1, R, .).C1  -7.413191         NA      NA       NA    
-Mult(1, R, .).C2  40.623214         NA      NA       NA    
-Mult(1, R, .).C3   6.216197         NA      NA       NA    
-Mult(1, R, .).C4 -31.363240         NA      NA       NA    
-cov_rcl            0.224229   0.017087  13.123  &lt; 2e-16 ***
-Mult(., R, L).     2.525802         NA      NA       NA    
-Mult(1, ., L).R1   0.538271         NA      NA       NA    
-Mult(1, ., L).R2  -0.597665         NA      NA       NA    
-Mult(1, ., L).R3  -0.389408         NA      NA       NA    
-Mult(1, ., L).R4   0.448801         NA      NA       NA    
-Mult(1, R, .).L1   0.005446         NA      NA       NA    
-Mult(1, R, .).L2  -0.313714         NA      NA       NA    
-Mult(1, R, .).L3  -0.070171         NA      NA       NA    
-Mult(1, R, .).L4   0.318184         NA      NA       NA    
-Mult(., C, L).    -0.537294         NA      NA       NA    
-Mult(1, ., L).C1   0.005461         NA      NA       NA    
-Mult(1, ., L).C2  -0.092273         NA      NA       NA    
-Mult(1, ., L).C3  -0.790815         NA      NA       NA    
-Mult(1, ., L).C4   0.113407         NA      NA       NA    
-Mult(1, C, .).L1  -0.104099         NA      NA       NA    
-Mult(1, C, .).L2  -0.590411         NA      NA       NA    
-Mult(1, C, .).L3   0.427323         NA      NA       NA    
-Mult(1, C, .).L4  -0.199832         NA      NA       NA    
+                 Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)       3.60033         NA      NA       NA    
+R2               -0.99476         NA      NA       NA    
+R3               -0.69584         NA      NA       NA    
+R4               -1.39837         NA      NA       NA    
+C2               -1.63919         NA      NA       NA    
+C3               -2.19507         NA      NA       NA    
+C4               -3.65149         NA      NA       NA    
+L2               -1.50647         NA      NA       NA    
+L3               -2.01308         NA      NA       NA    
+L4               -3.76978         NA      NA       NA    
+Rscore:Cscore     0.13336    0.02542   5.246 1.55e-07 ***
+Mult(., R, C).   -1.28359         NA      NA       NA    
+Mult(1, ., C).R1 -0.53827         NA      NA       NA    
+Mult(1, ., C).R2  0.59766         NA      NA       NA    
+Mult(1, ., C).R3  0.38941         NA      NA       NA    
+Mult(1, ., C).R4 -0.44880         NA      NA       NA    
+Mult(1, R, .).C1  0.07941         NA      NA       NA    
+Mult(1, R, .).C2 -0.38062         NA      NA       NA    
+Mult(1, R, .).C3 -0.05111         NA      NA       NA    
+Mult(1, R, .).C4  0.30877         NA      NA       NA    
+cov_rcl           0.22423    0.01709  13.123  &lt; 2e-16 ***
+Mult(., R, L).   -0.57367         NA      NA       NA    
+Mult(1, ., L).R1 -0.53827         NA      NA       NA    
+Mult(1, ., L).R2  0.59766         NA      NA       NA    
+Mult(1, ., L).R3  0.38941         NA      NA       NA    
+Mult(1, ., L).R4 -0.44880         NA      NA       NA    
+Mult(1, R, .).L1  0.01388         NA      NA       NA    
+Mult(1, R, .).L2 -1.39135         NA      NA       NA    
+Mult(1, R, .).L3 -0.31905         NA      NA       NA    
+Mult(1, R, .).L4  1.39084         NA      NA       NA    
+Mult(., C, L).    1.42525         NA      NA       NA    
+Mult(1, ., L).C1 -0.42531         NA      NA       NA    
+Mult(1, ., L).C2 -0.35762         NA      NA       NA    
+Mult(1, ., L).C3  0.12618         NA      NA       NA    
+Mult(1, ., L).C4 -0.50007         NA      NA       NA    
+Mult(1, C, .).L1  0.02506         NA      NA       NA    
+Mult(1, C, .).L2 -0.23964         NA      NA       NA    
+Mult(1, C, .).L3  0.31432         NA      NA       NA    
+Mult(1, C, .).L4 -0.02704         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -2393,7 +2396,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 48.569 on 41 degrees of freedom
 AIC: 388.89
 
-Number of iterations: 87</code></pre>
+Number of iterations: 94</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a>nu1 <span class="ot">&lt;-</span> <span class="fu">getContrasts</span>(</span>
 <span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a>  model12.extended,</span>
@@ -2458,29 +2461,29 @@ L3               -2.13230    0.17235 -12.372  &lt; 2e-16 ***
 L4               -3.74831    0.27154 -13.804  &lt; 2e-16 ***
 Rscore:Cscore     0.13336    0.02490   5.357 8.48e-08 ***
 Mult(., R, C).   -0.64007    0.13725  -4.663 3.11e-06 ***
-Mult(1, ., C).R1  0.53827         NA      NA       NA    
-Mult(1, ., C).R2 -0.59766         NA      NA       NA    
-Mult(1, ., C).R3 -0.38941         NA      NA       NA    
-Mult(1, ., C).R4  0.44880         NA      NA       NA    
-Mult(1, R, .).C1 -0.18108         NA      NA       NA    
-Mult(1, R, .).C2  0.74146         NA      NA       NA    
-Mult(1, R, .).C3  0.08067         NA      NA       NA    
-Mult(1, R, .).C4 -0.64105         NA      NA       NA    
+Mult(1, ., C).R1 -0.53827         NA      NA       NA    
+Mult(1, ., C).R2  0.59766         NA      NA       NA    
+Mult(1, ., C).R3  0.38941         NA      NA       NA    
+Mult(1, ., C).R4 -0.44880         NA      NA       NA    
+Mult(1, R, .).C1  0.18108         NA      NA       NA    
+Mult(1, R, .).C2 -0.74146         NA      NA       NA    
+Mult(1, R, .).C3 -0.08067         NA      NA       NA    
+Mult(1, R, .).C4  0.64105         NA      NA       NA    
 cov_rcl           0.22423    0.01636  13.707  &lt; 2e-16 ***
-Mult(., R, L).    1.13998    0.13669   8.340  &lt; 2e-16 ***
-Mult(1, ., L).R1  0.53827         NA      NA       NA    
-Mult(1, ., L).R2 -0.59766         NA      NA       NA    
-Mult(1, ., L).R3 -0.38941         NA      NA       NA    
-Mult(1, ., L).R4  0.44880         NA      NA       NA    
+Mult(., R, L).   -1.13998    0.13669  -8.340  &lt; 2e-16 ***
+Mult(1, ., L).R1 -0.53827         NA      NA       NA    
+Mult(1, ., L).R2  0.59766         NA      NA       NA    
+Mult(1, ., L).R3  0.38941         NA      NA       NA    
+Mult(1, ., L).R4 -0.44880         NA      NA       NA    
 Mult(1, R, .).L1  0.04544         NA      NA       NA    
 Mult(1, R, .).L2 -0.66170         NA      NA       NA    
 Mult(1, R, .).L3 -0.12210         NA      NA       NA    
 Mult(1, R, .).L4  0.73836         NA      NA       NA    
-Mult(., C, L).   -0.27613    0.10158  -2.718  0.00656 ** 
-Mult(1, ., L).C1 -0.27770         NA      NA       NA    
-Mult(1, ., L).C2 -0.13959         NA      NA       NA    
-Mult(1, ., L).C3  0.84752         NA      NA       NA    
-Mult(1, ., L).C4 -0.43024         NA      NA       NA    
+Mult(., C, L).    0.27613    0.10158   2.718  0.00656 ** 
+Mult(1, ., L).C1  0.27770         NA      NA       NA    
+Mult(1, ., L).C2  0.13959         NA      NA       NA    
+Mult(1, ., L).C3 -0.84752         NA      NA       NA    
+Mult(1, ., L).C4  0.43024         NA      NA       NA    
 Mult(1, C, .).L1 -0.01743         NA      NA       NA    
 Mult(1, C, .).L2  0.65220         NA      NA       NA    
 Mult(1, C, .).L3 -0.74916         NA      NA       NA    
@@ -2500,18 +2503,18 @@ Number of iterations: 1</code></pre>
 <div class="sourceCode cell-code" id="cb168"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a>mu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                       Estimate Std. Error
-Mult(1, ., C + L).R1  0.5382715 0.07940991
-Mult(1, ., C + L).R2 -0.5976649 0.06869502
-Mult(1, ., C + L).R3 -0.3894076 0.08390695
-Mult(1, ., C + L).R4  0.4488010 0.08495489</code></pre>
+Mult(1, ., C + L).R1 -0.5382715 0.07940991
+Mult(1, ., C + L).R2  0.5976649 0.06869502
+Mult(1, ., C + L).R3  0.3894076 0.08390695
+Mult(1, ., C + L).R4 -0.4488010 0.08495489</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a>nu1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    Estimate Std. Error
-Mult(1, R, .).C1 -0.18108336  0.1505749
-Mult(1, R, .).C2  0.74145909  0.0888159
-Mult(1, R, .).C3  0.08066998  0.1598862
-Mult(1, R, .).C4 -0.64104571  0.1141041</code></pre>
+Mult(1, R, .).C1  0.18108336  0.1505749
+Mult(1, R, .).C2 -0.74145909  0.0888159
+Mult(1, R, .).C3 -0.08066998  0.1598862
+Mult(1, R, .).C4  0.64104571  0.1141041</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb172"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a>eta1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2524,10 +2527,10 @@ Mult(1, R, .).L4  0.7383601 0.04862532</code></pre>
 <div class="sourceCode cell-code" id="cb174"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a>nu2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   Estimate Std. Error
-Mult(1, ., L).C1 -0.2776974 0.30818568
-Mult(1, ., L).C2 -0.1395889 0.36977790
-Mult(1, ., L).C3  0.8475231 0.08001496
-Mult(1, ., L).C4 -0.4302368 0.32326672</code></pre>
+Mult(1, ., L).C1  0.2776974 0.30818568
+Mult(1, ., L).C2  0.1395889 0.36977790
+Mult(1, ., L).C3 -0.8475231 0.08001496
+Mult(1, ., L).C4  0.4302368 0.32326672</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a>eta2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2558,8 +2561,7 @@ Mult(1, C, .).L4  0.11439226  0.3321123</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.........................................................
-....
+Running main iterations...............................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb182"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model15)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2576,29 +2578,29 @@ Deviance Residuals:
 
 Coefficients:
                      Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)           3.57509         NA      NA       NA    
-R2                   -0.96856         NA      NA       NA    
-R3                   -0.68451         NA      NA       NA    
-R4                   -1.42320         NA      NA       NA    
-C2                   -1.67240         NA      NA       NA    
-C3                   -2.17732         NA      NA       NA    
-C4                   -3.68275         NA      NA       NA    
-L2                   -1.44924         NA      NA       NA    
-L3                   -2.16741         NA      NA       NA    
-L4                   -3.78630         NA      NA       NA    
+(Intercept)           3.56699         NA      NA       NA    
+R2                   -0.92501         NA      NA       NA    
+R3                   -0.64896         NA      NA       NA    
+R4                   -1.41935         NA      NA       NA    
+C2                   -1.70924         NA      NA       NA    
+C3                   -2.18696         NA      NA       NA    
+C4                   -3.66388         NA      NA       NA    
+L2                   -1.49958         NA      NA       NA    
+L3                   -2.18011         NA      NA       NA    
+L4                   -3.73696         NA      NA       NA    
 Rscore:Cscore         0.13307    0.02552   5.215 1.84e-07 ***
-Mult(., R, C + L).    0.23220         NA      NA       NA    
-Mult(1, ., C + L).R1  1.56791         NA      NA       NA    
-Mult(1, ., C + L).R2 -2.00146         NA      NA       NA    
-Mult(1, ., C + L).R3 -1.34616         NA      NA       NA    
-Mult(1, ., C + L).R4  1.25219         NA      NA       NA    
-Mult(1, R, . + L).C1  0.19002         NA      NA       NA    
-Mult(1, R, . + L).C2 -0.62010         NA      NA       NA    
-Mult(1, R, . + L).C3 -0.02187         NA      NA       NA    
-Mult(1, R, . + L).C4  0.60511         NA      NA       NA    
-Mult(1, R, C + .).L2 -1.10714         NA      NA       NA    
-Mult(1, R, C + .).L3 -0.27938         NA      NA       NA    
-Mult(1, R, C + .).L4  1.08508         NA      NA       NA    
+Mult(., R, C + L).    0.83016         NA      NA       NA    
+Mult(1, ., C + L).R1  0.82368         NA      NA       NA    
+Mult(1, ., C + L).R2 -1.31907         NA      NA       NA    
+Mult(1, ., C + L).R3 -0.92568         NA      NA       NA    
+Mult(1, ., C + L).R4  0.63415         NA      NA       NA    
+Mult(1, R, . + L).C1  0.11302         NA      NA       NA    
+Mult(1, R, . + L).C2 -0.26443         NA      NA       NA    
+Mult(1, R, . + L).C3  0.01429         NA      NA       NA    
+Mult(1, R, . + L).C4  0.30642         NA      NA       NA    
+Mult(1, R, C + .).L2 -0.51584         NA      NA       NA    
+Mult(1, R, C + .).L3 -0.13017         NA      NA       NA    
+Mult(1, R, C + .).L4  0.50556         NA      NA       NA    
 cov_rcl               0.22862    0.01709  13.377  &lt; 2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
@@ -2610,7 +2612,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 55.984 on 44 degrees of freedom
 AIC: 390.3
 
-Number of iterations: 61</code></pre>
+Number of iterations: 47</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb184"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model15)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2652,7 +2654,7 @@ Number of iterations: 61</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations......
+Running main iterations....
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb188"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model15.extended)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2670,10 +2672,10 @@ Deviance Residuals:
 
 Coefficients:
                  Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)       3.58897         NA      NA       NA    
-R2               -1.00992         NA      NA       NA    
-R3               -0.71827         NA      NA       NA    
-R4               -1.42686         NA      NA       NA    
+(Intercept)       3.58447         NA      NA       NA    
+R2               -1.00048         NA      NA       NA    
+R3               -0.71057         NA      NA       NA    
+R4               -1.42602         NA      NA       NA    
 C2               -1.64759    0.10152  -16.23  &lt; 2e-16 ***
 C3               -2.17084    0.15843  -13.70  &lt; 2e-16 ***
 C4               -3.69546    0.24129  -15.32  &lt; 2e-16 ***
@@ -2681,25 +2683,25 @@ L2               -1.41533    0.10612  -13.34  &lt; 2e-16 ***
 L3               -2.15885    0.17266  -12.50  &lt; 2e-16 ***
 L4               -3.81953    0.27268  -14.01  &lt; 2e-16 ***
 Rscore:Cscore     0.13307    0.02539    5.24  1.6e-07 ***
-Mult(., R, C).    0.25385         NA      NA       NA    
+Mult(., R, C).   -1.18537         NA      NA       NA    
 Mult(1, ., C).R1  0.54368         NA      NA       NA    
 Mult(1, ., C).R2 -0.59799         NA      NA       NA    
 Mult(1, ., C).R3 -0.38839         NA      NA       NA    
 Mult(1, ., C).R4  0.44270         NA      NA       NA    
-Mult(1, R, .).C1  0.27289         NA      NA       NA    
-Mult(1, R, .).C2 -2.04384         NA      NA       NA    
-Mult(1, R, .).C3 -0.33308         NA      NA       NA    
-Mult(1, R, .).C4  1.45994         NA      NA       NA    
+Mult(1, R, .).C1 -0.06811         NA      NA       NA    
+Mult(1, R, .).C2  0.42802         NA      NA       NA    
+Mult(1, R, .).C3  0.06166         NA      NA       NA    
+Mult(1, R, .).C4 -0.32232         NA      NA       NA    
 cov_rcl           0.22862    0.01643   13.91  &lt; 2e-16 ***
-Mult(., R, L).   -0.12049         NA      NA       NA    
+Mult(., R, L).    1.08225         NA      NA       NA    
 Mult(1, ., L).R1  0.54368         NA      NA       NA    
 Mult(1, ., L).R2 -0.59799         NA      NA       NA    
 Mult(1, ., L).R3 -0.38839         NA      NA       NA    
 Mult(1, ., L).R4  0.44270         NA      NA       NA    
-Mult(1, R, .).L1 -0.26931         NA      NA       NA    
-Mult(1, R, .).L2  6.40131         NA      NA       NA    
-Mult(1, R, .).L3  1.41396         NA      NA       NA    
-Mult(1, R, .).L4 -6.80700         NA      NA       NA    
+Mult(1, R, .).L1  0.02703         NA      NA       NA    
+Mult(1, R, .).L2 -0.71562         NA      NA       NA    
+Mult(1, R, .).L3 -0.16037         NA      NA       NA    
+Mult(1, R, .).L4  0.75488         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -2710,7 +2712,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 55.984 on 46 degrees of freedom
 AIC: 386.3
 
-Number of iterations: 6</code></pre>
+Number of iterations: 4</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb190"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">&lt;-</span></span>
 <span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getContrasts</span>(</span>
@@ -2740,7 +2742,7 @@ Number of iterations: 6</code></pre>
 <span id="cb190-26"><a href="#cb190-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
-Running main iterations.
+Running main iterations..
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model15.phis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2779,15 +2781,15 @@ Mult(1, R, .).C2 -0.74481         NA      NA       NA
 Mult(1, R, .).C3 -0.06806         NA      NA       NA    
 Mult(1, R, .).C4  0.64122         NA      NA       NA    
 cov_rcl           0.22862    0.01640  13.939  &lt; 2e-16 ***
-Mult(., R, L).   -1.13826    0.13726  -8.293  &lt; 2e-16 ***
+Mult(., R, L).    1.13826    0.13726   8.293  &lt; 2e-16 ***
 Mult(1, ., L).R1  0.54368         NA      NA       NA    
 Mult(1, ., L).R2 -0.59799         NA      NA       NA    
 Mult(1, ., L).R3 -0.38839         NA      NA       NA    
 Mult(1, ., L).R4  0.44270         NA      NA       NA    
-Mult(1, R, .).L1 -0.04806         NA      NA       NA    
-Mult(1, R, .).L2  0.65804         NA      NA       NA    
-Mult(1, R, .).L3  0.13012         NA      NA       NA    
-Mult(1, R, .).L4 -0.74010         NA      NA       NA    
+Mult(1, R, .).L1  0.04806         NA      NA       NA    
+Mult(1, R, .).L2 -0.65804         NA      NA       NA    
+Mult(1, R, .).L3 -0.13012         NA      NA       NA    
+Mult(1, R, .).L4  0.74010         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -2798,7 +2800,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 55.984 on 50 degrees of freedom
 AIC: 378.3
 
-Number of iterations: 1</code></pre>
+Number of iterations: 2</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb194"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a>mu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2819,10 +2821,10 @@ Mult(1, R, . + L).C4  0.64122226 0.11322236</code></pre>
 <div class="sourceCode cell-code" id="cb198"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a>eta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    Estimate Std. Error
-Mult(1, R, .).L1 -0.04806244 0.08932196
-Mult(1, R, .).L2  0.65804171 0.05969167
-Mult(1, R, .).L3  0.13011596 0.08427834
-Mult(1, R, .).L4 -0.74009523 0.04837401</code></pre>
+Mult(1, R, .).L1  0.04806244 0.08932196
+Mult(1, R, .).L2 -0.65804171 0.05969167
+Mult(1, R, .).L3 -0.13011596 0.08427834
+Mult(1, R, .).L4  0.74009523 0.04837401</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb200"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model15)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
