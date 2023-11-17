@@ -5,19 +5,552 @@
 
 [訳者のGitHubのスクリプトのフォルダ](https://github.com/ShoFujihara/Association_Models_Japanese/tree/main/scripts) にRのスクリプトファイルを保存しているのでそれも活用してください．
 
+```{r}
+#| message: false
+library(tidyverse)
+library(gnm)
+library(broom)
+library(vcdExtra)
+```
+
 
 ## Duncan (1979)
 
-@duncan1979 の結果を再現する．
+@duncan1979 の結果を再現する．まずはデータを作成する．
+
+```{r}
+# Data (p. 795)
+Freq_duncan_1979 <- c(50, 19, 26, 8, 7, 11, 6, 2,
+                      16, 40, 34, 18, 11, 20, 8, 3,
+                      12, 35, 65, 66, 35, 88, 23, 21,
+                      11, 20, 58, 110, 40, 183, 64, 32,
+                      2, 8, 12, 23, 25, 46, 28, 12,
+                      12, 28, 102, 162, 90, 554, 230, 177,
+                      0, 6, 19, 40, 21, 158, 143, 71,
+                      0, 3, 14, 32, 15, 126, 91, 106
+                      )
+
+d_duncan <- tibble(Freq = Freq_duncan_1979,
+                   O = gl(n = 8, k = 8, length = 8 * 8),
+                   D = gl(n = 8, k = 1, length = 8 * 8))
+
+# データの完成
+d_duncan
+
+# Row and column scores
+d_duncan <- d_duncan |> 
+  mutate(U = as.numeric(O),
+         V = as.numeric(D))
+
+# 確認
+d_duncan |> count(O, U)
+d_duncan |> count(D, V)
+
+# Diagonal parameters
+d_duncan <- d_duncan |> 
+  mutate(Diag = case_when(U == V ~ U, 
+                          .default = 0))
+# 確認
+d_duncan |> xtabs(Diag ~ O + D, data = _)
+# factorにする
+d_duncan <- d_duncan |> mutate(Diag = factor(Diag))
+
+# weight 
+d_duncan <- d_duncan |> mutate(W = ifelse(Diag != 0, 0, 1))
+
+# weight変数がどのようになっているのかを確認
+d_duncan |> xtabs(W ~ O + D, data = _)
+d_duncan |> uncount(weights = W) |> 
+  xtabs(Freq ~ O + D, data = _)
+# データの完成
+d_duncan
+```
+
+このデータについて`gnm`を用いたモデルの推定を行う．`glm`でもよい．結果は`summary`でみることができるが，`tidy`や`glance`でも確認でき，これらを使ったほうが表の整理やその後の`ggplot`による図の作成が簡単である．`tidy`は`gnm`をサポートの対象外としているが，`glm`とほぼ同じ構造なのではじめに警告がでるものの，結果は問題なく出力される．
+
+```{r}
+# (1) Independence
+fit_d_1 <- d_duncan |> 
+  gnm(Freq ~ O + D, data = _, family = poisson)
+summary(fit_d_1)
+tidy(fit_d_1)
+glance(fit_d_1)
+
+# (2) Row effects
+fit_d_2 <- d_duncan |> 
+  gnm(Freq ~ O + D + O:V, data = _, family = poisson)
+summary(fit_d_2)
+tidy(fit_d_2)
+glance(fit_d_2)
+
+# (3) Quasi independence, diagonal omitted
+fit_d_3 <- d_duncan |> gnm(Freq ~ O + D, data = _, weights = W, family = poisson)
+summary(fit_d_3)
+tidy(fit_d_3)
+glance(fit_d_3)
+
+# (3) Quasi independence, diagonal fitted
+fit_d_3b <- d_duncan |> gnm(Freq ~ O + D + Diag, data = _, family = poisson)
+summary(fit_d_3b)
+tidy(fit_d_3b)
+glance(fit_d_3b)
+
+# (4) Uniform association, diagonal omitted
+fit_d_4 <- d_duncan |> gnm(Freq ~  O + D + U:V, data = _, weights = W, family = poisson)
+summary(fit_d_4)
+tidy(fit_d_4)
+glance(fit_d_4)
+
+# log-odds b_hat
+fit_d_4$coefficients["U:V"] |> exp()
+
+fit_d_4b <- d_duncan |> gnm(Freq ~  O + D + U:V + Diag, data = _, family = poisson)
+summary(fit_d_4b)
+tidy(fit_d_4b)
+glance(fit_d_4b)
+
+# log-odds b_hat
+fit_d_4b$coefficients["U:V"] |> exp()
+
+# (5) Row effects, diagonal omitted*
+fit_d_5 <- d_duncan |> gnm(Freq ~ O + D + O:V, data = _, weights = W, family = poisson)
+summary(fit_d_5)
+tidy(fit_d_5)
+glance(fit_d_5)
+
+# (5) Row effects, diagonal fitted
+fit_d_5b <- d_duncan |> gnm(Freq ~ O + D + O:V + Diag, data = _, family = poisson)
+summary(fit_d_5b)
+tidy(fit_d_5b)
+glance(fit_d_5b)
+```
+
+
+```{r}
+# Tabel 1
+d_duncan_fitted <- 
+  d_duncan |> 
+  mutate(fitted_1 = predict(fit_d_1, type = "response"),
+         fitted_2 = predict(fit_d_2, type = "response"),
+         fitted_3 = predict(fit_d_3, type = "response"),
+         fitted_4 = predict(fit_d_4, type = "response"),
+         fitted_5 = predict(fit_d_5, type = "response"))
+
+tab_obs <- d_duncan_fitted |> xtabs(Freq ~ O + D, data = _)
+tab_fitted_1 <- d_duncan_fitted |> xtabs(fitted_1 ~ O + D, data = _)
+tab_fitted_2 <- d_duncan_fitted |> xtabs(fitted_2 ~ O + D, data = _)
+tab_fitted_3 <- d_duncan_fitted |> xtabs(fitted_3 ~ O + D, data = _)
+tab_fitted_4 <- d_duncan_fitted |> xtabs(fitted_4 ~ O + D, data = _)
+tab_fitted_5 <- d_duncan_fitted |> xtabs(fitted_5 ~ O + D, data = _)
+
+# Observed Counts
+tab_obs
+# Fitted Counts, Model (4)
+tab_fitted_4 |> round(1)
+# Fitted Counts, Model (5)
+tab_fitted_5 |> round(1)
+
+d_1 <- (tab_obs/tab_fitted_1) |> diag()
+d_2 <- (tab_obs/tab_fitted_2) |> diag()
+d_3 <- (tab_obs/tab_fitted_3) |> diag()
+d_4 <- (tab_obs/tab_fitted_4) |> diag()
+d_5 <- (tab_obs/tab_fitted_5) |> diag()
+
+# Diagonal Ratios
+occ <- c("I","II","III","IV","Va","Vb","VI","VII")
+tibble(occ, d_1, d_2, d_3, d_4, d_5)
+
+# Table 2
+Model <- c("(1) Independence",
+           "(2) Row effects",
+           "(3) Quasi independence, diagonal omitted",
+           "(4) Uniform association, diagonal omitted",
+           "(5) Row effects, diagonal omitted")
+
+# 複数のモデルの適合度をglanceで示してまとめる
+list(fit_d_1, fit_d_2, fit_d_3, fit_d_4, fit_d_5) |> 
+  map_dfr(glance) |> 
+  mutate(Model, .before = 1) |> 
+  dplyr::select(Model, L2 = deviance, df = df.residual)
+
+# Figure 2
+b_4 <- exp(fit_d_4$coefficients["U:V"] * (7:0))
+b_5 <- fit_d_5$coefficients[grep(":V", names(fit_d_5$coefficients))]
+b_5["O8:V"] <- 0
+b_5 <- exp(b_5 * (-1)) 
+
+d_duncan_b_4 <- tibble(y = b_4, Model = "Model 4", x = gl(8, 1))
+d_duncan_b_5 <- tibble(y = b_5, Model = "Model 5", x = gl(8, 1))
+d <- bind_rows(d_duncan_b_4, d_duncan_b_5)
+
+d |> 
+  mutate(x = factor(x, levels = 8:1)) |>
+  ggplot(aes(x = x, y = y, 
+             group = Model, 
+             linetype = Model,
+             color = Model)) + 
+  geom_line() + 
+  ylim(1,3) + 
+  scale_linetype_manual(values = c("longdash","solid")) +
+  labs(x = "FATHER'S OCCUPATION (i)", y = "b_i/b_8") +
+  theme_classic() + 
+  ggthemes::scale_color_colorblind()
+
+# mosaic plot
+mosaic(fit_d_1, ~ O + D, residuals_type = "rstandard")
+mosaic(fit_d_2, ~ O + D, residuals_type = "rstandard")
+mosaic(fit_d_3b, ~ O + D, residuals_type = "rstandard")
+mosaic(fit_d_4b, ~ O + D, residuals_type = "rstandard")
+mosaic(fit_d_5b, ~ O + D, residuals_type = "rstandard")
+```
+
 
 ## Yamaguchi (1987)
 
 @yamaguchi1987 の結果を再現する．
 
+```{r}
+# Data
+Freq_yamaguchi_1987 <- c(1275, 364, 274, 272, 17,
+                         1055, 597, 394, 443, 31,
+                         1043, 587, 1045, 951, 47,
+                         1159, 791, 1323, 2046, 52,
+                         666, 496, 1031, 1632, 646,
+                         
+                         474, 129, 87, 124, 11,
+                         300, 218, 171, 220, 8,
+                         438, 254, 669, 703, 16,
+                         601, 388, 932, 1789, 37,
+                         76, 56, 125, 295, 191,
+                         
+                         127, 101, 24, 30, 12,
+                         86, 207, 64, 61, 13,
+                         43, 73, 122, 60, 13,
+                         35, 51, 62, 66, 11,
+                         109, 206, 184, 253, 325)
+d_yamaguchi <- tibble(O = gl(5, k = 5, length = 3 * 5 * 5),
+                      D = gl(5, k = 1, length = 3 * 5 * 5),
+                      C = gl(3, k = 5 * 5, length = 3 * 5 * 5),
+                      Freq = Freq_yamaguchi_1987)
+d_yamaguchi
+
+# Diagonal parameters
+d_yamaguchi <- d_yamaguchi |> 
+  mutate(Diag = case_when(O == D ~ O, .default = "0"))
+
+# Row and column scores
+d_yamaguchi <- d_yamaguchi |> 
+  mutate(U = as.numeric(O),
+         V = as.numeric(D))
+
+# Country dummy
+d_yamaguchi <- d_yamaguchi |> 
+  mutate(C2 = case_match(C,
+                         c("1","3") ~ 0,
+                         "2" ~ 1),
+         C3 = case_match(C,
+                         c("1","2") ~ 0,
+                         "3" ~ 1))
+  
+# Off diagonal cells (Diag*C)
+# No association between R and C, given L
+fit_y_1 <- d_yamaguchi |> glm(Freq ~ O*C + D*C + Diag*C, data = _, family = poisson)
+glance(fit_y_1)
+
+# U0-Cross-nationally homogeneous uniform association
+fit_y_2 <- d_yamaguchi |> glm(Freq ~ O*C + D*C + Diag*C + U:V, data = _, family = poisson)
+glance(fit_y_2)
+b_2 <- fit_y_2$coefficients[grep("U:V", names(fit_y_2$coefficients))]
+b_2
+
+# U1-Cross-nationally uniform uniform association
+fit_y_3 <- d_yamaguchi |> glm(Freq ~ O*C + D*C + Diag*C + U:V*C, data = _, family = poisson)
+glance(fit_y_3)
+b_3 <- fit_y_3$coefficients[grep("U:V", names(fit_y_3$coefficients))]
+b_3
+
+# U2-Cross-nationally uniform uniform association
+fit_y_4 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + U:V:C3, data = _, family = poisson)
+glance(fit_y_4)
+b_4 <- fit_y_4$coefficients[grep("U:V", names(fit_y_4$coefficients))]
+b_4
+      
+# R0-Cross-nationally homogeneous row effect association
+fit_y_5 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + O:V, data = _, family = poisson)
+glance(fit_y_5)
+
+# R1-Cross-nationally uniform row effect association
+fit_y_6 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + O:V + U:V*C, data = _, family = poisson)
+glance(fit_y_6)
+b_6 <- fit_y_6$coefficients[grep("V:U", names(fit_y_6$coefficients))]
+b_6
+
+# R2-Cross-nationally uniform row effect association
+fit_y_7 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + O:V + U:V:C3, data = _, family = poisson)
+glance(fit_y_7)
+b_7 <- fit_y_7$coefficients[grep("V:U", names(fit_y_7$coefficients))]
+b_7
+
+# C0-Cross-nationally homogeneous column effect association
+fit_y_8 <- d_yamaguchi |>
+  glm(Freq ~ O*C + D*C + Diag*C + U:D, data = _, family = poisson)
+glance(fit_y_8)
+
+# C1-Cross-nationally uniform column effect association
+fit_y_9 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + U:D + U:V*C, data = _, family = poisson)
+glance(fit_y_9)
+b_9 <- fit_y_9$coefficients[grep("U:V", names(fit_y_9$coefficients))]
+b_9
+
+# C2-Cross-nationally uniform column effect association
+fit_y_10 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + U:D + U:V:C3, data = _, family = poisson)
+glance(fit_y_10)
+b_10 <- fit_y_10$coefficients[grep("U:V", names(fit_y_10$coefficients))]
+b_10
+
+# H0-Cross-nationally homogeneous homogeneous row & column effect association
+fit_y_11 <- d_yamaguchi |> gnm(Freq ~ O*C + D*C + Diag*C + MultHomog(O, D), 
+                               data = _, family = poisson)
+glance(fit_y_11)
+
+# H1-Cross-nationally uniform homogeneousrow & column effect association
+fit_y_12 <- d_yamaguchi |> 
+  gnm(Freq ~ O*C + D*C + Diag*C + MultHomog(O, D) + U:V:C2 + U:V:C3, 
+                               data = _, family = poisson)
+glance(fit_y_12)
+b_12 <- fit_y_12$coefficients[grep("U:V", names(fit_y_12$coefficients))]
+b_12
+
+# H2-Cross-nationally uniform homogeneousrow & column effect association
+fit_y_13 <- d_yamaguchi |> gnm(Freq ~ O*C + D*C + Diag*C + MultHomog(O, D) + U:V:C3, 
+                               data = _, family = poisson)
+glance(fit_y_13)
+b_13 <- fit_y_13$coefficients[grep("U:V", names(fit_y_13$coefficients))]
+b_13
+
+# R+C0 -Cross-nationally uniform row & column effect association
+fit_y_14 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + U:D + O:V, data = _, family = poisson)
+glance(fit_y_14)
+
+# R+C1 -Cross-nationally uniform row & column effect association
+fit_y_15 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + U:D + O:V + U:V*C, data = _, family = poisson)
+glance(fit_y_15)
+b_15 <- fit_y_15$coefficients[grep("U:V", names(fit_y_15$coefficients))]
+b_15
+
+# R+C2-Cross-nationally uniform row & column effect association
+fit_y_16 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + U:D + O:V + U:V:C3, data = _, family = poisson)
+glance(fit_y_16)
+b_16 <- fit_y_16$coefficients[grep("U:V", names(fit_y_16$coefficients))]
+b_16
+
+d_yamaguchi <- d_yamaguchi |> 
+  mutate(SYM = c(rep(c(0, 1, 2, 3, 4,
+                       1, 0, 5, 6, 7, 
+                       2, 5, 0, 8, 9,
+                       3, 6, 8, 0, 10,
+                       4, 7, 9, 10, 0), 3)) |>  factor())
+
+d_yamaguchi |> dplyr::select(O, D, C, SYM) |> unique()
+
+# QS0-Cross-nationally homogeneous quasi-symmetry
+fit_y_17 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + SYM, data = _, family = poisson)
+glance(fit_y_17)
+tidy(fit_y_17) |> print(n = Inf)
+
+# QS1-Cross-nationally uniform quasi-symmetry
+fit_y_18 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + SYM + U:V*C, data = _, family = poisson)
+glance(fit_y_18)
+b_18 <- fit_y_18$coefficients[grep("U:V", names(fit_y_18$coefficients))]
+b_18
+
+# QS2-Cross-nationally uniform quasi-symmetry
+fit_y_19 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + SYM + U:V:C3, data = _, family = poisson)
+glance(fit_y_19)
+b_19 <- fit_y_19$coefficients[grep("U:V", names(fit_y_19$coefficients))]
+b_19
+
+# FI0-Cross-nationallyhomogeneous full two-way interaction
+fit_y_20 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + O:D, data = _, family = poisson)
+glance(fit_y_20)
+
+# FI1-Cross-nationally uniform full two-way interaction
+fit_y_21 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + O:D + U:V*C, data = _, family = poisson)
+glance(fit_y_21)
+b_21 <- fit_y_21$coefficients[grep("U:V", names(fit_y_21$coefficients))]
+b_21
+
+# FI2-Cross-nationally uniform full two-way interaction
+fit_y_22 <- d_yamaguchi |> 
+  glm(Freq ~ O*C + D*C + Diag*C + O:D + U:V:C3, data = _, family = poisson)
+glance(fit_y_22)
+b_22 <- fit_y_22$coefficients[grep("U:V", names(fit_y_22$coefficients))]
+b_22
+```
+
+```{r}
+Model <- c("No association between R and C, given L",
+           "U0-Cross-nationally homogeneous uniform association",
+           "U1-Cross-nationally uniform uniform association",
+           "U2-Cross-nationally uniform uniform association",
+           "R0-Cross-nationally homogeneous row effect association",
+           "R1-Cross-nationally uniform row effect association",
+           "R2-Cross-nationally uniform row effect association",
+           "C0-Cross-nationally homogeneous column effect association",
+           "C1-Cross-nationally uniform column effect association",
+           "C2-Cross-nationally uniform column effect association",
+           "H0-Cross-nationally homogeneous homogeneous row & column effect association",
+           "H1-Cross-nationally uniform homogeneousrow & column effect association",
+           "H2-Cross-nationally uniform homogeneousrow & column effect association",
+           "R+C0 -Cross-nationally uniform row & column effect association",
+           "R+C1 -Cross-nationally uniform row & column effect association",
+           "R+C2-Cross-nationally uniform row & column effect association",
+           "QS0-Cross-nationally homogeneous quasi-symmetry",
+           "QS1-Cross-nationally uniform quasi-symmetry",
+           "QS2-Cross-nationally uniform quasi-symmetry",
+           "FI0-Cross-nationallyhomogeneous full two-way interaction",
+           "FI1-Cross-nationally uniform full two-way interaction",
+           "FI2-Cross-nationally uniform full two-way interaction")
+
+list(fit_y_1, fit_y_2, fit_y_3, fit_y_4, fit_y_5, fit_y_6, fit_y_7, fit_y_8, fit_y_9, fit_y_10,
+     fit_y_11, fit_y_12, fit_y_13, fit_y_14, fit_y_15, fit_y_16, fit_y_17, fit_y_18, fit_y_19,
+     fit_y_20, fit_y_21, fit_y_22) |> 
+  map_dfr(glance) |> 
+  mutate(Model = Model, .before = 1) |> 
+  dplyr::select(-c(2:3)) |> 
+  print(n = Inf)
+```
+
+
+
+```{r}
+# R+C2: No uniform difference between any two
+fit_y_23 <- d_yamaguchi |> 
+  gnm(Freq ~ O*C + D*C + Diag*C + U:D + O:V + U:V*C3, 
+      data = _, family = poisson)
+glance(fit_y_23)
+tidy(fit_y_23) |> print(n = Inf)
+# R+C3: Uniform difference between G.B. andU.S.
+# ...
+```
+
+
 ## Xie (1992)
 
 @xie1992 の結果を再現する．
 
+
+```{r}
+# Data
+d_xie <- d_yamaguchi
+# 確認
+d_xie
+```
+
+
+
+```{r}
+# Off diagonal cells (Diag*C)
+# Null association between R and C, given L
+fit_x_1 <- d_xie |> glm(Freq ~ O*C + D*C + Diag*C, data = _, family = poisson)
+glance(fit_x_1)
+
+# R0 Cross-nationally homogeneous row effect association
+fit_x_2 <- d_xie |> glm(Freq ~ O*C + D*C + Diag*C + O:V, data = _, family = poisson)
+glance(fit_x_2)
+
+# R1 Cross-nationally uniform row effect association
+fit_x_3 <- d_xie |> glm(Freq ~ O*C + D*C + Diag*C + O:V + U:V*C, data = _, family = poisson)
+glance(fit_x_3)
+
+# Rx Cross-nationally log-multiplicative row effect association
+fit_x_4 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C + Mult(C,O,V), data = _, family = poisson)
+glance(fit_x_4)
+
+# C0-Cross-nationally homogeneous column effect association
+fit_x_5 <- d_xie |> glm(Freq ~ O*C + D*C + Diag*C + U:D, data = _, family = poisson)
+glance(fit_x_5)
+
+# C1-Cross-nationally uniform column effect association
+fit_x_6 <- d_xie |> glm(Freq ~ O*C + D*C + Diag*C + U:D + U:V*C, data = _, family = poisson)
+glance(fit_x_6)
+
+# Cx-Cross-nationally log-multiplicative column effect association
+fit_x_7 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C + Mult(C,U,D), data = _, family = poisson)
+glance(fit_x_7)
+
+# (R+C) 0 - Cross-nationally homogeneous row and column effects association I
+fit_x_8 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C  + O:V + U:D, data = _, family = poisson)
+glance(fit_x_8)
+
+# (R+C) u - Cross-nationally uniform row and column effects association I
+fit_x_9 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C  + O:V + U:D + U:V*C, data = _, family = poisson)
+glance(fit_x_9)
+
+# (R+C) x - Cross-nationally log-multiplicative row and column effects association I
+fit_x_10 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C + Mult(C,O:V+U:D), data = _, family = poisson)
+glance(fit_x_10)
+
+# RC0 Cross-nationally homogeneous row and column effects association
+fit_x_11 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C + Mult(O,D), data = _, family = poisson)
+glance(fit_x_11)
+
+# RCx Cross-nationally log-multiplicative row and column effects association
+fit_x_12 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C + Mult(Exp(C),O,D), data = _, family = poisson)
+glance(fit_x_12)
+
+# FI0 Cross-nationally homogeneous full two-way R and C interaction
+fit_x_13 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C + Mult(1,O*D), data = _, family = poisson)
+glance(fit_x_13)
+
+# FIu Cross-nationally uniform full two-way R and C interaction
+fit_x_14 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C + Mult(1,O*D) + U:V*C, data = _, family = poisson)
+glance(fit_x_14)
+
+# FIx Cross-nationally log-multiplicative full two-way R and C interaction
+fit_x_15 <- d_xie |> gnm(Freq ~ O*C + D*C + Diag*C + Mult(Exp(C),O*D), data = _, family = poisson)
+glance(fit_x_15)
+```
+
+```{r}
+Model <- c("Null association between R and C, given L",
+           "R0 Cross-nationally homogeneous row effect association",
+           "R1 Cross-nationally uniform row effect association",
+           "Rx Cross-nationally log-multiplicative row effect association",
+           "C0-Cross-nationally homogeneous column effect association",
+           "C1-Cross-nationally uniform column effect association",
+           "Cx-Cross-nationally log-multiplicative column effect association",
+           "(R+C) 0 - Cross-nationally homogeneous row and column effects association I",
+           "(R+C) u - Cross-nationally uniform row and column effects association I",
+           "(R+C) x - Cross-nationally log-multiplicative row and column effects association I",
+           "RC0 Cross-nationally homogeneous row and column effects association",
+           "RCx Cross-nationally log-multiplicative row and column effects association",
+           "FI0 Cross-nationally homogeneous full two-way R and C interaction",
+           "FIu Cross-nationally uniform full two-way R and C interaction",
+           "FIx Cross-nationally log-multiplicative full two-way R and C interaction")
+
+list(fit_x_1, fit_x_2, fit_x_3, fit_x_4, fit_x_5, 
+     fit_x_6, fit_x_7, fit_x_8, fit_x_9, fit_x_10,
+     fit_x_11, fit_x_12, fit_x_13, fit_x_14, fit_x_15) |> 
+  map_dfr(glance) |> 
+  mutate(Model = Model, .before = 1) |> 
+  dplyr::select(-c(2:3)) |> 
+  print(n = Inf)
+```
 
 
 

@@ -8,6 +8,7 @@ library(vcdExtra)
 library(knitr)
 library(broom)
 
+
 # Data (p. 795)
 occ <- c("I","II","III","IV","Va","Vb","VI","VII")
 
@@ -133,8 +134,7 @@ d_4 <- (obs/t_fitted_4) |> diag()
 d_5 <- (obs/t_fitted_5) |> diag()
 
 # Diagonal Ratios
-tibble(occ,d_1,d_2,d_3,d_4,d_5) |>
-  kable(digits = 1)
+tibble(occ,d_1,d_2,d_3,d_4,d_5)
 
 # Table 2
 Model <- c("(1) Independence",
