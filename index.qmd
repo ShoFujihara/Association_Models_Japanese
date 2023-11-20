@@ -11,8 +11,7 @@
 
 2023年11月29日販売
 
-![](association_model_japanese.jpeg){width = 30%}
-
+![](association_model_japanese.jpeg){width=30%}
 
 - [honto](https://honto.jp/netstore/pd-book_32822793.html)
 - [紀伊国屋書店ウェブストア](https://www.kinokuniya.co.jp/f/dsg-01-9784320114173)

@@ -257,5 +257,47 @@
     "title": "研究の動向",
     "section": "対応分析との関係",
     "text": "対応分析との関係\n\nvan der Heijden and de Leeuw (1985)\nvan der Heijden and Worsley (1988)\n\n\n\n\n\n\n\nBouchet-Valat, Milan. 2022. “General Marginal-free Association Indices for Contingency Tables: From the Altham Index to the Intrinsic Association Coefficient.” Sociological Methods & Research 51 (1): 203–36. https://doi.org/10.1177/0049124119852389.\n\n\nKuha, Jouni, and John H. Goldthorpe. 2010. “Path Analysis for Discrete Variables: The Role of Education in Social Mobility.” Journal of the Royal Statistical Society Series A: Statistics in Society 173 (2): 351–69. https://doi.org/10.1111/j.1467-985X.2009.00620.x.\n\n\nMize, Trenton. 2019. “Best Practices for Estimating, Interpreting, and Presenting Nonlinear Interaction Effects.” Sociological Science 6: 81–117. https://doi.org/10.15195/v6.a4.\n\n\nvan der Heijden, Peter G. M., and Jan de Leeuw. 1985. “Correspondence Analysis Used Complementary to Loglinear Analysis.” Psychometrika 50 (4): 429–47. https://doi.org/10.1007/BF02296262.\n\n\nvan der Heijden, Peter G. M., and Keith J. Worsley. 1988. “Comment on ‘Correspondence Analysis Used Complementary to Loglinear Analysis’.” Psychometrika 53 (2): 287–91. https://doi.org/10.1007/BF02294139.\n\n\nYamaguchi, Kazuo. 2012. “Log-Linear Causal Analysis of Cross-classified Categorical Data.” Sociological Methodology 42 (1): 257–85. https://doi.org/10.1177/0081175012460661.\n\n\nZhou, Xiang. 2015. “Shrinkage Estimation of Log-odds Ratios for Comparing Mobility Tables.” Sociological Methodology 45 (1): 320–56. https://doi.org/10.1177/0081175015570097."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "『カテゴリカルデータの連関モデル』",
+    "section": "",
+    "text": "はじめに"
+  },
+  {
+    "objectID": "index.html#目的",
+    "href": "index.html#目的",
+    "title": "『カテゴリカルデータの連関モデル』",
+    "section": "目的",
+    "text": "目的\nこのページは共立出版の「計量分析One Point」シリーズのひとつとして出版された\nRaymond Wong著・藤原翔訳．2023．『カテゴリカルデータの連関モデル』共立出版． のためのサポートページです．\n2023年11月29日販売\n\n\nhonto\n紀伊国屋書店ウェブストア\nTSUTAYAオンラインショッピング\n楽天ブックス\nAmazon\n\n本書の付録や補遺とすることも検討しましたが，Association Modelsは他のQuantitative Applications in the Social Sciences (QASS)に比べて分量が多いため（156ページ！），そしてRのバージョンアップやパッケージの更新などに備えるため，正誤表もあわせて公開するためにオンラインで公開することにしました．本書と関連した連関モデルの適用例の情報についても，このサポートページで補うことができればと思います．\nこのサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．\nなおこのサポートページの内容は英語版のサポートページ が元になっています．そちらもぜひ参考にしてください．lem は Jeroen K. Vermunt教授のホームページからダウンロードできます．"
+  },
+  {
+    "objectID": "index.html#構成",
+    "href": "index.html#構成",
+    "title": "『カテゴリカルデータの連関モデル』",
+    "section": "構成",
+    "text": "構成\nまず，シリーズ編者による内容紹介，第1章から第6章までをできるだけ再現することを試みます．現在のRのgnmパッケージだけではできないことも部分的にはあります．またそれ以外にも自由度や関連した先行研究の再現 （Duncan (1979), Yamaguchi (1987)，Xie (1992)）などを行います． 他の対数線形モデルや対数乗法モデルについての最近の動向についてもアップデートしていきます．"
+  },
+  {
+    "objectID": "index.html#rのスクリプト",
+    "href": "index.html#rのスクリプト",
+    "title": "『カテゴリカルデータの連関モデル』",
+    "section": "Rのスクリプト",
+    "text": "Rのスクリプト\n本サポートページのスクリプトはそのままコピー・アンド・ペーストすることが可能です． スクリプトを選択してコピーしても良いですし，各スクリプトの右上の図をクリックしてもコピーされます．\n\nなおRのスクリプトについては 訳者のGitHubページ の scripts というフォルダに保存されているので，そちらを参照してください．Googleドライブにもスクリプトを保存しておきます．"
+  },
+  {
+    "objectID": "index.html#正誤表",
+    "href": "index.html#正誤表",
+    "title": "『カテゴリカルデータの連関モデル』",
+    "section": "正誤表",
+    "text": "正誤表\n\n原著 p. 133，Table 5.5，訳書 p. XX 表5.5のモデル1の\\(\\Delta\\)の値は3.85ではなく33.85です．（2023年11月7日）"
+  },
+  {
+    "objectID": "index.html#サポートページバージョン情報",
+    "href": "index.html#サポートページバージョン情報",
+    "title": "『カテゴリカルデータの連関モデル』",
+    "section": "サポートページバージョン情報",
+    "text": "サポートページバージョン情報\nversion 1になるにはもう少し時間がかかります．\n\n2023年5月1日: version 0.1.\n2023年11月7日: version 0.2.\n\n\n\n\n\n\n\nDuncan, Otis Dudley. 1979. “How Destination Depends on Origin in the Occupational Mobility Table.” The American Journal of Sociology 84 (4): 793–803. https://www.jstor.org/stable/2778024.\n\n\nXie, Yu. 1992. “The Log-Multiplicative Layer Effect Model for Comparing Mobility Tables.” American Sociological Review 57 (3): 380–95. https://doi.org/10.2307/2096242.\n\n\nYamaguchi, Kazuo. 1987. “Models for Comparing Mobility Tables: Toward Parsimony and Substance.” American Sociological Review 52 (4): 482–94. https://doi.org/10.2307/2095293."
   }
 ]
