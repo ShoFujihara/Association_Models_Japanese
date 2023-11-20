@@ -1,0 +1,20 @@
+# 研究の動向 {-}
+
+
+## 内的連関係数
+- @bouchet-valat2022
+- @zhou2015
+
+## 因果推論
+- @yamaguchi2012
+- @kuha2010
+
+## オッズ比
+- @karlson2023a
+
+## 限界効果
+- @mize2019a
+
+## 対応分析との関係
+- @vanderheijden1985
+- @vanderheijden1988

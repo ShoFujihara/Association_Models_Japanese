@@ -19,6 +19,7 @@ book:
     - 9-Note.qmd
     - 10-R.qmd
     - 11-Replication.qmd
+    - 12-Review.qmd
 
 format:
   html:
