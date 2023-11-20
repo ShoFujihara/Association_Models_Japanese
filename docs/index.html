@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="藤原翔（東京大学社会科学研究所）">
-<meta name="dcterms.date" content="2023-11-18">
+<meta name="dcterms.date" content="2023-11-20">
 
 <title>『カテゴリカルデータの連関モデル』</title>
 <style>
@@ -250,7 +250,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 18, 2023</p>
+      <p class="date">November 20, 2023</p>
     </div>
   </div>
   
@@ -267,7 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>このページは共立出版の<a href="https://www.kyoritsu-pub.co.jp/series/100268/">「計量分析One Point」シリーズ</a>のひとつとして出版された</p>
 <p><a href="https://www.kyoritsu-pub.co.jp/book/b10039534.html">Raymond Wong著・藤原翔訳．2023．『カテゴリカルデータの連関モデル』共立出版．</a> のためのサポートページです．</p>
 <p>2023年11月29日販売</p>
-<p><img src="association_model_japanese.jpeg" class="img-fluid" style="width:30.0%"></p>
+<p><img src="association_model_japanese.jpeg" class="img-fluid">{width = 30%}</p>
 <ul>
 <li><a href="https://honto.jp/netstore/pd-book_32822793.html">honto</a></li>
 <li><a href="https://www.kinokuniya.co.jp/f/dsg-01-9784320114173">紀伊国屋書店ウェブストア</a></li>
@@ -277,7 +277,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>本書の付録や補遺とすることも検討しましたが，<em>Association Models</em>は他の<a href="https://us.sagepub.com/en-us/nam/qass">Quantitative Applications in the Social Sciences (QASS)</a>に比べて分量が多いため（156ページ！），そしてRのバージョンアップやパッケージの更新などに備えるため，正誤表もあわせて公開するためにオンラインで公開することにしました．本書と関連した連関モデルの適用例の情報についても，このサポートページで補うことができればと思います．</p>
 <p>このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．</p>
-<p>なおこのサポートページの内容は英語版の<a href="https://studysites.sagepub.com/wongstudy/">サポートページ</a> が元になっています．そちらもぜひ参考にしてください．</p>
+<p>なおこのサポートページの内容は英語版の<a href="https://studysites.sagepub.com/wongstudy/">サポートページ</a> が元になっています．そちらもぜひ参考にしてください．lem は <a href="https://jeroenvermunt.nl/">Jeroen K. Vermunt教授のホームページ</a>からダウンロードできます．</p>
 </section>
 <section id="rのスクリプト" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="rのスクリプト">Rのスクリプト</h2>
@@ -293,6 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="サポートページバージョン情報" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="サポートページバージョン情報">サポートページバージョン情報</h2>
+<p>version 1になるにはもう少し時間がかかります．</p>
 <ul>
 <li>2023年5月1日: version 0.1.</li>
 <li>2023年11月7日: version 0.2.</li>
@@ -624,7 +625,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>2023年11月29日販売</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="al">![](association_model_japanese.jpeg)</span>{width=30%}</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="al">![](association_model_japanese.jpeg)</span>{width = 30%}</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">honto</span><span class="co">](https://honto.jp/netstore/pd-book_32822793.html)</span></span>
@@ -638,7 +639,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>なおこのサポートページの内容は英語版の<span class="co">[</span><span class="ot">サポートページ</span><span class="co">](https://studysites.sagepub.com/wongstudy/)</span> が元になっています．そちらもぜひ参考にしてください．</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>なおこのサポートページの内容は英語版の<span class="co">[</span><span class="ot">サポートページ</span><span class="co">](https://studysites.sagepub.com/wongstudy/)</span> が元になっています．そちらもぜひ参考にしてください．lem は <span class="co">[</span><span class="ot">Jeroen K. Vermunt教授のホームページ</span><span class="co">](https://jeroenvermunt.nl/)</span>からダウンロードできます．</span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Rのスクリプト {-}</span></span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
@@ -655,9 +656,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>原著 p. 133，Table 5.5，訳書 p. XX 表5.5のモデル1の$\Delta$の値は<span class="in">`3.85`</span>ではなく<span class="in">`33.85`</span>です．（2023年11月7日）</span>
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## サポートページバージョン情報 {-}</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2023年5月1日: version 0.1.</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2023年11月7日: version 0.2.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>version 1になるにはもう少し時間がかかります．</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2023年5月1日: version 0.1.</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>2023年11月7日: version 0.2.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

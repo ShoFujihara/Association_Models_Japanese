@@ -11,7 +11,7 @@
 
 2023年11月29日販売
 
-![](association_model_japanese.jpeg){width=30%}
+![](association_model_japanese.jpeg){width = 30%}
 
 
 - [honto](https://honto.jp/netstore/pd-book_32822793.html)
@@ -25,7 +25,7 @@
 
 このサポートページでは，特にRの基本的な操作方法と，Rを用いた連関分析の方法を紹介します．各章ごとにRの実行方法をまとめています．モデルの意味や結果の解釈などについては本書を参考にしてください．
 
-なおこのサポートページの内容は英語版の[サポートページ](https://studysites.sagepub.com/wongstudy/) が元になっています．そちらもぜひ参考にしてください．
+なおこのサポートページの内容は英語版の[サポートページ](https://studysites.sagepub.com/wongstudy/) が元になっています．そちらもぜひ参考にしてください．lem は [Jeroen K. Vermunt教授のホームページ](https://jeroenvermunt.nl/)からダウンロードできます．
 
 ## Rのスクリプト {-}
 
@@ -42,6 +42,8 @@
 - 原著 p. 133，Table 5.5，訳書 p. XX 表5.5のモデル1の$\Delta$の値は`3.85`ではなく`33.85`です．（2023年11月7日）
 
 ## サポートページバージョン情報 {-}
+version 1になるにはもう少し時間がかかります．
 
 - 2023年5月1日: version 0.1.
 - 2023年11月7日: version 0.2.
+
