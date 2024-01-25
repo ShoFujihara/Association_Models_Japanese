@@ -38,6 +38,7 @@ df &=\overbrace{IJ}^{セルの数} - [\overbrace{1}^{\lambda} + \overbrace{(I - 
 
 **式（2.9）：$R$モデル**
 
+
 \begin{align}
 df &=\overbrace{IJ}^{セルの数} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B}  + \overbrace{(I - 1)}^{\tau_i^A}]\\
  &= IJ - 2I - J + 2\\
