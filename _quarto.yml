@@ -15,7 +15,7 @@ book:
     - 5-Chapter_4.qmd
     - 6-Chapter_5.qmd
     - 7-Chapter_6.qmd
-    - 8-DF.qmd
+    - 8-degrees_of_freedom.qmd
     - 9-Note.qmd
     - 10-R.qmd
     - 11-Replication.qmd
