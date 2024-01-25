@@ -204,7 +204,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./8-DF.html" class="sidebar-item-text sidebar-link">
+  <a href="./8-degrees_of_freedom.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">自由度</span></a>
   </div>
 </li>
@@ -1396,7 +1396,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations....
+Running main iterations.....
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_y_12)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1409,8 +1409,8 @@ Done</code></pre>
 <div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a>b_12 <span class="ot">&lt;-</span> fit_y_12<span class="sc">$</span>coefficients[<span class="fu">grep</span>(<span class="st">"U:V"</span>, <span class="fu">names</span>(fit_y_12<span class="sc">$</span>coefficients))]</span>
 <span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a>b_12</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     U:V:C2      U:V:C3 
--0.00254806 -0.05219935 </code></pre>
+<pre><code>      U:V:C2       U:V:C3 
+-0.002548059 -0.052199354 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="co"># H2-Cross-nationally uniform homogeneous row &amp; column effect association</span></span>
 <span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a>fit_y_13 <span class="ot">&lt;-</span> d_yamaguchi <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">MultHomog</span>(O, D) <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">:</span>C3, </span>
@@ -1902,7 +1902,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations........
+Running main iterations.......
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb204"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb204-1"><a href="#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_10)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1962,7 +1962,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations....
+Running main iterations.....
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb220"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb220-1"><a href="#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_14)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
