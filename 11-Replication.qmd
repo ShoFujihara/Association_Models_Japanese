@@ -236,7 +236,7 @@ d_yamaguchi
 
 # Diagonal parameters
 d_yamaguchi <- d_yamaguchi |> 
-  mutate(Diag = case_when(O == D ~ O, .default = "0"))
+  mutate(Diag = case_when(O == D ~ O, .default = "0") |> factor())
 
 # Row and column scores
 d_yamaguchi <- d_yamaguchi |> 
@@ -245,7 +245,10 @@ d_yamaguchi <- d_yamaguchi |>
 
 # Country dummy
 d_yamaguchi <- d_yamaguchi |> 
-  mutate(C2 = case_match(C,
+  mutate(C1 = case_match(C,
+                         c("2","3") ~ 0,
+                         "1" ~ 1),
+         C2 = case_match(C,
                          c("1","3") ~ 0,
                          "2" ~ 1),
          C3 = case_match(C,
@@ -271,7 +274,7 @@ b_3
 
 # U2-Cross-nationally uniform uniform association
 fit_y_4 <- d_yamaguchi |> 
-  glm(Freq ~ O*C + D*C + Diag*C + U:V:C3, data = _, family = poisson)
+  glm(Freq ~ O*C + D*C + Diag*C + U:V + U:V:C3, data = _, family = poisson)
 glance(fit_y_4)
 b_4 <- fit_y_4$coefficients[grep("U:V", names(fit_y_4$coefficients))]
 b_4
@@ -315,11 +318,12 @@ b_10 <- fit_y_10$coefficients[grep("U:V", names(fit_y_10$coefficients))]
 b_10
 
 # H0-Cross-nationally homogeneous homogeneous row & column effect association
-fit_y_11 <- d_yamaguchi |> gnm(Freq ~ O*C + D*C + Diag*C + MultHomog(O, D), 
+fit_y_11 <- d_yamaguchi |> 
+  gnm(Freq ~ O*C + D*C + Diag*C + MultHomog(O, D), 
                                data = _, family = poisson)
 glance(fit_y_11)
 
-# H1-Cross-nationally uniform homogeneousrow & column effect association
+# H1-Cross-nationally uniform homogeneous row & column effect association
 fit_y_12 <- d_yamaguchi |> 
   gnm(Freq ~ O*C + D*C + Diag*C + MultHomog(O, D) + U:V:C2 + U:V:C3, 
                                data = _, family = poisson)
@@ -327,7 +331,7 @@ glance(fit_y_12)
 b_12 <- fit_y_12$coefficients[grep("U:V", names(fit_y_12$coefficients))]
 b_12
 
-# H2-Cross-nationally uniform homogeneousrow & column effect association
+# H2-Cross-nationally uniform homogeneous row & column effect association
 fit_y_13 <- d_yamaguchi |> gnm(Freq ~ O*C + D*C + Diag*C + MultHomog(O, D) + U:V:C3, 
                                data = _, family = poisson)
 glance(fit_y_13)
@@ -341,7 +345,7 @@ glance(fit_y_14)
 
 # R+C1 -Cross-nationally uniform row & column effect association
 fit_y_15 <- d_yamaguchi |> 
-  glm(Freq ~ O*C + D*C + Diag*C + U:D + O:V + U:V*C, data = _, family = poisson)
+  glm(Freq ~ O*C + D*C + Diag*C + U:D + O:V + U:V:C2 + U:V:C3, data = _, family = poisson)
 glance(fit_y_15)
 b_15 <- fit_y_15$coefficients[grep("U:V", names(fit_y_15$coefficients))]
 b_15
@@ -370,7 +374,7 @@ tidy(fit_y_17) |> print(n = Inf)
 
 # QS1-Cross-nationally uniform quasi-symmetry
 fit_y_18 <- d_yamaguchi |> 
-  glm(Freq ~ O*C + D*C + Diag*C + SYM + U:V*C, data = _, family = poisson)
+  glm(Freq ~ O*C + D*C + Diag*C + SYM + U:V:C2 + U:V:C3, data = _, family = poisson)
 glance(fit_y_18)
 b_18 <- fit_y_18$coefficients[grep("U:V", names(fit_y_18$coefficients))]
 b_18
@@ -389,7 +393,7 @@ glance(fit_y_20)
 
 # FI1-Cross-nationally uniform full two-way interaction
 fit_y_21 <- d_yamaguchi |> 
-  glm(Freq ~ O*C + D*C + Diag*C + O:D + U:V*C, data = _, family = poisson)
+  glm(Freq ~ O*C + D*C + Diag*C + O:D + U:V:C2 + U:V:C3, data = _, family = poisson)
 glance(fit_y_21)
 b_21 <- fit_y_21$coefficients[grep("U:V", names(fit_y_21$coefficients))]
 b_21
@@ -435,17 +439,16 @@ list(fit_y_1, fit_y_2, fit_y_3, fit_y_4, fit_y_5, fit_y_6, fit_y_7, fit_y_8, fit
   print(n = Inf)
 ```
 
-
+H1とH2が微妙に異なるが誤差の範囲か．また，FI1の$\beta_1$については符号が @yamaguchi1987 のものとは異なっているがこちらが正しいか．
 
 ```{r}
 # R+C2: No uniform difference between any two
 fit_y_23 <- d_yamaguchi |> 
-  gnm(Freq ~ O*C + D*C + Diag*C + U:D + O:V + U:V*C3, 
+  gnm(Freq ~ O*C + D*C + Diag*C + U:D + O:V + U:V:C3, 
       data = _, family = poisson)
 glance(fit_y_23)
 tidy(fit_y_23) |> print(n = Inf)
-# R+C3: Uniform difference between G.B. andU.S.
-# ...
+# R+C3: Uniform difference between G.B. and U.S.
 ```
 
 

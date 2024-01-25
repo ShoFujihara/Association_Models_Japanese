@@ -1,7 +1,35 @@
 # 研究の動向 {-}
 
+連関モデルと関連した文献のリストを作成します．
 
-## 内的連関係数
+
+## Uniform Association
+- @duncan1979
+
+
+
+## SAT (Status-Autonomy-Training) Model
+- @hout1984
+- @hout1988
+
+## SHD (Sobel-Hout-Duncan) Model
+
+- @sobel1985
+- @sobel1998
+
+## log-linear uniform difference model
+- @yamaguchi1987
+- @wong1990
+
+## Unififf
+- @erikson1992
+- @xie1992
+
+## Simulation
+- @breen2010
+- @pfeffer2015
+
+## 連関係数
 - @bouchet-valat2022
 - @zhou2015
 

@@ -13,6 +13,7 @@
 
 ![](association_model_japanese.jpeg){width=30%}
 
+- [大学図書館](https://ci.nii.ac.jp/ncid/BD04708511)
 - [honto](https://honto.jp/netstore/pd-book_32822793.html)
 - [紀伊国屋書店ウェブストア](https://www.kinokuniya.co.jp/f/dsg-01-9784320114173)
 - [TSUTAYAオンラインショッピング](https://shop.tsutaya.co.jp/book/product/9784320114173/)
@@ -51,3 +52,4 @@ version 1になるにはもう少し時間がかかります．
 - 2023年5月1日: version 0.1.
 - 2023年11月7日: version 0.2.
 
+## 文献 {-}
