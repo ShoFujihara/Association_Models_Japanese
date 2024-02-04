@@ -25,6 +25,10 @@
 - @erikson1992
 - @xie1992
 
+## Regression-type Model
+- @goodman1998
+- @goodman2001
+
 ## Simulation
 - @breen2010
 - @pfeffer2015
@@ -46,3 +50,5 @@
 ## 対応分析との関係
 - @vanderheijden1985
 - @vanderheijden1988
+
+## 参考文献 {-}

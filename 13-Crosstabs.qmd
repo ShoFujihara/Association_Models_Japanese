@@ -1,0 +1,91 @@
+
+# クロス表 {-}
+
+ここでは先行研究で分析されたクロス表のデータをいくつか取り上げます．
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(gnm)
+library(broom)
+library(vcdExtra)
+library(logmult)
+library(knitr)
+```
+
+## Logan (1983) Table 2
+
+入江・菅澤・橋本．2022．『標準 ベイズ統計学』（朝倉書店）のp.27でも用いられているデータ．
+
+```{r}
+Freq_logan_1983 <- c(109, 36, 27, 24,  1,
+                      43,  8, 16, 15,  0,
+                      70, 27, 79, 55,  1,
+                      58, 27, 54, 94,  2,
+                      15,  7, 26, 29, 15
+                      )
+d_logan <- tibble(Freq = Freq_logan_1983,
+                  O = gl(n = 5, k = 5, length = 5 * 5),
+                  D = gl(n = 5, k = 1, length = 5 * 5))
+d_logan
+xtabs(Freq ~ O + D, data = d_logan)
+```
+
+
+# gnmパッケージのデータ
+
+```{r}
+data(package = "gnm")$results |> data.frame() |> select("Item", "Title") |> knitr::kable()
+```
+
+`mentalHealth`は本書でも用いられているデータ．`erikson`は @erikson1982 で分析され、その後 @xie1992 で再分析されている．データは @hauser1984 のAppendixのものである．
+
+```{r}
+erikson
+```
+
+```{r}
+d_erikson <- data.frame(erikson) |> tibble()
+d_erikson
+```
+
+
+# vcdExtraパッケージのデータ
+
+```{r}
+data(package = "vcdExtra")$results |> data.frame() |> select("Item", "Title") |> knitr::kable()
+```
+
+
+`Hauser79`は @hauser1980 で用いられたもの（Table 1. Counts in a Classification of Mobility from Father's (or Other Family Head's) Occupation to Son's First Full-Time Civilian Occupation: U.S. Men Aged 20-64 in 1973）．
+
+```{r}
+Hauser79
+```
+
+
+```{r}
+tab_Hauser79 <- xtabs(Freq ~ Father + Son, data = Hauser79)
+tab_Hauser79
+```
+
+
+`Yamaguchi87`は @yamaguchi1987 で用いられた，アメリカ，イギリス，日本の3ヶ国のデータ．@goodman1998 や@xie1992でも再分析されている．
+
+```{r}
+Yamaguchi87
+```
+
+```{r}
+tab_Yamaguchi87 <- xtabs(Freq ~ Father + Son + Country, data = Yamaguchi87)
+tab_Yamaguchi87
+```
+
+
+# logmult	パッケージのデータ
+
+```{r}
+data(package = "logmult")$results |> data.frame() |> select("Item", "Title") |> knitr::kable()
+```
+
+
+## 参考文献 {-}

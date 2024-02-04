@@ -207,7 +207,7 @@ mosaic(fit_d_5b, ~ O + D, residuals_type = "rstandard")
 
 ## Yamaguchi (1987)
 
-@yamaguchi1987 の結果を再現する．
+@yamaguchi1987 の結果を再現する．なおデータは`vcdExtra`パッケージの`Yamaguchi87`からも入手できる．
 
 ```{r}
 # Data

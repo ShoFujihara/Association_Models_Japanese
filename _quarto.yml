@@ -20,6 +20,7 @@ book:
     - 10-R.qmd
     - 11-Replication.qmd
     - 12-Review.qmd
+    - 13-Crosstabs.qmd
 
 format:
   html:
