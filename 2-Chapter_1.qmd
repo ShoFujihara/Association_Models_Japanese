@@ -22,8 +22,8 @@ tab <- matrix(
     SES = LETTERS[1:6],
     MHS = c("well",
             "mild",
-            "modelrate",
-            "impared")
+            "moderate",
+            "impaired")
   )
 )
 tab
@@ -156,7 +156,15 @@ logmult::maor(tab10, weighting = "marginal")
 
 ## 練習問題 {-}
 
-`occupationalStatus`
+`occupationalStatus`はRの組み込みデータセットで、イギリス男性の父親（origin）と息子（destination）の職業地位（8段階）をクロス表にしたものである。
+
+- 出典: Goodman, L. A. (1979). Simple Models for the Analysis of Association in Cross-Classifications having Ordered Categories. *J. Am. Stat. Assoc.*, 74(367), 537-552. Table 3.
+
+```{r}
+occupationalStatus
+```
+
+このデータを用いて、本章で紹介した連関の尺度（クラメールのV、Kendallの$\tau_b$、Goodman-Kruskalの$\gamma$、iac、maorなど）を計算し、結果を比較せよ。
 
 
 ## 参考文献 {-}
