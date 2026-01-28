@@ -14,3 +14,6 @@ _archive/
 
 # Quarto intermediate files
 *_files/
+
+# Unpublished chapters
+14-Bayes.qmd

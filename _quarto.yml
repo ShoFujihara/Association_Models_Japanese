@@ -21,6 +21,7 @@ book:
     - 11-Replication.qmd
     - 12-Review.qmd
     - 13-Crosstabs.qmd
+    # - 14-Bayes.qmd  # 未公開
 
 format:
   html:

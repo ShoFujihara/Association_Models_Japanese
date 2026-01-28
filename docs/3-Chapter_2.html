@@ -2641,7 +2641,7 @@ Number of iterations: 5</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations........................
+Running main iterations................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb234"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb234-1"><a href="#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果</span></span>
@@ -2657,36 +2657,36 @@ Deviance Residuals:
 -1.07428  -0.27239   0.03038   0.36792   1.03721  
 
 Coefficients:
-                             Estimate Std. Error z value Pr(&gt;|z|)
-(Intercept)                   2.90399         NA      NA       NA
-polviews2                     1.39038         NA      NA       NA
-polviews3                     1.42675         NA      NA       NA
-polviews4                     2.58587         NA      NA       NA
-polviews5                     1.68511         NA      NA       NA
-polviews6                     1.62455         NA      NA       NA
-polviews7                    -0.11592         NA      NA       NA
-fefam2                        0.88881         NA      NA       NA
-fefam3                        0.41358         NA      NA       NA
-fefam4                       -0.76827         NA      NA       NA
-Mult(., polviews, fefam).    -0.03793         NA      NA       NA
-Mult(1, ., fefam).polviews1  43.15091         NA      NA       NA
-Mult(1, ., fefam).polviews2  33.33208         NA      NA       NA
-Mult(1, ., fefam).polviews3  20.21949         NA      NA       NA
-Mult(1, ., fefam).polviews4  -0.01190         NA      NA       NA
-Mult(1, ., fefam).polviews5  -8.71277         NA      NA       NA
-Mult(1, ., fefam).polviews6 -37.16631         NA      NA       NA
-Mult(1, ., fefam).polviews7 -61.48813         NA      NA       NA
-Mult(1, polviews, .).fefam1  -0.47136         NA      NA       NA
-Mult(1, polviews, .).fefam2  -0.06175         NA      NA       NA
-Mult(1, polviews, .).fefam3   0.25755         NA      NA       NA
-Mult(1, polviews, .).fefam4   0.40901         NA      NA       NA
+                              Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept)                  2.9040721         NA      NA       NA
+polviews2                    1.3900989         NA      NA       NA
+polviews3                    1.4260995         NA      NA       NA
+polviews4                    2.5846388         NA      NA       NA
+polviews5                    1.6836315         NA      NA       NA
+polviews6                    1.6222721         NA      NA       NA
+polviews7                   -0.1188921         NA      NA       NA
+fefam2                       0.8898089         NA      NA       NA
+fefam3                       0.4153512         NA      NA       NA
+fefam4                      -0.7661279         NA      NA       NA
+Mult(., polviews, fefam).    2.2240152         NA      NA       NA
+Mult(1, ., fefam).polviews1 -0.5389684         NA      NA       NA
+Mult(1, ., fefam).polviews2 -0.4165103         NA      NA       NA
+Mult(1, ., fefam).polviews3 -0.2529734         NA      NA       NA
+Mult(1, ., fefam).polviews4 -0.0006524         NA      NA       NA
+Mult(1, ., fefam).polviews5  0.1078626         NA      NA       NA
+Mult(1, ., fefam).polviews6  0.4627281         NA      NA       NA
+Mult(1, ., fefam).polviews7  0.7660639         NA      NA       NA
+Mult(1, polviews, .).fefam1 -0.6434676         NA      NA       NA
+Mult(1, polviews, .).fefam2 -0.0834026         NA      NA       NA
+Mult(1, polviews, .).fefam3  0.3531705         NA      NA       NA
+Mult(1, polviews, .).fefam4  0.5602691         NA      NA       NA
 
 Std. Error is NA where coefficient has been constrained or is unidentified
 
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 24</code></pre>
+Number of iterations: 32</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb236"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb236-1"><a href="#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="co"># モデル適合度</span></span>
 <span id="cb236-2"><a href="#cb236-2" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(RC.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2716,7 +2716,7 @@ Number of iterations: 24</code></pre>
 <span id="cb238-15"><a href="#cb238-15" aria-hidden="true" tabindex="-1"></a>     <span class="st">"2乗和"</span> <span class="ot">=</span> <span class="fu">sum</span>(mu<span class="sc">$</span>qvframe[,<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$和
-[1] 1.110223e-16
+[1] 0
 
 $`2乗和`
 [1] 1</code></pre>
@@ -2738,7 +2738,7 @@ $`2乗和`
 <span id="cb240-15"><a href="#cb240-15" aria-hidden="true" tabindex="-1"></a>     <span class="st">"2乗和"</span> <span class="ot">=</span> <span class="fu">sum</span>(nu<span class="sc">$</span>qvframe[,<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$和
-[1] -1.110223e-16
+[1] 0
 
 $`2乗和`
 [1] 1</code></pre>
@@ -2760,7 +2760,7 @@ $`2乗和`
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.................................
+Running main iterations...........................
 Done</code></pre>
 </div>
 </div>
@@ -2814,7 +2814,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 33</code></pre>
+Number of iterations: 27</code></pre>
 </div>
 </div>
 <p>先ほどの単位標準化した解と推定の結果が一致しているのかを確認する．</p>
@@ -2844,7 +2844,7 @@ Mult(1, polviews, .).fefam4  0.5568002 0.04821776</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb249"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb249-1"><a href="#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(mu<span class="sc">$</span>qvframe[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.110223e-16</code></pre>
+<pre><code>[1] 0</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb251"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb251-1"><a href="#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(mu<span class="sc">$</span>qvframe[,<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2852,7 +2852,7 @@ Mult(1, polviews, .).fefam4  0.5568002 0.04821776</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb253"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb253-1"><a href="#cb253-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(nu<span class="sc">$</span>qvframe[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -1.110223e-16</code></pre>
+<pre><code>[1] 0</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb255"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb255-1"><a href="#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(nu<span class="sc">$</span>qvframe[,<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2947,7 +2947,7 @@ Strongly conservative
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations............................
+Running main iterations...................................
 Done</code></pre>
 </div>
 </div>
@@ -2999,7 +2999,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 28</code></pre>
+Number of iterations: 35</code></pre>
 </div>
 </div>
 <p>内的連関パラメータ<span class="math inline">\(\phi\)</span>が0.25673となっている．場合によっては符号が逆となる．</p>
