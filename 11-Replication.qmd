@@ -467,6 +467,7 @@ d_xie
 
 
 ```{r}
+set.seed(12345)
 # Off diagonal cells (Diag*C)
 # Null association between R and C, given L
 fit_x_1 <- d_xie |> glm(Freq ~ O*C + D*C + Diag*C, data = _, family = poisson)

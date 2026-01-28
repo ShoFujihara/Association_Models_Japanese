@@ -61,8 +61,8 @@ tab <- matrix(
     SES = LETTERS[1:6],
     MHS = c("well",
             "mild",
-            "modelrate",
-            "impared")
+            "moderate",
+            "impaired")
   )
 )
 ```
@@ -659,11 +659,23 @@ d_occupationalStatus |> tibble()
 - 問題0.2.3：問題0.2.1で作成したデータについて`gnm`を適用して(1) 独立モデルと (2) 一様連関モデルを用いた分析を行う．
 
 ```{r}
-fit_O <- d_occupationalStatus |> 
-  gnm(Freq ~ origin + destination, data = _)
-fit_U <- d_occupationalStatus |> 
-  gnm(Freq ~ origin + destination, data = _)
+# スコア変数を作成
+d_occupationalStatus <- d_occupationalStatus |>
+  mutate(Rscore = as.integer(origin),
+         Rscore = Rscore - mean(Rscore),
+         Cscore = as.integer(destination),
+         Cscore = Cscore - mean(Cscore))
 
+# 独立モデル
+fit_O <- d_occupationalStatus |>
+  gnm(Freq ~ origin + destination, family = poisson, data = _)
+
+# 一様連関モデル
+fit_U <- d_occupationalStatus |>
+  gnm(Freq ~ origin + destination + Rscore:Cscore, family = poisson, data = _)
+
+# 結果の確認
+anova(fit_O, fit_U)
 ```
 
 

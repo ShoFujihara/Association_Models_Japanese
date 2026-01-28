@@ -1888,10 +1888,11 @@ Done</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb188"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Off diagonal cells (Diag*C)</span></span>
-<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Null association between R and C, given L</span></span>
-<span id="cb188-3"><a href="#cb188-3" aria-hidden="true" tabindex="-1"></a>fit_x_1 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb188-4"><a href="#cb188-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb188"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Off diagonal cells (Diag*C)</span></span>
+<span id="cb188-3"><a href="#cb188-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Null association between R and C, given L</span></span>
+<span id="cb188-4"><a href="#cb188-4" aria-hidden="true" tabindex="-1"></a>fit_x_1 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb188-5"><a href="#cb188-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 8
   null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
@@ -1987,7 +1988,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.........
+Running main iterations........
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb212"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb212-1"><a href="#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_10)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2062,7 +2063,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.........
+Running main iterations........
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb232"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb232-1"><a href="#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_15)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3091,99 +3092,100 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb236-481"><a href="#cb236-481" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb236-482"><a href="#cb236-482" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb236-485"><a href="#cb236-485" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb236-486"><a href="#cb236-486" aria-hidden="true" tabindex="-1"></a><span class="co"># Off diagonal cells (Diag*C)</span></span>
-<span id="cb236-487"><a href="#cb236-487" aria-hidden="true" tabindex="-1"></a><span class="co"># Null association between R and C, given L</span></span>
-<span id="cb236-488"><a href="#cb236-488" aria-hidden="true" tabindex="-1"></a>fit_x_1 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-489"><a href="#cb236-489" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_1)</span>
-<span id="cb236-490"><a href="#cb236-490" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-491"><a href="#cb236-491" aria-hidden="true" tabindex="-1"></a><span class="co"># R0 Cross-nationally homogeneous row effect association</span></span>
-<span id="cb236-492"><a href="#cb236-492" aria-hidden="true" tabindex="-1"></a>fit_x_2 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> O<span class="sc">:</span>V, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-493"><a href="#cb236-493" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_2)</span>
-<span id="cb236-494"><a href="#cb236-494" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-495"><a href="#cb236-495" aria-hidden="true" tabindex="-1"></a><span class="co"># R1 Cross-nationally uniform row effect association</span></span>
-<span id="cb236-496"><a href="#cb236-496" aria-hidden="true" tabindex="-1"></a>fit_x_3 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> O<span class="sc">:</span>V <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-497"><a href="#cb236-497" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_3)</span>
-<span id="cb236-498"><a href="#cb236-498" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-499"><a href="#cb236-499" aria-hidden="true" tabindex="-1"></a><span class="co"># Rx Cross-nationally log-multiplicative row effect association</span></span>
-<span id="cb236-500"><a href="#cb236-500" aria-hidden="true" tabindex="-1"></a>fit_x_4 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(C,O,V), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-501"><a href="#cb236-501" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_4)</span>
-<span id="cb236-502"><a href="#cb236-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-503"><a href="#cb236-503" aria-hidden="true" tabindex="-1"></a><span class="co"># C0-Cross-nationally homogeneous column effect association</span></span>
-<span id="cb236-504"><a href="#cb236-504" aria-hidden="true" tabindex="-1"></a>fit_x_5 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> U<span class="sc">:</span>D, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-505"><a href="#cb236-505" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_5)</span>
-<span id="cb236-506"><a href="#cb236-506" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-507"><a href="#cb236-507" aria-hidden="true" tabindex="-1"></a><span class="co"># C1-Cross-nationally uniform column effect association</span></span>
-<span id="cb236-508"><a href="#cb236-508" aria-hidden="true" tabindex="-1"></a>fit_x_6 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> U<span class="sc">:</span>D <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-509"><a href="#cb236-509" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_6)</span>
-<span id="cb236-510"><a href="#cb236-510" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-511"><a href="#cb236-511" aria-hidden="true" tabindex="-1"></a><span class="co"># Cx-Cross-nationally log-multiplicative column effect association</span></span>
-<span id="cb236-512"><a href="#cb236-512" aria-hidden="true" tabindex="-1"></a>fit_x_7 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(C,U,D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-513"><a href="#cb236-513" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_7)</span>
-<span id="cb236-514"><a href="#cb236-514" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-515"><a href="#cb236-515" aria-hidden="true" tabindex="-1"></a><span class="co"># (R+C) 0 - Cross-nationally homogeneous row and column effects association I</span></span>
-<span id="cb236-516"><a href="#cb236-516" aria-hidden="true" tabindex="-1"></a>fit_x_8 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C  <span class="sc">+</span> O<span class="sc">:</span>V <span class="sc">+</span> U<span class="sc">:</span>D, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-517"><a href="#cb236-517" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_8)</span>
-<span id="cb236-518"><a href="#cb236-518" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-519"><a href="#cb236-519" aria-hidden="true" tabindex="-1"></a><span class="co"># (R+C) u - Cross-nationally uniform row and column effects association I</span></span>
-<span id="cb236-520"><a href="#cb236-520" aria-hidden="true" tabindex="-1"></a>fit_x_9 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C  <span class="sc">+</span> O<span class="sc">:</span>V <span class="sc">+</span> U<span class="sc">:</span>D <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-521"><a href="#cb236-521" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_9)</span>
-<span id="cb236-522"><a href="#cb236-522" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-523"><a href="#cb236-523" aria-hidden="true" tabindex="-1"></a><span class="co"># (R+C) x - Cross-nationally log-multiplicative row and column effects association I</span></span>
-<span id="cb236-524"><a href="#cb236-524" aria-hidden="true" tabindex="-1"></a>fit_x_10 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(C,O<span class="sc">:</span>V<span class="sc">+</span>U<span class="sc">:</span>D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-525"><a href="#cb236-525" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_10)</span>
-<span id="cb236-526"><a href="#cb236-526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-527"><a href="#cb236-527" aria-hidden="true" tabindex="-1"></a><span class="co"># RC0 Cross-nationally homogeneous row and column effects association</span></span>
-<span id="cb236-528"><a href="#cb236-528" aria-hidden="true" tabindex="-1"></a>fit_x_11 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(O,D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-529"><a href="#cb236-529" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_11)</span>
-<span id="cb236-530"><a href="#cb236-530" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-531"><a href="#cb236-531" aria-hidden="true" tabindex="-1"></a><span class="co"># RCx Cross-nationally log-multiplicative row and column effects association</span></span>
-<span id="cb236-532"><a href="#cb236-532" aria-hidden="true" tabindex="-1"></a>fit_x_12 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(<span class="fu">Exp</span>(C),O,D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-533"><a href="#cb236-533" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_12)</span>
-<span id="cb236-534"><a href="#cb236-534" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-535"><a href="#cb236-535" aria-hidden="true" tabindex="-1"></a><span class="co"># FI0 Cross-nationally homogeneous full two-way R and C interaction</span></span>
-<span id="cb236-536"><a href="#cb236-536" aria-hidden="true" tabindex="-1"></a>fit_x_13 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>,O<span class="sc">*</span>D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-537"><a href="#cb236-537" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_13)</span>
-<span id="cb236-538"><a href="#cb236-538" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-539"><a href="#cb236-539" aria-hidden="true" tabindex="-1"></a><span class="co"># FIu Cross-nationally uniform full two-way R and C interaction</span></span>
-<span id="cb236-540"><a href="#cb236-540" aria-hidden="true" tabindex="-1"></a>fit_x_14 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>,O<span class="sc">*</span>D) <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-541"><a href="#cb236-541" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_14)</span>
-<span id="cb236-542"><a href="#cb236-542" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-543"><a href="#cb236-543" aria-hidden="true" tabindex="-1"></a><span class="co"># FIx Cross-nationally log-multiplicative full two-way R and C interaction</span></span>
-<span id="cb236-544"><a href="#cb236-544" aria-hidden="true" tabindex="-1"></a>fit_x_15 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(<span class="fu">Exp</span>(C),O<span class="sc">*</span>D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
-<span id="cb236-545"><a href="#cb236-545" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_15)</span>
-<span id="cb236-546"><a href="#cb236-546" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb236-547"><a href="#cb236-547" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-550"><a href="#cb236-550" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb236-551"><a href="#cb236-551" aria-hidden="true" tabindex="-1"></a>Model <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Null association between R and C, given L"</span>,</span>
-<span id="cb236-552"><a href="#cb236-552" aria-hidden="true" tabindex="-1"></a>           <span class="st">"R0 Cross-nationally homogeneous row effect association"</span>,</span>
-<span id="cb236-553"><a href="#cb236-553" aria-hidden="true" tabindex="-1"></a>           <span class="st">"R1 Cross-nationally uniform row effect association"</span>,</span>
-<span id="cb236-554"><a href="#cb236-554" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Rx Cross-nationally log-multiplicative row effect association"</span>,</span>
-<span id="cb236-555"><a href="#cb236-555" aria-hidden="true" tabindex="-1"></a>           <span class="st">"C0-Cross-nationally homogeneous column effect association"</span>,</span>
-<span id="cb236-556"><a href="#cb236-556" aria-hidden="true" tabindex="-1"></a>           <span class="st">"C1-Cross-nationally uniform column effect association"</span>,</span>
-<span id="cb236-557"><a href="#cb236-557" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Cx-Cross-nationally log-multiplicative column effect association"</span>,</span>
-<span id="cb236-558"><a href="#cb236-558" aria-hidden="true" tabindex="-1"></a>           <span class="st">"(R+C) 0 - Cross-nationally homogeneous row and column effects association I"</span>,</span>
-<span id="cb236-559"><a href="#cb236-559" aria-hidden="true" tabindex="-1"></a>           <span class="st">"(R+C) u - Cross-nationally uniform row and column effects association I"</span>,</span>
-<span id="cb236-560"><a href="#cb236-560" aria-hidden="true" tabindex="-1"></a>           <span class="st">"(R+C) x - Cross-nationally log-multiplicative row and column effects association I"</span>,</span>
-<span id="cb236-561"><a href="#cb236-561" aria-hidden="true" tabindex="-1"></a>           <span class="st">"RC0 Cross-nationally homogeneous row and column effects association"</span>,</span>
-<span id="cb236-562"><a href="#cb236-562" aria-hidden="true" tabindex="-1"></a>           <span class="st">"RCx Cross-nationally log-multiplicative row and column effects association"</span>,</span>
-<span id="cb236-563"><a href="#cb236-563" aria-hidden="true" tabindex="-1"></a>           <span class="st">"FI0 Cross-nationally homogeneous full two-way R and C interaction"</span>,</span>
-<span id="cb236-564"><a href="#cb236-564" aria-hidden="true" tabindex="-1"></a>           <span class="st">"FIu Cross-nationally uniform full two-way R and C interaction"</span>,</span>
-<span id="cb236-565"><a href="#cb236-565" aria-hidden="true" tabindex="-1"></a>           <span class="st">"FIx Cross-nationally log-multiplicative full two-way R and C interaction"</span>)</span>
-<span id="cb236-566"><a href="#cb236-566" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-567"><a href="#cb236-567" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(fit_x_1, fit_x_2, fit_x_3, fit_x_4, fit_x_5, </span>
-<span id="cb236-568"><a href="#cb236-568" aria-hidden="true" tabindex="-1"></a>     fit_x_6, fit_x_7, fit_x_8, fit_x_9, fit_x_10,</span>
-<span id="cb236-569"><a href="#cb236-569" aria-hidden="true" tabindex="-1"></a>     fit_x_11, fit_x_12, fit_x_13, fit_x_14, fit_x_15) <span class="sc">|&gt;</span> </span>
-<span id="cb236-570"><a href="#cb236-570" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(glance) <span class="sc">|&gt;</span> </span>
-<span id="cb236-571"><a href="#cb236-571" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Model =</span> Model, <span class="at">.before =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb236-572"><a href="#cb236-572" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb236-573"><a href="#cb236-573" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span>
-<span id="cb236-574"><a href="#cb236-574" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb236-575"><a href="#cb236-575" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-486"><a href="#cb236-486" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb236-487"><a href="#cb236-487" aria-hidden="true" tabindex="-1"></a><span class="co"># Off diagonal cells (Diag*C)</span></span>
+<span id="cb236-488"><a href="#cb236-488" aria-hidden="true" tabindex="-1"></a><span class="co"># Null association between R and C, given L</span></span>
+<span id="cb236-489"><a href="#cb236-489" aria-hidden="true" tabindex="-1"></a>fit_x_1 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-490"><a href="#cb236-490" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_1)</span>
+<span id="cb236-491"><a href="#cb236-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-492"><a href="#cb236-492" aria-hidden="true" tabindex="-1"></a><span class="co"># R0 Cross-nationally homogeneous row effect association</span></span>
+<span id="cb236-493"><a href="#cb236-493" aria-hidden="true" tabindex="-1"></a>fit_x_2 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> O<span class="sc">:</span>V, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-494"><a href="#cb236-494" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_2)</span>
+<span id="cb236-495"><a href="#cb236-495" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-496"><a href="#cb236-496" aria-hidden="true" tabindex="-1"></a><span class="co"># R1 Cross-nationally uniform row effect association</span></span>
+<span id="cb236-497"><a href="#cb236-497" aria-hidden="true" tabindex="-1"></a>fit_x_3 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> O<span class="sc">:</span>V <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-498"><a href="#cb236-498" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_3)</span>
+<span id="cb236-499"><a href="#cb236-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-500"><a href="#cb236-500" aria-hidden="true" tabindex="-1"></a><span class="co"># Rx Cross-nationally log-multiplicative row effect association</span></span>
+<span id="cb236-501"><a href="#cb236-501" aria-hidden="true" tabindex="-1"></a>fit_x_4 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(C,O,V), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-502"><a href="#cb236-502" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_4)</span>
+<span id="cb236-503"><a href="#cb236-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-504"><a href="#cb236-504" aria-hidden="true" tabindex="-1"></a><span class="co"># C0-Cross-nationally homogeneous column effect association</span></span>
+<span id="cb236-505"><a href="#cb236-505" aria-hidden="true" tabindex="-1"></a>fit_x_5 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> U<span class="sc">:</span>D, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-506"><a href="#cb236-506" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_5)</span>
+<span id="cb236-507"><a href="#cb236-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-508"><a href="#cb236-508" aria-hidden="true" tabindex="-1"></a><span class="co"># C1-Cross-nationally uniform column effect association</span></span>
+<span id="cb236-509"><a href="#cb236-509" aria-hidden="true" tabindex="-1"></a>fit_x_6 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">glm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> U<span class="sc">:</span>D <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-510"><a href="#cb236-510" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_6)</span>
+<span id="cb236-511"><a href="#cb236-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-512"><a href="#cb236-512" aria-hidden="true" tabindex="-1"></a><span class="co"># Cx-Cross-nationally log-multiplicative column effect association</span></span>
+<span id="cb236-513"><a href="#cb236-513" aria-hidden="true" tabindex="-1"></a>fit_x_7 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(C,U,D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-514"><a href="#cb236-514" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_7)</span>
+<span id="cb236-515"><a href="#cb236-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-516"><a href="#cb236-516" aria-hidden="true" tabindex="-1"></a><span class="co"># (R+C) 0 - Cross-nationally homogeneous row and column effects association I</span></span>
+<span id="cb236-517"><a href="#cb236-517" aria-hidden="true" tabindex="-1"></a>fit_x_8 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C  <span class="sc">+</span> O<span class="sc">:</span>V <span class="sc">+</span> U<span class="sc">:</span>D, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-518"><a href="#cb236-518" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_8)</span>
+<span id="cb236-519"><a href="#cb236-519" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-520"><a href="#cb236-520" aria-hidden="true" tabindex="-1"></a><span class="co"># (R+C) u - Cross-nationally uniform row and column effects association I</span></span>
+<span id="cb236-521"><a href="#cb236-521" aria-hidden="true" tabindex="-1"></a>fit_x_9 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C  <span class="sc">+</span> O<span class="sc">:</span>V <span class="sc">+</span> U<span class="sc">:</span>D <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-522"><a href="#cb236-522" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_9)</span>
+<span id="cb236-523"><a href="#cb236-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-524"><a href="#cb236-524" aria-hidden="true" tabindex="-1"></a><span class="co"># (R+C) x - Cross-nationally log-multiplicative row and column effects association I</span></span>
+<span id="cb236-525"><a href="#cb236-525" aria-hidden="true" tabindex="-1"></a>fit_x_10 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(C,O<span class="sc">:</span>V<span class="sc">+</span>U<span class="sc">:</span>D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-526"><a href="#cb236-526" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_10)</span>
+<span id="cb236-527"><a href="#cb236-527" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-528"><a href="#cb236-528" aria-hidden="true" tabindex="-1"></a><span class="co"># RC0 Cross-nationally homogeneous row and column effects association</span></span>
+<span id="cb236-529"><a href="#cb236-529" aria-hidden="true" tabindex="-1"></a>fit_x_11 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(O,D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-530"><a href="#cb236-530" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_11)</span>
+<span id="cb236-531"><a href="#cb236-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-532"><a href="#cb236-532" aria-hidden="true" tabindex="-1"></a><span class="co"># RCx Cross-nationally log-multiplicative row and column effects association</span></span>
+<span id="cb236-533"><a href="#cb236-533" aria-hidden="true" tabindex="-1"></a>fit_x_12 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(<span class="fu">Exp</span>(C),O,D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-534"><a href="#cb236-534" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_12)</span>
+<span id="cb236-535"><a href="#cb236-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-536"><a href="#cb236-536" aria-hidden="true" tabindex="-1"></a><span class="co"># FI0 Cross-nationally homogeneous full two-way R and C interaction</span></span>
+<span id="cb236-537"><a href="#cb236-537" aria-hidden="true" tabindex="-1"></a>fit_x_13 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>,O<span class="sc">*</span>D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-538"><a href="#cb236-538" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_13)</span>
+<span id="cb236-539"><a href="#cb236-539" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-540"><a href="#cb236-540" aria-hidden="true" tabindex="-1"></a><span class="co"># FIu Cross-nationally uniform full two-way R and C interaction</span></span>
+<span id="cb236-541"><a href="#cb236-541" aria-hidden="true" tabindex="-1"></a>fit_x_14 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(<span class="dv">1</span>,O<span class="sc">*</span>D) <span class="sc">+</span> U<span class="sc">:</span>V<span class="sc">*</span>C, <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-542"><a href="#cb236-542" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_14)</span>
+<span id="cb236-543"><a href="#cb236-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-544"><a href="#cb236-544" aria-hidden="true" tabindex="-1"></a><span class="co"># FIx Cross-nationally log-multiplicative full two-way R and C interaction</span></span>
+<span id="cb236-545"><a href="#cb236-545" aria-hidden="true" tabindex="-1"></a>fit_x_15 <span class="ot">&lt;-</span> d_xie <span class="sc">|&gt;</span> <span class="fu">gnm</span>(Freq <span class="sc">~</span> O<span class="sc">*</span>C <span class="sc">+</span> D<span class="sc">*</span>C <span class="sc">+</span> Diag<span class="sc">*</span>C <span class="sc">+</span> <span class="fu">Mult</span>(<span class="fu">Exp</span>(C),O<span class="sc">*</span>D), <span class="at">data =</span> _, <span class="at">family =</span> poisson)</span>
+<span id="cb236-546"><a href="#cb236-546" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(fit_x_15)</span>
+<span id="cb236-547"><a href="#cb236-547" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb236-548"><a href="#cb236-548" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-551"><a href="#cb236-551" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb236-552"><a href="#cb236-552" aria-hidden="true" tabindex="-1"></a>Model <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Null association between R and C, given L"</span>,</span>
+<span id="cb236-553"><a href="#cb236-553" aria-hidden="true" tabindex="-1"></a>           <span class="st">"R0 Cross-nationally homogeneous row effect association"</span>,</span>
+<span id="cb236-554"><a href="#cb236-554" aria-hidden="true" tabindex="-1"></a>           <span class="st">"R1 Cross-nationally uniform row effect association"</span>,</span>
+<span id="cb236-555"><a href="#cb236-555" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Rx Cross-nationally log-multiplicative row effect association"</span>,</span>
+<span id="cb236-556"><a href="#cb236-556" aria-hidden="true" tabindex="-1"></a>           <span class="st">"C0-Cross-nationally homogeneous column effect association"</span>,</span>
+<span id="cb236-557"><a href="#cb236-557" aria-hidden="true" tabindex="-1"></a>           <span class="st">"C1-Cross-nationally uniform column effect association"</span>,</span>
+<span id="cb236-558"><a href="#cb236-558" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Cx-Cross-nationally log-multiplicative column effect association"</span>,</span>
+<span id="cb236-559"><a href="#cb236-559" aria-hidden="true" tabindex="-1"></a>           <span class="st">"(R+C) 0 - Cross-nationally homogeneous row and column effects association I"</span>,</span>
+<span id="cb236-560"><a href="#cb236-560" aria-hidden="true" tabindex="-1"></a>           <span class="st">"(R+C) u - Cross-nationally uniform row and column effects association I"</span>,</span>
+<span id="cb236-561"><a href="#cb236-561" aria-hidden="true" tabindex="-1"></a>           <span class="st">"(R+C) x - Cross-nationally log-multiplicative row and column effects association I"</span>,</span>
+<span id="cb236-562"><a href="#cb236-562" aria-hidden="true" tabindex="-1"></a>           <span class="st">"RC0 Cross-nationally homogeneous row and column effects association"</span>,</span>
+<span id="cb236-563"><a href="#cb236-563" aria-hidden="true" tabindex="-1"></a>           <span class="st">"RCx Cross-nationally log-multiplicative row and column effects association"</span>,</span>
+<span id="cb236-564"><a href="#cb236-564" aria-hidden="true" tabindex="-1"></a>           <span class="st">"FI0 Cross-nationally homogeneous full two-way R and C interaction"</span>,</span>
+<span id="cb236-565"><a href="#cb236-565" aria-hidden="true" tabindex="-1"></a>           <span class="st">"FIu Cross-nationally uniform full two-way R and C interaction"</span>,</span>
+<span id="cb236-566"><a href="#cb236-566" aria-hidden="true" tabindex="-1"></a>           <span class="st">"FIx Cross-nationally log-multiplicative full two-way R and C interaction"</span>)</span>
+<span id="cb236-567"><a href="#cb236-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-568"><a href="#cb236-568" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(fit_x_1, fit_x_2, fit_x_3, fit_x_4, fit_x_5, </span>
+<span id="cb236-569"><a href="#cb236-569" aria-hidden="true" tabindex="-1"></a>     fit_x_6, fit_x_7, fit_x_8, fit_x_9, fit_x_10,</span>
+<span id="cb236-570"><a href="#cb236-570" aria-hidden="true" tabindex="-1"></a>     fit_x_11, fit_x_12, fit_x_13, fit_x_14, fit_x_15) <span class="sc">|&gt;</span> </span>
+<span id="cb236-571"><a href="#cb236-571" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(glance) <span class="sc">|&gt;</span> </span>
+<span id="cb236-572"><a href="#cb236-572" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Model =</span> Model, <span class="at">.before =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb236-573"><a href="#cb236-573" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb236-574"><a href="#cb236-574" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span>
+<span id="cb236-575"><a href="#cb236-575" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb236-576"><a href="#cb236-576" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb236-577"><a href="#cb236-577" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb236-578"><a href="#cb236-578" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb236-579"><a href="#cb236-579" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb236-580"><a href="#cb236-580" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献 {-}</span></span>
+<span id="cb236-580"><a href="#cb236-580" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-581"><a href="#cb236-581" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献 {-}</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
