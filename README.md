@@ -42,7 +42,7 @@ a <- 1:5
 
 - $l_{\rm EM}$はJeroen K. Vermunt氏のホームページ（ https://jeroenvermunt.nl/ ）からダウンロードできる．
 - Software, User Manuals, and VideoのVermunt, J.K  (1997). LEM 1.0: A general program for the analysis of categorical data. Tilburg: Tilburg University. (download) の「 (download) 」をクリック．
-- Windowsで動く．
+- Windowsで動く．MACでも頑張れば動く．
 
 # 基本的なクロス表の分析方法
 
