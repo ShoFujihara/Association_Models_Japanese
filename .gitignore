@@ -5,3 +5,12 @@
 
 /.quarto/
 claude.md
+
+# macOS
+.DS_Store
+
+# Archive folder
+_archive/
+
+# Quarto intermediate files
+*_files/

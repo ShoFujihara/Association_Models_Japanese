@@ -443,7 +443,7 @@ Number of iterations: 6</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations......................................
+Running main iterations................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -466,7 +466,7 @@ Done</code></pre>
 <pre><code>Initialising
 Running start-up iterations..
 Running main iterations.........................................................
-..................................................
+......................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -488,7 +488,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.....................
+Running main iterations...............
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -531,7 +531,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations......
+Running main iterations.....
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model6)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -573,7 +573,7 @@ Use exitInfo() for numerical details of last iteration.</code></pre>
 <pre><code># A tibble: 1 × 6
   `Model Description`    df       L2      BIC         Delta     p
   &lt;chr&gt;               &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;
-1 model7                  0 2.83e-11 2.83e-11 0.00000000409     0</code></pre>
+1 model7                  0 2.51e-11 2.51e-11 0.00000000676     0</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 8- U+RC (homogeneous)</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>model8 <span class="ot">&lt;-</span> freq_tab_3<span class="fl">.1</span> <span class="sc">|&gt;</span> </span>
@@ -608,14 +608,14 @@ Deviance Residuals:
 
 Coefficients:
                       Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)            4.40316         NA      NA       NA    
-Educ2                 -3.15413         NA      NA       NA    
-Educ3                 -2.06547         NA      NA       NA    
-Educ4                 -5.79425         NA      NA       NA    
-Occ2                  -2.84651         NA      NA       NA    
-Occ3                  -4.44552         NA      NA       NA    
-Occ4                  -6.46084         NA      NA       NA    
-Occ5                  -9.81614         NA      NA       NA    
+(Intercept)            4.40457         NA      NA       NA    
+Educ2                 -3.15163         NA      NA       NA    
+Educ3                 -2.06045         NA      NA       NA    
+Educ4                 -5.78800         NA      NA       NA    
+Occ2                  -2.85235         NA      NA       NA    
+Occ3                  -4.44697         NA      NA       NA    
+Occ4                  -6.41286         NA      NA       NA    
+Occ5                  -9.72707         NA      NA       NA    
 L2                    -0.45256    0.10138  -4.464 8.04e-06 ***
 L3                     0.30784    0.08546   3.602 0.000315 ***
 L4                     0.27495    0.08559   3.212 0.001317 ** 
@@ -641,16 +641,16 @@ Occ3:L4               -2.31754    0.20662 -11.217  &lt; 2e-16 ***
 Occ4:L4                0.05314    0.14388   0.369 0.711886    
 Occ5:L4               -1.43905    0.38269  -3.760 0.000170 ***
 Rscore:Cscore          0.80506    0.23183   3.473 0.000515 ***
-Mult(., Educ, Occ).   -0.96992         NA      NA       NA    
-Mult(1, ., Occ).Educ1 -1.23690         NA      NA       NA    
-Mult(1, ., Occ).Educ2 -0.17656         NA      NA       NA    
-Mult(1, ., Occ).Educ3  0.89218         NA      NA       NA    
-Mult(1, ., Occ).Educ4  1.41391         NA      NA       NA    
-Mult(1, Educ, .).Occ1  0.09634         NA      NA       NA    
-Mult(1, Educ, .).Occ2 -0.03680         NA      NA       NA    
-Mult(1, Educ, .).Occ3  0.06319         NA      NA       NA    
-Mult(1, Educ, .).Occ4  1.19115         NA      NA       NA    
-Mult(1, Educ, .).Occ5  2.12867         NA      NA       NA    
+Mult(., Educ, Occ).   -3.11097         NA      NA       NA    
+Mult(1, ., Occ).Educ1 -0.27768         NA      NA       NA    
+Mult(1, ., Occ).Educ2 -0.03061         NA      NA       NA    
+Mult(1, ., Occ).Educ3  0.21841         NA      NA       NA    
+Mult(1, ., Occ).Educ4  0.33998         NA      NA       NA    
+Mult(1, Educ, .).Occ1  0.13216         NA      NA       NA    
+Mult(1, Educ, .).Occ2 -0.04599         NA      NA       NA    
+Mult(1, Educ, .).Occ3  0.08781         NA      NA       NA    
+Mult(1, Educ, .).Occ4  1.59706         NA      NA       NA    
+Mult(1, Educ, .).Occ5  2.85150         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -1016,7 +1016,7 @@ Number of iterations: 14</code></pre>
 <pre><code>Initialising
 Running start-up iterations....................
 Running main iterations.........................................................
-.........................................................
+........................................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(model9.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1079,7 +1079,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations....................
-Running main iterations.........................................................</code></pre>
+Running main iterations.....................................................</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -1113,10 +1113,10 @@ Mult(L, Educ, ., inst = 1).Occ5  0.82368933 0.03866984</code></pre>
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>mu2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                  Estimate Std. Error
-Mult(L, ., Occ, inst = 2).Educ1  0.6402222 0.02882211
-Mult(L, ., Occ, inst = 2).Educ2  0.2386164 0.03949527
-Mult(L, ., Occ, inst = 2).Educ3 -0.1683115 0.03139203
-Mult(L, ., Occ, inst = 2).Educ4 -0.7105272 0.02071164</code></pre>
+Mult(L, ., Occ, inst = 2).Educ1 -0.6402222 0.02882211
+Mult(L, ., Occ, inst = 2).Educ2 -0.2386164 0.03949527
+Mult(L, ., Occ, inst = 2).Educ3  0.1683115 0.03139203
+Mult(L, ., Occ, inst = 2).Educ4  0.7105272 0.02071164</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>nu2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">

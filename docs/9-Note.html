@@ -365,17 +365,17 @@ window.Quarto = {
 [1] "A" "B" "C" "D"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">SES =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>],</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>, <span class="st">"mild"</span>, <span class="st">"modelrate"</span>, <span class="st">"impared"</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>, <span class="st">"mild"</span>, <span class="st">"moderate"</span>, <span class="st">"impaired"</span>))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>tab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   MHS
-SES well mild modelrate impared
-  A   64   94        58      46
-  B   57   94        54      40
-  C   57  105        65      60
-  D   72  141        77      94
-  E   36   97        54      78
-  F   21   71        54      71</code></pre>
+SES well mild moderate impaired
+  A   64   94       58       46
+  B   57   94       54       40
+  C   57  105       65       60
+  D   72  141       77       94
+  E   36   97       54       78
+  F   21   71       54       71</code></pre>
 </div>
 </div>
 </section>
@@ -3695,7 +3695,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb298-27"><a href="#cb298-27" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(Freq, <span class="at">nrow =</span> <span class="dv">6</span>, <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">as.table</span>()</span>
 <span id="cb298-28"><a href="#cb298-28" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(tab)</span>
 <span id="cb298-29"><a href="#cb298-29" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">SES =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>],</span>
-<span id="cb298-30"><a href="#cb298-30" aria-hidden="true" tabindex="-1"></a>                      <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>, <span class="st">"mild"</span>, <span class="st">"modelrate"</span>, <span class="st">"impared"</span>))</span>
+<span id="cb298-30"><a href="#cb298-30" aria-hidden="true" tabindex="-1"></a>                      <span class="at">MHS =</span> <span class="fu">c</span>(<span class="st">"well"</span>, <span class="st">"mild"</span>, <span class="st">"moderate"</span>, <span class="st">"impaired"</span>))</span>
 <span id="cb298-31"><a href="#cb298-31" aria-hidden="true" tabindex="-1"></a>tab</span>
 <span id="cb298-32"><a href="#cb298-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb298-33"><a href="#cb298-33" aria-hidden="true" tabindex="-1"></a></span>

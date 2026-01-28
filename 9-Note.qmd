@@ -24,7 +24,7 @@ Freq <- c( 64,  94, 58, 46,
 tab <- matrix(Freq, nrow = 6, ncol = 4, byrow = TRUE) |> as.table()
 dimnames(tab)
 dimnames(tab) <- list(SES = LETTERS[1:6],
-                      MHS = c("well", "mild", "modelrate", "impared"))
+                      MHS = c("well", "mild", "moderate", "impaired"))
 tab
 ```
 
