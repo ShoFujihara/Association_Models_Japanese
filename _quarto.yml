@@ -23,6 +23,10 @@ book:
     - 13-Crosstabs.qmd
     # - 14-Bayes.qmd  # 未公開
 
+execute:
+  warning: false
+  message: false
+
 format:
   html:
     theme: minty
