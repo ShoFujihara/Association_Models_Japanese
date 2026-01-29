@@ -287,7 +287,36 @@ mu
 ::: {.callout-note}
 ## gnmによるModel 5およびModel 7の制約について
 
-gnmで`Mult(1, occ, educ + income)`と指定すると，職業スコアが教育-職業連関と職業-収入連関で共通（一貫）になるだけでなく，**連関強度パラメータ$\phi$も共通**（$\phi_{EO} = \phi_{OI}$）になる．これは暗黙的な制約であり，本文中では明示されていない．
+### Mult(1, occ, educ + income) の数式表現
+
+gnmの`Mult(1, occ, educ + income)`は，数式では以下のように展開される：
+
+$$
+\phi \cdot \nu_j \cdot (\mu_i + \eta_k) = \phi \cdot \mu_i \cdot \nu_j + \phi \cdot \nu_j \cdot \eta_k
+$$
+
+ここで`educ + income`は**加法的に結合**されるため，教育スコア$\mu_i$と収入スコア$\eta_k$の和に職業スコア$\nu_j$が乗じられる形になる．
+
+### 暗黙的な制約
+
+この式から，gnmの`Mult(1, occ, educ + income)`には**2つの制約**が含まれることがわかる：
+
+| 制約 | 説明 |
+|------|------|
+| **φ共通** | $\phi_{EO} = \phi_{OI} = \phi$（両連関で同じ強度） |
+| **ν共通** | 職業スコア$\nu_j$が両連関で同一 |
+
+### モデルの比較
+
+| モデル | 数式 | 制約 |
+|--------|------|------|
+| Model 4 | $\phi_{EO} \mu_i \nu_{j1} + \phi_{OI} \nu_{j2} \eta_k$ | なし（全て別々） |
+| Model 5 (gnm) | $\phi (\mu_i + \eta_k) \nu_j$ | φ共通 + ν共通 |
+| Model 5' | $\phi_{EO} \mu_i \nu_j + \phi_{OI} \nu_j \eta_k$ | ν共通のみ |
+
+**Model 5'**（φ別々・ν共通）はgnmでは直接表現できないため，Stanが必要になる．
+
+### Stanによる推定結果
 
 Stanを用いて$\phi_{EO} \neq \phi_{OI}$を許容するモデルを推定すると：
 

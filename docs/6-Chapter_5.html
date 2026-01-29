@@ -369,7 +369,8 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations........................................................
+Running main iterations...................................................................
+...........
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -405,7 +406,7 @@ Levels: 1 2 3 4</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations....................................................
+Running main iterations...................................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m3.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -433,7 +434,7 @@ Done</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations..........................................
+Running main iterations......................................................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m3);mu;nu;<span class="fu">model.summary</span>(m3.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -462,15 +463,15 @@ situations1                          1.43713    0.08740  16.443  &lt; 2e-16 ***
 situations2                         -0.02940    0.07766  -0.379  0.70501    
 situations3                          0.88374    0.07261  12.172  &lt; 2e-16 ***
 situations4                         -1.07721    0.11438  -9.418  &lt; 2e-16 ***
-Mult(., worries.a, situations.a).    1.35718    0.50966   2.663  0.00775 ** 
+Mult(., worries.a, situations.a).   -1.35718    0.50966  -2.663  0.00775 ** 
 Mult(1, ., situations.a).worries.a1  0.42724         NA      NA       NA    
 Mult(1, ., situations.a).worries.a2  0.17319    0.11548   1.500  0.13367    
 Mult(1, ., situations.a).worries.a3 -0.03189    0.09790  -0.326  0.74459    
 Mult(1, ., situations.a).worries.a4 -0.85113         NA      NA       NA    
-Mult(1, worries.a, .).situations.a1  0.69874         NA      NA       NA    
-Mult(1, worries.a, .).situations.a2  0.29537    0.22737   1.299  0.19392    
-Mult(1, worries.a, .).situations.a3 -0.45726    0.41619  -1.099  0.27191    
-Mult(1, worries.a, .).situations.a4 -0.07959         NA      NA       NA    
+Mult(1, worries.a, .).situations.a1 -0.69874         NA      NA       NA    
+Mult(1, worries.a, .).situations.a2 -0.29537    0.22737  -1.299  0.19392    
+Mult(1, worries.a, .).situations.a3  0.45726    0.41619   1.099  0.27191    
+Mult(1, worries.a, .).situations.a4  0.07959         NA      NA       NA    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -481,7 +482,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 29.612 on 23 degrees of freedom
 AIC: 249.9
 
-Number of iterations: 42</code></pre>
+Number of iterations: 54</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                      Estimate Std. Error
@@ -492,10 +493,10 @@ Mult(1, ., situations.a).worries.a4 -0.8511342 0.03998795</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                       Estimate Std. Error
-Mult(1, worries.a, .).situations.a1  0.69874471 0.08798182
-Mult(1, worries.a, .).situations.a2  0.29537072 0.13782241
-Mult(1, worries.a, .).situations.a3 -0.45726207 0.06815138
-Mult(1, worries.a, .).situations.a4 -0.07959129 0.22251866</code></pre>
+Mult(1, worries.a, .).situations.a1 -0.69874471 0.08798182
+Mult(1, worries.a, .).situations.a2 -0.29537072 0.13782241
+Mult(1, worries.a, .).situations.a3  0.45726207 0.06815138
+Mult(1, worries.a, .).situations.a4  0.07959129 0.22251866</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 6
@@ -521,7 +522,7 @@ Levels: 1 2 3</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations...........................................
+Running main iterations.........................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(m4.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -893,7 +894,73 @@ gnmによるModel 5およびModel 7の制約について
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>gnmで<code>Mult(1, occ, educ + income)</code>と指定すると，職業スコアが教育-職業連関と職業-収入連関で共通（一貫）になるだけでなく，<strong>連関強度パラメータ<span class="math inline">\(\phi\)</span>も共通</strong>（<span class="math inline">\(\phi_{EO} = \phi_{OI}\)</span>）になる．これは暗黙的な制約であり，本文中では明示されていない．</p>
+<section id="mult1-occ-educ-income-の数式表現" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="mult1-occ-educ-income-の数式表現"><span class="header-section-number">5.2.1</span> Mult(1, occ, educ + income) の数式表現</h3>
+<p>gnmの<code>Mult(1, occ, educ + income)</code>は，数式では以下のように展開される：</p>
+<p><span class="math display">\[
+\phi \cdot \nu_j \cdot (\mu_i + \eta_k) = \phi \cdot \mu_i \cdot \nu_j + \phi \cdot \nu_j \cdot \eta_k
+\]</span></p>
+<p>ここで<code>educ + income</code>は<strong>加法的に結合</strong>されるため，教育スコア<span class="math inline">\(\mu_i\)</span>と収入スコア<span class="math inline">\(\eta_k\)</span>の和に職業スコア<span class="math inline">\(\nu_j\)</span>が乗じられる形になる．</p>
+</section>
+<section id="暗黙的な制約" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="暗黙的な制約"><span class="header-section-number">5.2.2</span> 暗黙的な制約</h3>
+<p>この式から，gnmの<code>Mult(1, occ, educ + income)</code>には<strong>2つの制約</strong>が含まれることがわかる：</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>制約</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>φ共通</strong></td>
+<td><span class="math inline">\(\phi_{EO} = \phi_{OI} = \phi\)</span>（両連関で同じ強度）</td>
+</tr>
+<tr class="even">
+<td><strong>ν共通</strong></td>
+<td>職業スコア<span class="math inline">\(\nu_j\)</span>が両連関で同一</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="モデルの比較" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="モデルの比較"><span class="header-section-number">5.2.3</span> モデルの比較</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 40%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>モデル</th>
+<th>数式</th>
+<th>制約</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Model 4</td>
+<td><span class="math inline">\(\phi_{EO} \mu_i \nu_{j1} + \phi_{OI} \nu_{j2} \eta_k\)</span></td>
+<td>なし（全て別々）</td>
+</tr>
+<tr class="even">
+<td>Model 5 (gnm)</td>
+<td><span class="math inline">\(\phi (\mu_i + \eta_k) \nu_j\)</span></td>
+<td>φ共通 + ν共通</td>
+</tr>
+<tr class="odd">
+<td>Model 5’</td>
+<td><span class="math inline">\(\phi_{EO} \mu_i \nu_j + \phi_{OI} \nu_j \eta_k\)</span></td>
+<td>ν共通のみ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Model 5’</strong>（φ別々・ν共通）はgnmでは直接表現できないため，Stanが必要になる．</p>
+</section>
+<section id="stanによる推定結果" class="level3" data-number="5.2.4">
+<h3 data-number="5.2.4" class="anchored" data-anchor-id="stanによる推定結果"><span class="header-section-number">5.2.4</span> Stanによる推定結果</h3>
 <p>Stanを用いて<span class="math inline">\(\phi_{EO} \neq \phi_{OI}\)</span>を許容するモデルを推定すると：</p>
 <ul>
 <li><span class="math inline">\(\phi_{EO} \approx 0.45\)</span>（教育-職業連関）</li>
@@ -901,6 +968,7 @@ gnmによるModel 5およびModel 7の制約について
 </ul>
 <p>となり，<strong>教育-職業の連関は職業-収入の連関の約2倍強い</strong>ことがわかる．ただし，<span class="math inline">\(L^2\)</span>への影響は小さく（約20），職業スコアの推定値もほぼ変わらない（相関0.99以上）．</p>
 <p>Model 8（すべてのスコアが一貫）はgnmでは推定できないが，LEMやStanでは推定可能である．</p>
+</section>
 </div>
 </div>
 <ul>
@@ -1792,37 +1860,66 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb74-294"><a href="#cb74-294" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
 <span id="cb74-295"><a href="#cb74-295" aria-hidden="true" tabindex="-1"></a><span class="fu">## gnmによるModel 5およびModel 7の制約について</span></span>
 <span id="cb74-296"><a href="#cb74-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-297"><a href="#cb74-297" aria-hidden="true" tabindex="-1"></a>gnmで<span class="in">`Mult(1, occ, educ + income)`</span>と指定すると，職業スコアが教育-職業連関と職業-収入連関で共通（一貫）になるだけでなく，**連関強度パラメータ$\phi$も共通**（$\phi_{EO} = \phi_{OI}$）になる．これは暗黙的な制約であり，本文中では明示されていない．</span>
+<span id="cb74-297"><a href="#cb74-297" aria-hidden="true" tabindex="-1"></a><span class="fu">### Mult(1, occ, educ + income) の数式表現</span></span>
 <span id="cb74-298"><a href="#cb74-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-299"><a href="#cb74-299" aria-hidden="true" tabindex="-1"></a>Stanを用いて$\phi_{EO} \neq \phi_{OI}$を許容するモデルを推定すると：</span>
+<span id="cb74-299"><a href="#cb74-299" aria-hidden="true" tabindex="-1"></a>gnmの<span class="in">`Mult(1, occ, educ + income)`</span>は，数式では以下のように展開される：</span>
 <span id="cb74-300"><a href="#cb74-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-301"><a href="#cb74-301" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\phi_{EO} \approx 0.45$（教育-職業連関）</span>
-<span id="cb74-302"><a href="#cb74-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\phi_{OI} \approx 0.21$（職業-収入連関）</span>
-<span id="cb74-303"><a href="#cb74-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-304"><a href="#cb74-304" aria-hidden="true" tabindex="-1"></a>となり，**教育-職業の連関は職業-収入の連関の約2倍強い**ことがわかる．ただし，$L^2$への影響は小さく（約20），職業スコアの推定値もほぼ変わらない（相関0.99以上）．</span>
-<span id="cb74-305"><a href="#cb74-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-306"><a href="#cb74-306" aria-hidden="true" tabindex="-1"></a>Model 8（すべてのスコアが一貫）はgnmでは推定できないが，LEMやStanでは推定可能である．</span>
-<span id="cb74-307"><a href="#cb74-307" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb74-301"><a href="#cb74-301" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb74-302"><a href="#cb74-302" aria-hidden="true" tabindex="-1"></a>\phi \cdot \nu_j \cdot (\mu_i + \eta_k) = \phi \cdot \mu_i \cdot \nu_j + \phi \cdot \nu_j \cdot \eta_k</span>
+<span id="cb74-303"><a href="#cb74-303" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb74-304"><a href="#cb74-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-305"><a href="#cb74-305" aria-hidden="true" tabindex="-1"></a>ここで<span class="in">`educ + income`</span>は**加法的に結合**されるため，教育スコア$\mu_i$と収入スコア$\eta_k$の和に職業スコア$\nu_j$が乗じられる形になる．</span>
+<span id="cb74-306"><a href="#cb74-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-307"><a href="#cb74-307" aria-hidden="true" tabindex="-1"></a><span class="fu">### 暗黙的な制約</span></span>
 <span id="cb74-308"><a href="#cb74-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-309"><a href="#cb74-309" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>表5.5のモデル1については原著および訳書ともに$\Delta$の値が間違っているので注意すること（印刷後に修正漏れに気づきました）．実際は<span class="in">`r model.summary(m1)$Delta |&gt; round(2)`</span>である．</span>
+<span id="cb74-309"><a href="#cb74-309" aria-hidden="true" tabindex="-1"></a>この式から，gnmの<span class="in">`Mult(1, occ, educ + income)`</span>には**2つの制約**が含まれることがわかる：</span>
 <span id="cb74-310"><a href="#cb74-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-313"><a href="#cb74-313" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb74-314"><a href="#cb74-314" aria-hidden="true" tabindex="-1"></a><span class="co"># 2つの引数についてのリストを作成</span></span>
-<span id="cb74-315"><a href="#cb74-315" aria-hidden="true" tabindex="-1"></a><span class="do">## 第1引数はモデル</span></span>
-<span id="cb74-316"><a href="#cb74-316" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">list</span>(m1, m2, m3, m4, m5, m6, m7)</span>
-<span id="cb74-317"><a href="#cb74-317" aria-hidden="true" tabindex="-1"></a><span class="do">## 第2引数はモデルの内容</span></span>
-<span id="cb74-318"><a href="#cb74-318" aria-hidden="true" tabindex="-1"></a>model_desctiption <span class="ot">&lt;-</span> </span>
-<span id="cb74-319"><a href="#cb74-319" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="st">"完全独立"</span>, </span>
-<span id="cb74-320"><a href="#cb74-320" aria-hidden="true" tabindex="-1"></a>       <span class="st">"条件付き独立"</span>, </span>
-<span id="cb74-321"><a href="#cb74-321" aria-hidden="true" tabindex="-1"></a>       <span class="st">"すべての2元交互作用"</span>,</span>
-<span id="cb74-322"><a href="#cb74-322" aria-hidden="true" tabindex="-1"></a>       <span class="st">"RC(1)+RL(1) 部分連関"</span>,</span>
-<span id="cb74-323"><a href="#cb74-323" aria-hidden="true" tabindex="-1"></a>       <span class="st">"一貫した行(職業)スコアのあるRC(1)+RL(1) 部分連関"</span>,</span>
-<span id="cb74-324"><a href="#cb74-324" aria-hidden="true" tabindex="-1"></a>       <span class="st">"RC(1)+RL(1)+CL(1) 部分連関"</span>,</span>
-<span id="cb74-325"><a href="#cb74-325" aria-hidden="true" tabindex="-1"></a>       <span class="st">"一貫した行(職業)スコアのあるRC(1)+RL(1)+CL(1)部分連関"</span>)</span>
-<span id="cb74-326"><a href="#cb74-326" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果をまとめる</span></span>
-<span id="cb74-327"><a href="#cb74-327" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_dfr</span>(models, model_desctiption, model.summary, <span class="at">.id =</span> <span class="st">"Model"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb74-328"><a href="#cb74-328" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
-<span id="cb74-329"><a href="#cb74-329" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb74-311"><a href="#cb74-311" aria-hidden="true" tabindex="-1"></a>| 制約 | 説明 |</span>
+<span id="cb74-312"><a href="#cb74-312" aria-hidden="true" tabindex="-1"></a>|------|------|</span>
+<span id="cb74-313"><a href="#cb74-313" aria-hidden="true" tabindex="-1"></a>| **φ共通** | $\phi_{EO} = \phi_{OI} = \phi$（両連関で同じ強度） |</span>
+<span id="cb74-314"><a href="#cb74-314" aria-hidden="true" tabindex="-1"></a>| **ν共通** | 職業スコア$\nu_j$が両連関で同一 |</span>
+<span id="cb74-315"><a href="#cb74-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-316"><a href="#cb74-316" aria-hidden="true" tabindex="-1"></a><span class="fu">### モデルの比較</span></span>
+<span id="cb74-317"><a href="#cb74-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-318"><a href="#cb74-318" aria-hidden="true" tabindex="-1"></a>| モデル | 数式 | 制約 |</span>
+<span id="cb74-319"><a href="#cb74-319" aria-hidden="true" tabindex="-1"></a>|--------|------|------|</span>
+<span id="cb74-320"><a href="#cb74-320" aria-hidden="true" tabindex="-1"></a>| Model 4 | $\phi_{EO} \mu_i \nu_{j1} + \phi_{OI} \nu_{j2} \eta_k$ | なし（全て別々） |</span>
+<span id="cb74-321"><a href="#cb74-321" aria-hidden="true" tabindex="-1"></a>| Model 5 (gnm) | $\phi (\mu_i + \eta_k) \nu_j$ | φ共通 + ν共通 |</span>
+<span id="cb74-322"><a href="#cb74-322" aria-hidden="true" tabindex="-1"></a>| Model 5' | $\phi_{EO} \mu_i \nu_j + \phi_{OI} \nu_j \eta_k$ | ν共通のみ |</span>
+<span id="cb74-323"><a href="#cb74-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-324"><a href="#cb74-324" aria-hidden="true" tabindex="-1"></a>**Model 5'**（φ別々・ν共通）はgnmでは直接表現できないため，Stanが必要になる．</span>
+<span id="cb74-325"><a href="#cb74-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-326"><a href="#cb74-326" aria-hidden="true" tabindex="-1"></a><span class="fu">### Stanによる推定結果</span></span>
+<span id="cb74-327"><a href="#cb74-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-328"><a href="#cb74-328" aria-hidden="true" tabindex="-1"></a>Stanを用いて$\phi_{EO} \neq \phi_{OI}$を許容するモデルを推定すると：</span>
+<span id="cb74-329"><a href="#cb74-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-330"><a href="#cb74-330" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\phi_{EO} \approx 0.45$（教育-職業連関）</span>
+<span id="cb74-331"><a href="#cb74-331" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$\phi_{OI} \approx 0.21$（職業-収入連関）</span>
+<span id="cb74-332"><a href="#cb74-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-333"><a href="#cb74-333" aria-hidden="true" tabindex="-1"></a>となり，**教育-職業の連関は職業-収入の連関の約2倍強い**ことがわかる．ただし，$L^2$への影響は小さく（約20），職業スコアの推定値もほぼ変わらない（相関0.99以上）．</span>
+<span id="cb74-334"><a href="#cb74-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-335"><a href="#cb74-335" aria-hidden="true" tabindex="-1"></a>Model 8（すべてのスコアが一貫）はgnmでは推定できないが，LEMやStanでは推定可能である．</span>
+<span id="cb74-336"><a href="#cb74-336" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb74-337"><a href="#cb74-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-338"><a href="#cb74-338" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>表5.5のモデル1については原著および訳書ともに$\Delta$の値が間違っているので注意すること（印刷後に修正漏れに気づきました）．実際は<span class="in">`r model.summary(m1)$Delta |&gt; round(2)`</span>である．</span>
+<span id="cb74-339"><a href="#cb74-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-342"><a href="#cb74-342" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb74-343"><a href="#cb74-343" aria-hidden="true" tabindex="-1"></a><span class="co"># 2つの引数についてのリストを作成</span></span>
+<span id="cb74-344"><a href="#cb74-344" aria-hidden="true" tabindex="-1"></a><span class="do">## 第1引数はモデル</span></span>
+<span id="cb74-345"><a href="#cb74-345" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">list</span>(m1, m2, m3, m4, m5, m6, m7)</span>
+<span id="cb74-346"><a href="#cb74-346" aria-hidden="true" tabindex="-1"></a><span class="do">## 第2引数はモデルの内容</span></span>
+<span id="cb74-347"><a href="#cb74-347" aria-hidden="true" tabindex="-1"></a>model_desctiption <span class="ot">&lt;-</span> </span>
+<span id="cb74-348"><a href="#cb74-348" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="st">"完全独立"</span>, </span>
+<span id="cb74-349"><a href="#cb74-349" aria-hidden="true" tabindex="-1"></a>       <span class="st">"条件付き独立"</span>, </span>
+<span id="cb74-350"><a href="#cb74-350" aria-hidden="true" tabindex="-1"></a>       <span class="st">"すべての2元交互作用"</span>,</span>
+<span id="cb74-351"><a href="#cb74-351" aria-hidden="true" tabindex="-1"></a>       <span class="st">"RC(1)+RL(1) 部分連関"</span>,</span>
+<span id="cb74-352"><a href="#cb74-352" aria-hidden="true" tabindex="-1"></a>       <span class="st">"一貫した行(職業)スコアのあるRC(1)+RL(1) 部分連関"</span>,</span>
+<span id="cb74-353"><a href="#cb74-353" aria-hidden="true" tabindex="-1"></a>       <span class="st">"RC(1)+RL(1)+CL(1) 部分連関"</span>,</span>
+<span id="cb74-354"><a href="#cb74-354" aria-hidden="true" tabindex="-1"></a>       <span class="st">"一貫した行(職業)スコアのあるRC(1)+RL(1)+CL(1)部分連関"</span>)</span>
+<span id="cb74-355"><a href="#cb74-355" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果をまとめる</span></span>
+<span id="cb74-356"><a href="#cb74-356" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_dfr</span>(models, model_desctiption, model.summary, <span class="at">.id =</span> <span class="st">"Model"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb74-357"><a href="#cb74-357" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span>
+<span id="cb74-358"><a href="#cb74-358" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
