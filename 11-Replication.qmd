@@ -2,8 +2,31 @@
 
 # 先行研究の再現 {-}
 
+## なぜ再現が重要か
 
-[訳者のGitHubのスクリプトのフォルダ](https://github.com/ShoFujihara/Association_Models_Japanese/tree/main/scripts) にRのスクリプトファイルを保存しているのでそれも活用してください．
+先行研究の再現（replication）は、統計手法を学ぶ上で非常に有効なアプローチである。その理由は以下の通りである。
+
+1. **手法の理解が深まる**: 論文を読むだけでなく、実際にデータを入力し、モデルを推定し、結果を確認することで、手法の理解が格段に深まる。
+
+2. **実装の詳細を学べる**: 論文には書かれていない実装上の工夫やデータの前処理方法を、コードを書く過程で学ぶことができる。
+
+3. **結果の検証ができる**: 自分の実装が正しいかどうかを、論文の結果と照合することで確認できる。これはソフトウェアや推定アルゴリズムの理解にもつながる。
+
+4. **応用への準備になる**: 先行研究を再現できれば、同じ手法を自分のデータに適用する準備が整う。
+
+::: {.callout-tip}
+## 再現における注意点
+論文の結果と完全に一致しないことは珍しくない。これは以下の理由による：
+
+- 丸め誤差や収束基準の違い
+- 使用したソフトウェアやアルゴリズムの違い
+- 論文の誤植
+- モデルの定式化の微妙な違い（制約条件など）
+
+重要なのは、**主要な結論が一致するかどうか**である。L²やパラメータ推定値が数ポイント異なっても、解釈が同じであれば問題ない。
+:::
+
+[訳者のGitHubのスクリプトのフォルダ](https://github.com/ShoFujihara/Association_Models_Japanese/tree/main/scripts) にRのスクリプトファイルを保存しているので、それも活用してください。
 
 ```{r}
 #| message: false
@@ -12,6 +35,114 @@ library(gnm)
 library(broom)
 library(vcdExtra)
 ```
+
+
+## Goodman (1979)
+
+@goodman1979a はRC連関モデルを提唱した記念碑的論文である。ここではTable 4のデータ（精神的健康と親の社会経済的地位の関連）を用いて、一様連関モデルとRC(1)モデルを再現する。
+
+### データの準備
+
+```{r}
+# Goodman (1979) Table 4: Mental Health by Parents' SES
+# Rows: Mental Health (Well, Mild, Moderate, Impaired)
+# Columns: Parents' SES (A=High, B, C, D, E, F=Low)
+Freq_gm79 <- c(64, 94, 58, 46,
+               57, 94, 54, 40,
+               57, 105, 65, 60,
+               72, 141, 77, 94,
+               36, 97, 54, 78,
+               21, 71, 54, 71)
+
+d_gm79 <- tibble(
+  Freq = Freq_gm79,
+  MH = gl(4, 1, 24, labels = c("Well", "Mild", "Moderate", "Impaired")),
+  SES = gl(6, 4, 24, labels = LETTERS[1:6])
+) |>
+  mutate(
+    U = as.numeric(MH),  # Row scores
+    V = as.numeric(SES)  # Column scores
+  )
+
+# クロス表として確認
+d_gm79 |> xtabs(Freq ~ SES + MH, data = _)
+```
+
+### 独立モデルと一様連関モデル
+
+```{r}
+# Model 1: Independence
+fit_gm79_1 <- d_gm79 |>
+  gnm(Freq ~ MH + SES, data = _, family = poisson)
+
+# Model 2: Uniform Association (Row-Column Association I)
+fit_gm79_2 <- d_gm79 |>
+  gnm(Freq ~ MH + SES + U:V, data = _, family = poisson)
+
+# 結果の比較
+list(
+  Independence = fit_gm79_1,
+  `Uniform Association` = fit_gm79_2
+) |>
+  map_dfr(glance, .id = "Model") |>
+  dplyr::select(Model, L2 = deviance, df = df.residual)
+```
+
+一様連関パラメータ $\beta$ を確認する。
+
+```{r}
+# 一様連関パラメータ
+beta_ua <- coef(fit_gm79_2)["U:V"]
+cat("β =", round(beta_ua, 4), "\n")
+cat("exp(β) =", round(exp(beta_ua), 4), "\n")
+```
+
+### RC(1)モデル
+
+RC(1)モデルは行スコア $\mu_i$ と列スコア $\nu_j$ を推定する。
+
+```{r}
+set.seed(123)
+# Model 3: RC(1) Association
+fit_gm79_3 <- d_gm79 |>
+  gnm(Freq ~ MH + SES + Mult(1, MH, SES),
+      data = _, family = poisson)
+
+# 適合度
+glance(fit_gm79_3) |>
+  dplyr::select(L2 = deviance, df = df.residual)
+
+# スコアの取得と正規化
+mu <- getContrasts(fit_gm79_3, pickCoef(fit_gm79_3, "[.]MH"),
+                   ref = "mean", scaleRef = "mean", scaleWeights = "unit")
+nu <- getContrasts(fit_gm79_3, pickCoef(fit_gm79_3, "[.]SES"),
+                   ref = "mean", scaleRef = "mean", scaleWeights = "unit")
+
+cat("\n行スコア（Mental Health）:\n")
+print(round(mu$qvframe, 4))
+cat("\n列スコア（Parents' SES）:\n")
+print(round(nu$qvframe, 4))
+```
+
+### モデル比較
+
+```{r}
+# モデル適合度の比較（Goodman 1979 Table 4と照合）
+tibble(
+  Model = c("Independence", "Uniform Association", "RC(1)"),
+  L2 = c(deviance(fit_gm79_1), deviance(fit_gm79_2), deviance(fit_gm79_3)),
+  df = c(fit_gm79_1$df, fit_gm79_2$df, fit_gm79_3$df)
+) |>
+  mutate(
+    p = pchisq(L2, df, lower.tail = FALSE),
+    BIC = L2 - df * log(sum(d_gm79$Freq))
+  )
+```
+
+::: {.callout-note}
+## 補足
+Goodman (1979) のTable 4では、RC(1)モデルの $L^2 = 3.57$, $df = 8$ と報告されている。上記の結果と一致すれば、実装が正しいことが確認できる。
+:::
 
 
 ## Duncan (1979)
