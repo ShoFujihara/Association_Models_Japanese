@@ -1,15 +1,204 @@
 
-
 # RとRStudioのインストールと基本的な操作方法 {-}
 
-## RとRStudioのインストール
+本付録では、RとRStudioのインストール方法および基本的な操作方法を説明する。
 
-- Rのインストールは [CRAN（The Comprehensive R Archive Network）](https://cran.r-project.org/) から行います．
+## Rのインストール
 
-- RStudioのインストールは [Posit](https://posit.co/download/rstudio-desktop/) から行います．
-   - 「2: Install RStudio」を選択してRStudioをインストールしてください．
-   
-  
-## 基本的な操作方法
+1. [CRAN（The Comprehensive R Archive Network）](https://cran.r-project.org/) にアクセス
+2. 自分のOSに合ったリンクをクリック
+   - **Windows**：「Download R for Windows」→「base」→「Download R-x.x.x for Windows」
+   - **Mac**：「Download R for macOS」→ 自分のMacに合ったパッケージを選択
+     - Apple Silicon Mac（M1/M2/M3）：`arm64`版を選択
+     - Intel Mac：`x86_64`版を選択
+3. ダウンロードしたファイルを実行してインストール
 
+## RStudioのインストール
 
+1. [Posit社のダウンロードページ](https://posit.co/download/rstudio-desktop/) にアクセス
+2. 「2: Install RStudio」のセクションで、自分のOSに合ったインストーラをダウンロード
+3. ダウンロードしたファイルを実行してインストール
+
+## RStudioの起動と画面構成
+
+RStudioを起動すると、4つの領域（ペイン）が表示される：
+
+- **左上（Source）**：スクリプトを編集する場所
+- **左下（Console）**：コードを実行し、結果が表示される場所
+- **右上（Environment）**：作成したオブジェクトを確認する場所
+- **右下（Output）**：ファイル、プロット、ヘルプなどが表示される場所
+
+::: {.callout-tip}
+## ペインの配置変更
+RStudioの「Tools」→「Global Options」→「Pane Layout」からペインの配置を変更できる。好みに応じて設定してください。
+:::
+
+## プロジェクトの作成
+
+RStudioでは**プロジェクト**を使ってファイルを管理することを推奨する。
+
+1. RStudioのメニューから「File」→「New Project...」を選択
+2. 「New Directory」→「New Project」を選択
+3. 以下を設定：
+   - **Directory name**：プロジェクト名（例：`association_models`）
+   - **Create project as subdirectory of**：保存先を選択
+4. 「Create Project」をクリック
+
+## パッケージのインストール
+
+本書で使用する主要なパッケージをインストールする。以下のコードをRStudioのコンソールに貼り付けて実行する：
+
+```{r}
+#| eval: false
+# 本書で使用するパッケージのインストール
+install.packages(c(
+  "tidyverse",    # データ操作・可視化
+  "gnm",          # 一般化非線形モデル（連関モデル）
+  "vcd",          # カテゴリカルデータの可視化
+  "vcdExtra",     # vcdの拡張
+  "broom",        # モデル結果の整形
+  "MASS",         # 統計関数
+  "knitr",        # レポート生成
+  "logmult"       # 対数乗法モデル
+))
+```
+
+::: {.callout-note}
+## インストールに時間がかかる場合
+初めてのインストールでは数分〜10分程度かかることがある。「パッケージをソースからインストールしますか？（Do you want to install from sources ...）」と聞かれたら「No」を選択してください。
+:::
+
+インストールが完了したら、以下のコードでパッケージが正しく読み込めるか確認する：
+
+```{r}
+#| eval: false
+# パッケージの読み込みテスト
+library(tidyverse)
+library(gnm)
+library(vcd)
+```
+
+エラーが出なければ成功である。
+
+## Rの基本操作
+
+### スクリプトの作成
+
+「File」→「New File」→「R Script」でスクリプトファイルを新規作成できる。スクリプトにコードを入力し、「Ctrl + Enter」（Macは「Cmd + Enter」）で実行する。
+
+### 計算の実行
+
+```{r}
+# 基本的な計算
+1 + 1
+7 * 8
+sqrt(16)
+```
+
+### オブジェクトへの代入
+
+Rでは、値や計算結果に名前をつけて保存できる。この「名前をつけた入れ物」を**オブジェクト**と呼ぶ。`<-`（代入演算子）を使って、右側の値を左側の名前に代入する。
+
+```{r}
+# xに10を代入
+x <- 10
+x
+
+# ベクトル（複数の値）を代入
+y <- c(1, 2, 3, 4, 5)
+y
+
+# 平均を計算
+mean(y)
+```
+
+::: {.callout-tip}
+## オブジェクトの確認
+作成したオブジェクトは、RStudio右上の「Environment」ペインで確認できる。
+:::
+
+### データフレーム
+
+データフレームは、行と列からなる表形式のデータ構造である。本書では主にこの形式でデータを扱う。
+
+```{r}
+# データフレームの作成
+df <- data.frame(
+  name = c("Alice", "Bob", "Carol"),
+  age = c(25, 30, 35),
+  score = c(80, 90, 85)
+)
+df
+
+# 行数と列数
+dim(df)
+
+# 構造の確認
+str(df)
+```
+
+### 分割表（クロス表）の作成
+
+本書で扱う連関モデルでは、分割表（クロス集計表）が基本的なデータ形式となる。
+
+```{r}
+# 度数からクロス表を作成
+freq <- c(1275, 364, 274, 272,
+          1055, 597, 394, 443,
+          1043, 587, 1045, 951,
+          1159, 791, 1323, 2046)
+
+# 行列形式に変換
+tab <- matrix(freq, nrow = 4, byrow = TRUE)
+rownames(tab) <- c("Upper", "Upper-middle", "Lower-middle", "Lower")
+colnames(tab) <- c("Upper", "Upper-middle", "Lower-middle", "Lower")
+tab
+
+# クロス表を表示
+as.table(tab)
+```
+
+### データフレームから分割表を作成
+
+```{r}
+# サンプルデータの作成
+set.seed(123)
+sample_data <- data.frame(
+  row_var = sample(c("A", "B", "C"), 100, replace = TRUE),
+  col_var = sample(c("X", "Y"), 100, replace = TRUE)
+)
+
+# クロス表の作成
+table(sample_data$row_var, sample_data$col_var)
+
+# tidyverseを使う場合
+library(tidyverse)
+sample_data |>
+  count(row_var, col_var) |>
+  pivot_wider(names_from = col_var, values_from = n, values_fill = 0)
+```
+
+## 困ったときは
+
+### パッケージのインストールでエラーが出る
+
+```{r}
+#| eval: false
+# CRANのミラーを明示的に指定
+install.packages("gnm", repos = "https://cran.rstudio.com/")
+```
+
+### 日本語のファイルパスで問題が起きる
+
+プロジェクトフォルダは、日本語を含まないパス（例：`C:/Users/username/Documents/association_models`）に作成することを推奨する。
+
+### Macで「開発元を確認できない」と表示される
+
+「システム設定」→「プライバシーとセキュリティ」から、該当するアプリの実行を許可する。
+
+## 参考リンク
+
+- [R公式サイト](https://www.r-project.org/)
+- [RStudio公式サイト](https://posit.co/products/open-source/rstudio/)
+- [R for Data Science（英語・無料）](https://r4ds.hadley.nz/)
+- [gnmパッケージのドキュメント](https://cran.r-project.org/web/packages/gnm/vignettes/gnmOverview.pdf)
