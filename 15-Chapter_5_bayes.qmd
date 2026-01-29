@@ -106,22 +106,25 @@ tab5.4 <- data.frame(Freq = Freq, occ = occ, educ = educ, income = income)
 stan_data <- list(
   N = 192,
   Y = Freq,
-  occ = as.integer(occ),
   educ = as.integer(educ),
+  occ = as.integer(occ),
   income = as.integer(income),
-  N_occ = 12,
   N_educ = 4,
+  N_occ = 12,
   N_income = 4
 )
 
-cat("総サンプルサイズ:", sum(Freq), "\n")
-cat("セル数:", length(Freq), "\n")
+tibble(
+  項目 = c("総サンプルサイズ", "セル数"),
+  値 = c(sum(Freq), length(Freq))
+) |>
+  knitr::kable(caption = "データ概要")
 ```
 
 ## Model 1: 完全独立モデル
 
 $$
-\log \mu_{ijk} = \alpha + \alpha^O_j + \alpha^E_i + \alpha^I_k
+\log \mu_{ijk} = \lambda + \lambda^E_i + \lambda^O_j + \lambda^I_k
 $$
 
 ```{r}
@@ -142,29 +145,29 @@ stan_model1 <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
 }
 parameters {
-  real alpha0;
-  vector[11] alpha_occ;   // occ 2-12 (corner constraint)
-  vector[3] alpha_educ;   // educ 2-4
-  vector[3] alpha_income; // income 2-4
+  real lambda0;
+  vector[3] lambda_educ;   // educ 2-4 (corner constraint)
+  vector[11] lambda_occ;   // occ 2-12
+  vector[3] lambda_income; // income 2-4
 }
 model {
   // Priors
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
 
   // Likelihood
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     Y[n] ~ poisson_log(log_mu);
   }
 }
@@ -172,10 +175,10 @@ generated quantities {
   real G2 = 0;  // Deviance (gnmと同じ)
   vector[N] expected;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     expected[n] = exp(log_mu);
     // Deviance = 2 * Σ [Y * log(Y/μ) - (Y - μ)]
     if (Y[n] > 0) {
@@ -190,10 +193,12 @@ generated quantities {
 mod1 <- cmdstan_model(write_stan_file(stan_model1))
 fit1_mle <- mod1$optimize(data = stan_data, seed = 123, algorithm = "lbfgs")
 
-cat("\n=== Model 1: Stan MLE vs gnm ===\n")
-cat("Stan L² =", round(fit1_mle$summary("G2")$estimate, 2), "\n")
-cat("gnm  L² =", round(deviance(m1_gnm), 2), "\n")
-cat("差     =", round(fit1_mle$summary("G2")$estimate - deviance(m1_gnm), 2), "\n")
+tibble(
+  推定法 = c("Stan", "gnm"),
+  `L²` = c(fit1_mle$summary("G2")$estimate, deviance(m1_gnm))
+) |>
+  mutate(`L²` = round(`L²`, 2)) |>
+  knitr::kable(caption = "Model 1: Stan MLE vs gnm")
 ```
 
 ### Stanとgnmのずれの診断
@@ -202,43 +207,43 @@ cat("差     =", round(fit1_mle$summary("G2")$estimate - deviance(m1_gnm), 2), "
 #| label: model1-diagnosis
 
 # 1. 総度数の比較
-cat("=== 総度数の比較 ===\n")
-cat("観測度数の合計:", sum(Freq), "\n")
-cat("gnm期待度数の合計:", round(sum(fitted(m1_gnm)), 2), "\n")
-
 stan_expected <- fit1_mle$summary("expected")$estimate
-cat("Stan期待度数の合計:", round(sum(stan_expected), 2), "\n")
-cat("差 (Stan - 観測):", round(sum(stan_expected) - sum(Freq), 2), "\n")
-
-# 2. パラメータ推定値の比較
-cat("\n=== 切片の比較 ===\n")
 gnm_coef <- coef(m1_gnm)
-cat("gnm  α₀:", round(gnm_coef["(Intercept)"], 6), "\n")
-cat("Stan α₀:", round(fit1_mle$summary("alpha0")$estimate, 6), "\n")
+
+tibble(
+  項目 = c("観測度数", "gnm期待度数", "Stan期待度数"),
+  合計 = c(sum(Freq), sum(fitted(m1_gnm)), sum(stan_expected))
+) |>
+  mutate(合計 = round(合計, 2)) |>
+  knitr::kable(caption = "総度数の比較")
+
+# 2. 切片の比較
+tibble(
+  推定法 = c("gnm", "Stan"),
+  `λ₀` = c(gnm_coef["(Intercept)"], fit1_mle$summary("lambda0")$estimate)
+) |>
+  mutate(`λ₀` = round(`λ₀`, 6)) |>
+  knitr::kable(caption = "切片の比較")
 
 # 3. 逸脱度の計算方法の違い
-cat("\n=== 逸脱度の計算 ===\n")
 Y <- Freq
 mu_gnm <- fitted(m1_gnm)
 mu_stan <- stan_expected
 
-# 標準的なG² (ΣY=Σμを仮定)
 G2_simple_gnm <- 2 * sum(ifelse(Y > 0, Y * log(Y / mu_gnm), 0))
 G2_simple_stan <- 2 * sum(ifelse(Y > 0, Y * log(Y / mu_stan), 0))
-
-# 修正版G² (ΣY≠Σμでも正しい)
 G2_corrected_gnm <- 2 * sum(ifelse(Y > 0, Y * log(Y / mu_gnm) - (Y - mu_gnm), mu_gnm))
 G2_corrected_stan <- 2 * sum(ifelse(Y > 0, Y * log(Y / mu_stan) - (Y - mu_stan), mu_stan))
 
-cat("gnm:\n")
-cat("  単純G²:", round(G2_simple_gnm, 2), "\n")
-cat("  修正G²:", round(G2_corrected_gnm, 2), "\n")
-cat("  deviance():", round(deviance(m1_gnm), 2), "\n")
-
-cat("\nStan:\n")
-cat("  単純G²:", round(G2_simple_stan, 2), "\n")
-cat("  修正G²:", round(G2_corrected_stan, 2), "\n")
-cat("  Stan報告値:", round(fit1_mle$summary("G2")$estimate, 2), "\n")
+tibble(
+  推定法 = c("gnm", "gnm", "gnm", "Stan", "Stan", "Stan"),
+  計算方法 = rep(c("単純G²", "修正G²", "報告値"), 2),
+  `G²` = c(G2_simple_gnm, G2_corrected_gnm, deviance(m1_gnm),
+           G2_simple_stan, G2_corrected_stan, fit1_mle$summary("G2")$estimate)
+) |>
+  mutate(`G²` = round(`G²`, 2)) |>
+  pivot_wider(names_from = 推定法, values_from = `G²`) |>
+  knitr::kable(caption = "逸脱度の計算方法の比較")
 ```
 
 ```{r}
@@ -249,23 +254,23 @@ stan_model1_flat <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
 }
 parameters {
-  real alpha0;
-  vector[11] alpha_occ;
-  vector[3] alpha_educ;
-  vector[3] alpha_income;
+  real lambda0;
+  vector[3] lambda_educ;
+  vector[11] lambda_occ;
+  vector[3] lambda_income;
 }
 model {
   // 事前分布なし（無情報事前分布）
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     Y[n] ~ poisson_log(log_mu);
   }
 }
@@ -273,10 +278,10 @@ generated quantities {
   real G2 = 0;
   real total_expected = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     real mu = exp(log_mu);
     total_expected += mu;
     if (Y[n] > 0) {
@@ -291,34 +296,32 @@ generated quantities {
 mod1_flat <- cmdstan_model(write_stan_file(stan_model1_flat))
 fit1_flat <- mod1_flat$optimize(data = stan_data, seed = 123, algorithm = "lbfgs")
 
-cat("\n=== 事前分布の影響 ===\n")
-cat("事前分布あり:\n")
-cat("  L² =", round(fit1_mle$summary("G2")$estimate, 2), "\n")
-cat("  α₀ =", round(fit1_mle$summary("alpha0")$estimate, 6), "\n")
-
-cat("\n事前分布なし:\n")
-cat("  L² =", round(fit1_flat$summary("G2")$estimate, 2), "\n")
-cat("  α₀ =", round(fit1_flat$summary("alpha0")$estimate, 6), "\n")
-cat("  Σμ =", round(fit1_flat$summary("total_expected")$estimate, 2), "\n")
-
-cat("\ngnm:\n")
-cat("  L² =", round(deviance(m1_gnm), 2), "\n")
-cat("  α₀ =", round(gnm_coef["(Intercept)"], 6), "\n")
-
-cat("\n結論:\n")
-diff_prior <- abs(fit1_mle$summary("G2")$estimate - deviance(m1_gnm))
-diff_flat <- abs(fit1_flat$summary("G2")$estimate - deviance(m1_gnm))
-if (diff_flat < diff_prior) {
-  cat("事前分布なしの方がgnmに近い（差:", round(diff_flat, 4), "）\n")
-} else {
-  cat("事前分布の影響は小さい\n")
-}
+tibble(
+  推定法 = c("Stan (事前分布あり)", "Stan (事前分布なし)", "gnm"),
+  `L²` = c(
+    fit1_mle$summary("G2")$estimate,
+    fit1_flat$summary("G2")$estimate,
+    deviance(m1_gnm)
+  ),
+  `λ₀` = c(
+    fit1_mle$summary("lambda0")$estimate,
+    fit1_flat$summary("lambda0")$estimate,
+    gnm_coef["(Intercept)"]
+  ),
+  `Σμ` = c(NA, fit1_flat$summary("total_expected")$estimate, sum(Freq))
+) |>
+  mutate(
+    `L²` = round(`L²`, 2),
+    `λ₀` = round(`λ₀`, 6),
+    `Σμ` = round(`Σμ`, 2)
+  ) |>
+  knitr::kable(caption = "事前分布の影響")
 ```
 
 ## Model 2: 条件付き独立モデル
 
 $$
-\log \mu_{ijk} = \alpha + \alpha^O_j + \alpha^E_i + \alpha^I_k + \alpha^{EO}_{ij} + \alpha^{OI}_{jk}
+\log \mu_{ijk} = \lambda + \lambda^E_i + \lambda^O_j + \lambda^I_k + \lambda^{EO}_{ij} + \lambda^{OI}_{jk}
 $$
 
 ```{r}
@@ -338,34 +341,34 @@ stan_model2 <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
   matrix[N_educ - 1, N_occ - 1] beta_EO;  // educ × occ interaction
   matrix[N_occ - 1, N_income - 1] beta_OI; // occ × income interaction
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
   to_vector(beta_EO) ~ normal(0, 2);
   to_vector(beta_OI) ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     if (educ[n] > 1 && occ[n] > 1) log_mu += beta_EO[educ[n] - 1, occ[n] - 1];
     if (occ[n] > 1 && income[n] > 1) log_mu += beta_OI[occ[n] - 1, income[n] - 1];
     Y[n] ~ poisson_log(log_mu);
@@ -374,10 +377,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     if (educ[n] > 1 && occ[n] > 1) log_mu += beta_EO[educ[n] - 1, occ[n] - 1];
     if (occ[n] > 1 && income[n] > 1) log_mu += beta_OI[occ[n] - 1, income[n] - 1];
     // Deviance = 2 * Σ [Y * log(Y/μ) - (Y - μ)]
@@ -393,15 +396,13 @@ generated quantities {
 mod2 <- cmdstan_model(write_stan_file(stan_model2))
 fit2_mle <- mod2$optimize(data = stan_data, seed = 123, algorithm = "lbfgs")
 
-cat("\n=== Model 2: Stan MLE ===\n")
-cat("L² =", round(fit2_mle$summary("G2")$estimate, 2), "\n")
-cat("gnm L² =", round(deviance(m2_gnm), 2), "\n")
+# L²比較: Stan = 上記で計算済み, gnm = deviance(m2_gnm)
 ```
 
 ## Model 3: すべての2元交互作用
 
 $$
-\log \mu_{ijk} = \alpha + \alpha^O_j + \alpha^E_i + \alpha^I_k + \alpha^{EO}_{ij} + \alpha^{OI}_{jk} + \alpha^{EI}_{ik}
+\log \mu_{ijk} = \lambda + \lambda^E_i + \lambda^O_j + \lambda^I_k + \lambda^{EO}_{ij} + \lambda^{OI}_{jk} + \lambda^{EI}_{ik}
 $$
 
 ```{r}
@@ -421,36 +422,36 @@ stan_model3 <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
   matrix[N_educ - 1, N_occ - 1] beta_EO;
   matrix[N_occ - 1, N_income - 1] beta_OI;
   matrix[N_educ - 1, N_income - 1] beta_EI;
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
   to_vector(beta_EO) ~ normal(0, 2);
   to_vector(beta_OI) ~ normal(0, 2);
   to_vector(beta_EI) ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     if (educ[n] > 1 && occ[n] > 1) log_mu += beta_EO[educ[n] - 1, occ[n] - 1];
     if (occ[n] > 1 && income[n] > 1) log_mu += beta_OI[occ[n] - 1, income[n] - 1];
     if (educ[n] > 1 && income[n] > 1) log_mu += beta_EI[educ[n] - 1, income[n] - 1];
@@ -460,10 +461,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     if (educ[n] > 1 && occ[n] > 1) log_mu += beta_EO[educ[n] - 1, occ[n] - 1];
     if (occ[n] > 1 && income[n] > 1) log_mu += beta_OI[occ[n] - 1, income[n] - 1];
     if (educ[n] > 1 && income[n] > 1) log_mu += beta_EI[educ[n] - 1, income[n] - 1];
@@ -480,15 +481,13 @@ generated quantities {
 mod3 <- cmdstan_model(write_stan_file(stan_model3))
 fit3_mle <- mod3$optimize(data = stan_data, seed = 123, algorithm = "lbfgs")
 
-cat("\n=== Model 3: Stan MLE ===\n")
-cat("L² =", round(fit3_mle$summary("G2")$estimate, 2), "\n")
-cat("gnm L² =", round(deviance(m3_gnm), 2), "\n")
+# L²比較: Stan = 上記で計算済み, gnm = deviance(m3_gnm)
 ```
 
 ## Model 4: RC(1)+RL(1) 部分連関
 
 $$
-\log \mu_{ijk} = \alpha + \alpha^O_j + \alpha^E_i + \alpha^I_k + \phi_{EO} \mu_{i1} \nu_{j1} + \phi_{OI} \nu_{j2} \eta_{k1}
+\log \mu_{ijk} = \lambda + \lambda^E_i + \lambda^O_j + \lambda^I_k + \phi_{EO} \mu_{i1} \nu_{j1} + \phi_{OI} \nu_{j2} \eta_{k1}
 $$
 
 職業スコアは教育-職業（$\nu_{j1}$）と職業-収入（$\nu_{j2}$）で**別々**に推定される．
@@ -512,23 +511,23 @@ stan_model4 <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
 
   // RC(1) for E-O
   real phi_EO;
-  vector[N_occ] nu1_raw;  // occ scores for E-O
   vector[N_educ] mu_raw;  // educ scores
+  vector[N_occ] nu1_raw;  // occ scores for E-O
 
   // RL(1) for O-I
   real phi_OI;
@@ -536,29 +535,29 @@ parameters {
   vector[N_income] eta_raw; // income scores
 }
 transformed parameters {
-  vector[N_occ] nu1 = nu1_raw - mean(nu1_raw);
   vector[N_educ] mu = mu_raw - mean(mu_raw);
+  vector[N_occ] nu1 = nu1_raw - mean(nu1_raw);
   vector[N_occ] nu2 = nu2_raw - mean(nu2_raw);
   vector[N_income] eta = eta_raw - mean(eta_raw);
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
 
   phi_EO ~ normal(0, 5);
   phi_OI ~ normal(0, 5);
+  mu_raw ~ normal(0, 2);
   nu1_raw ~ normal(0, 2);
   nu2_raw ~ normal(0, 2);
-  mu_raw ~ normal(0, 2);
   eta_raw ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
 
     // RC(1) for E-O
     log_mu += phi_EO * mu[educ[n]] * nu1[occ[n]];
@@ -571,10 +570,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     log_mu += phi_EO * mu[educ[n]] * nu1[occ[n]];
     log_mu += phi_OI * nu2[occ[n]] * eta[income[n]];
     // Deviance = 2 * Σ [Y * log(Y/μ) - (Y - μ)]
@@ -590,9 +589,7 @@ generated quantities {
 mod4 <- cmdstan_model(write_stan_file(stan_model4))
 fit4_mle <- mod4$optimize(data = stan_data, seed = 123, algorithm = "lbfgs", iter = 50000)
 
-cat("\n=== Model 4: Stan MLE ===\n")
-cat("L² =", round(fit4_mle$summary("G2")$estimate, 2), "\n")
-cat("gnm L² =", round(deviance(m4_gnm), 2), "\n")
+# L²比較: Stan = 上記で計算済み, gnm = deviance(m4_gnm)
 ```
 
 ## Model 5: RC(1)+RL(1) 一貫した職業スコア（gnm式）
@@ -603,7 +600,7 @@ gnmの`Mult(1, occ, educ + income)`は：
 - **$\phi_{EO} = \phi_{OI}$を強制する**（暗黙の制約）
 
 $$
-\log \mu_{ijk} = \alpha + \alpha^O_j + \alpha^E_i + \alpha^I_k + \phi \nu_j (\mu_i + \eta_k)
+\log \mu_{ijk} = \lambda + \lambda^E_i + \lambda^O_j + \lambda^I_k + \phi \nu_j (\mu_i + \eta_k)
 $$
 
 ```{r}
@@ -625,46 +622,46 @@ stan_model5 <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
 
   // gnm式: phi * nu * (mu + eta)
   real phi;
-  vector[N_occ] nu_raw;
   vector[N_educ] mu_raw;
+  vector[N_occ] nu_raw;
   vector[N_income] eta_raw;
 }
 transformed parameters {
-  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_educ] mu = mu_raw - mean(mu_raw);
+  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_income] eta = eta_raw - mean(eta_raw);
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
 
   phi ~ normal(0, 5);
-  nu_raw ~ normal(0, 2);
   mu_raw ~ normal(0, 2);
+  nu_raw ~ normal(0, 2);
   eta_raw ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
 
     // gnm式: phi * nu * (mu + eta)
     log_mu += phi * nu[occ[n]] * (mu[educ[n]] + eta[income[n]]);
@@ -675,10 +672,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     log_mu += phi * nu[occ[n]] * (mu[educ[n]] + eta[income[n]]);
     // Deviance = 2 * Σ [Y * log(Y/μ) - (Y - μ)]
     if (Y[n] > 0) {
@@ -693,9 +690,7 @@ generated quantities {
 mod5 <- cmdstan_model(write_stan_file(stan_model5))
 fit5_mle <- mod5$optimize(data = stan_data, seed = 123, algorithm = "lbfgs", iter = 50000)
 
-cat("\n=== Model 5 (gnm式): Stan MLE ===\n")
-cat("L² =", round(fit5_mle$summary("G2")$estimate, 2), "\n")
-cat("gnm L² =", round(deviance(m5_gnm), 2), "\n")
+# L²比較: Stan = 上記で計算済み, gnm = deviance(m5_gnm)
 ```
 
 ## Model 5': RC(1)+RL(1) 一貫した職業スコア（φ別々）
@@ -703,7 +698,7 @@ cat("gnm L² =", round(deviance(m5_gnm), 2), "\n")
 gnmでは推定できないモデル：職業スコアは一貫だが，$\phi_{EO} \neq \phi_{OI}$を許容．
 
 $$
-\log \mu_{ijk} = \alpha + \alpha^O_j + \alpha^E_i + \alpha^I_k + \phi_{EO} \mu_i \nu_j + \phi_{OI} \nu_j \eta_k
+\log \mu_{ijk} = \lambda + \lambda^E_i + \lambda^O_j + \lambda^I_k + \phi_{EO} \mu_i \nu_j + \phi_{OI} \nu_j \eta_k
 $$
 
 ```{r}
@@ -713,48 +708,48 @@ stan_model5p <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
 
   // φ別々: phi_EO * mu * nu + phi_OI * nu * eta
   real phi_EO;
   real phi_OI;
-  vector[N_occ] nu_raw;   // 職業スコア（共通）
   vector[N_educ] mu_raw;
+  vector[N_occ] nu_raw;   // 職業スコア（共通）
   vector[N_income] eta_raw;
 }
 transformed parameters {
-  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_educ] mu = mu_raw - mean(mu_raw);
+  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_income] eta = eta_raw - mean(eta_raw);
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
 
   phi_EO ~ normal(0, 5);
   phi_OI ~ normal(0, 5);
-  nu_raw ~ normal(0, 2);
   mu_raw ~ normal(0, 2);
+  nu_raw ~ normal(0, 2);
   eta_raw ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
 
     // φ別々
     log_mu += phi_EO * mu[educ[n]] * nu[occ[n]];
@@ -766,10 +761,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     log_mu += phi_EO * mu[educ[n]] * nu[occ[n]];
     log_mu += phi_OI * nu[occ[n]] * eta[income[n]];
     // Deviance = 2 * Σ [Y * log(Y/μ) - (Y - μ)]
@@ -785,14 +780,7 @@ generated quantities {
 mod5p <- cmdstan_model(write_stan_file(stan_model5p))
 fit5p_mle <- mod5p$optimize(data = stan_data, seed = 123, algorithm = "lbfgs", iter = 50000)
 
-cat("\n=== Model 5' (φ別々): Stan MLE ===\n")
-cat("L² =", round(fit5p_mle$summary("G2")$estimate, 2), "\n")
-cat("φ_EO =", round(fit5p_mle$summary("phi_EO")$estimate, 4), "\n")
-cat("φ_OI =", round(fit5p_mle$summary("phi_OI")$estimate, 4), "\n")
-cat("\n比較:\n")
-cat("Model 5 (gnm式, φ共通): L² =", round(fit5_mle$summary("G2")$estimate, 2), "\n")
-cat("Model 5' (φ別々):       L² =", round(fit5p_mle$summary("G2")$estimate, 2), "\n")
-cat("差:", round(fit5_mle$summary("G2")$estimate - fit5p_mle$summary("G2")$estimate, 2), "\n")
+# Model 5'の結果（詳細は「結果のまとめ」セクションで比較）
 ```
 
 ## Model 6: RC(1)+RL(1)+CL(1) 部分連関
@@ -818,23 +806,23 @@ stan_model6 <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
 
   // E-O
   real phi_EO;
-  vector[N_occ] nu1_raw;
   vector[N_educ] mu1_raw;
+  vector[N_occ] nu1_raw;
 
   // O-I
   real phi_OI;
@@ -847,34 +835,34 @@ parameters {
   vector[N_income] eta2_raw;
 }
 transformed parameters {
-  vector[N_occ] nu1 = nu1_raw - mean(nu1_raw);
   vector[N_educ] mu1 = mu1_raw - mean(mu1_raw);
+  vector[N_occ] nu1 = nu1_raw - mean(nu1_raw);
   vector[N_occ] nu2 = nu2_raw - mean(nu2_raw);
   vector[N_income] eta1 = eta1_raw - mean(eta1_raw);
   vector[N_educ] mu2 = mu2_raw - mean(mu2_raw);
   vector[N_income] eta2 = eta2_raw - mean(eta2_raw);
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
 
   phi_EO ~ normal(0, 5);
   phi_OI ~ normal(0, 5);
   phi_EI ~ normal(0, 5);
-  nu1_raw ~ normal(0, 2);
   mu1_raw ~ normal(0, 2);
+  nu1_raw ~ normal(0, 2);
   nu2_raw ~ normal(0, 2);
   eta1_raw ~ normal(0, 2);
   mu2_raw ~ normal(0, 2);
   eta2_raw ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     log_mu += phi_EO * mu1[educ[n]] * nu1[occ[n]];
     log_mu += phi_OI * nu2[occ[n]] * eta1[income[n]];
     log_mu += phi_EI * mu2[educ[n]] * eta2[income[n]];
@@ -884,10 +872,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     log_mu += phi_EO * mu1[educ[n]] * nu1[occ[n]];
     log_mu += phi_OI * nu2[occ[n]] * eta1[income[n]];
     log_mu += phi_EI * mu2[educ[n]] * eta2[income[n]];
@@ -904,9 +892,7 @@ generated quantities {
 mod6 <- cmdstan_model(write_stan_file(stan_model6))
 fit6_mle <- mod6$optimize(data = stan_data, seed = 123, algorithm = "lbfgs", iter = 50000)
 
-cat("\n=== Model 6: Stan MLE ===\n")
-cat("L² =", round(fit6_mle$summary("G2")$estimate, 2), "\n")
-cat("gnm L² =", round(deviance(m6_gnm), 2), "\n")
+# L²比較: Stan = 上記で計算済み, gnm = deviance(m6_gnm)
 ```
 
 ## Model 7: RC(1)+RL(1)+CL(1) 一貫した職業スコア（gnm式）
@@ -931,23 +917,23 @@ stan_model7 <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
 
   // gnm式: phi * nu * (mu + eta) + phi_EI * mu2 * eta2
   real phi;           // E-O と O-I で共通
-  vector[N_occ] nu_raw;
   vector[N_educ] mu1_raw;
+  vector[N_occ] nu_raw;
   vector[N_income] eta1_raw;
 
   real phi_EI;
@@ -955,31 +941,31 @@ parameters {
   vector[N_income] eta2_raw;
 }
 transformed parameters {
-  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_educ] mu1 = mu1_raw - mean(mu1_raw);
+  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_income] eta1 = eta1_raw - mean(eta1_raw);
   vector[N_educ] mu2 = mu2_raw - mean(mu2_raw);
   vector[N_income] eta2 = eta2_raw - mean(eta2_raw);
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
 
   phi ~ normal(0, 5);
   phi_EI ~ normal(0, 5);
-  nu_raw ~ normal(0, 2);
   mu1_raw ~ normal(0, 2);
+  nu_raw ~ normal(0, 2);
   eta1_raw ~ normal(0, 2);
   mu2_raw ~ normal(0, 2);
   eta2_raw ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
 
     // gnm式: phi * nu * (mu + eta)
     log_mu += phi * nu[occ[n]] * (mu1[educ[n]] + eta1[income[n]]);
@@ -992,10 +978,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     log_mu += phi * nu[occ[n]] * (mu1[educ[n]] + eta1[income[n]]);
     log_mu += phi_EI * mu2[educ[n]] * eta2[income[n]];
     // Deviance = 2 * Σ [Y * log(Y/μ) - (Y - μ)]
@@ -1011,9 +997,7 @@ generated quantities {
 mod7 <- cmdstan_model(write_stan_file(stan_model7))
 fit7_mle <- mod7$optimize(data = stan_data, seed = 123, algorithm = "lbfgs", iter = 50000)
 
-cat("\n=== Model 7 (gnm式): Stan MLE ===\n")
-cat("L² =", round(fit7_mle$summary("G2")$estimate, 2), "\n")
-cat("gnm L² =", round(deviance(m7_gnm), 2), "\n")
+# L²比較: Stan = 上記で計算済み, gnm = deviance(m7_gnm)
 ```
 
 ## Model 7': RC(1)+RL(1)+CL(1) 一貫した職業スコア（φ別々）
@@ -1027,57 +1011,57 @@ stan_model7p <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
 
   // φ別々
   real phi_EO;
   real phi_OI;
   real phi_EI;
 
-  vector[N_occ] nu_raw;     // 職業スコア（共通）
   vector[N_educ] mu1_raw;   // 教育 for E-O
+  vector[N_occ] nu_raw;     // 職業スコア（共通）
   vector[N_income] eta1_raw; // 収入 for O-I
   vector[N_educ] mu2_raw;   // 教育 for E-I
   vector[N_income] eta2_raw; // 収入 for E-I
 }
 transformed parameters {
-  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_educ] mu1 = mu1_raw - mean(mu1_raw);
+  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_income] eta1 = eta1_raw - mean(eta1_raw);
   vector[N_educ] mu2 = mu2_raw - mean(mu2_raw);
   vector[N_income] eta2 = eta2_raw - mean(eta2_raw);
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
 
   phi_EO ~ normal(0, 5);
   phi_OI ~ normal(0, 5);
   phi_EI ~ normal(0, 5);
-  nu_raw ~ normal(0, 2);
   mu1_raw ~ normal(0, 2);
+  nu_raw ~ normal(0, 2);
   eta1_raw ~ normal(0, 2);
   mu2_raw ~ normal(0, 2);
   eta2_raw ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
 
     log_mu += phi_EO * mu1[educ[n]] * nu[occ[n]];
     log_mu += phi_OI * nu[occ[n]] * eta1[income[n]];
@@ -1089,10 +1073,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     log_mu += phi_EO * mu1[educ[n]] * nu[occ[n]];
     log_mu += phi_OI * nu[occ[n]] * eta1[income[n]];
     log_mu += phi_EI * mu2[educ[n]] * eta2[income[n]];
@@ -1109,15 +1093,7 @@ generated quantities {
 mod7p <- cmdstan_model(write_stan_file(stan_model7p))
 fit7p_mle <- mod7p$optimize(data = stan_data, seed = 123, algorithm = "lbfgs", iter = 50000)
 
-cat("\n=== Model 7' (φ別々): Stan MLE ===\n")
-cat("L² =", round(fit7p_mle$summary("G2")$estimate, 2), "\n")
-cat("φ_EO =", round(fit7p_mle$summary("phi_EO")$estimate, 4), "\n")
-cat("φ_OI =", round(fit7p_mle$summary("phi_OI")$estimate, 4), "\n")
-cat("φ_EI =", round(fit7p_mle$summary("phi_EI")$estimate, 4), "\n")
-cat("\n比較:\n")
-cat("Model 7 (gnm式, φ共通): L² =", round(fit7_mle$summary("G2")$estimate, 2), "\n")
-cat("Model 7' (φ別々):       L² =", round(fit7p_mle$summary("G2")$estimate, 2), "\n")
-cat("差:", round(fit7_mle$summary("G2")$estimate - fit7p_mle$summary("G2")$estimate, 2), "\n")
+# Model 7'の結果（詳細は「結果のまとめ」セクションで比較）
 ```
 
 ## Model 8: 全スコア一貫（gnmでは推定不可）
@@ -1125,7 +1101,7 @@ cat("差:", round(fit7_mle$summary("G2")$estimate - fit7p_mle$summary("G2")$esti
 すべてのスコア（職業・教育・収入）が連関項間で共通．
 
 $$
-\log \mu_{ijk} = \alpha + \alpha^O_j + \alpha^E_i + \alpha^I_k + \phi_{EO} \mu_i \nu_j + \phi_{OI} \nu_j \eta_k + \phi_{EI} \mu_i \eta_k
+\log \mu_{ijk} = \lambda + \lambda^E_i + \lambda^O_j + \lambda^I_k + \phi_{EO} \mu_i \nu_j + \phi_{OI} \nu_j \eta_k + \phi_{EI} \mu_i \eta_k
 $$
 
 ```{r}
@@ -1135,51 +1111,51 @@ stan_model8 <- "
 data {
   int<lower=1> N;
   array[N] int<lower=0> Y;
-  array[N] int<lower=1> occ;
   array[N] int<lower=1> educ;
+  array[N] int<lower=1> occ;
   array[N] int<lower=1> income;
-  int<lower=1> N_occ;
   int<lower=1> N_educ;
+  int<lower=1> N_occ;
   int<lower=1> N_income;
 }
 parameters {
-  real alpha0;
-  vector[N_occ - 1] alpha_occ;
-  vector[N_educ - 1] alpha_educ;
-  vector[N_income - 1] alpha_income;
+  real lambda0;
+  vector[N_educ - 1] lambda_educ;
+  vector[N_occ - 1] lambda_occ;
+  vector[N_income - 1] lambda_income;
 
   // 全スコア共通
   real phi_EO;
   real phi_OI;
   real phi_EI;
 
-  vector[N_occ] nu_raw;    // 職業スコア（共通）
   vector[N_educ] mu_raw;   // 教育スコア（共通）
+  vector[N_occ] nu_raw;    // 職業スコア（共通）
   vector[N_income] eta_raw; // 収入スコア（共通）
 }
 transformed parameters {
-  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_educ] mu = mu_raw - mean(mu_raw);
+  vector[N_occ] nu = nu_raw - mean(nu_raw);
   vector[N_income] eta = eta_raw - mean(eta_raw);
 }
 model {
-  alpha0 ~ normal(0, 10);
-  alpha_occ ~ normal(0, 5);
-  alpha_educ ~ normal(0, 5);
-  alpha_income ~ normal(0, 5);
+  lambda0 ~ normal(0, 10);
+  lambda_educ ~ normal(0, 5);
+  lambda_occ ~ normal(0, 5);
+  lambda_income ~ normal(0, 5);
 
   phi_EO ~ normal(0, 5);
   phi_OI ~ normal(0, 5);
   phi_EI ~ normal(0, 5);
-  nu_raw ~ normal(0, 2);
   mu_raw ~ normal(0, 2);
+  nu_raw ~ normal(0, 2);
   eta_raw ~ normal(0, 2);
 
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
 
     // 全スコア共通
     log_mu += phi_EO * mu[educ[n]] * nu[occ[n]];
@@ -1192,10 +1168,10 @@ model {
 generated quantities {
   real G2 = 0;
   for (n in 1:N) {
-    real log_mu = alpha0;
-    if (occ[n] > 1) log_mu += alpha_occ[occ[n] - 1];
-    if (educ[n] > 1) log_mu += alpha_educ[educ[n] - 1];
-    if (income[n] > 1) log_mu += alpha_income[income[n] - 1];
+    real log_mu = lambda0;
+    if (educ[n] > 1) log_mu += lambda_educ[educ[n] - 1];
+    if (occ[n] > 1) log_mu += lambda_occ[occ[n] - 1];
+    if (income[n] > 1) log_mu += lambda_income[income[n] - 1];
     log_mu += phi_EO * mu[educ[n]] * nu[occ[n]];
     log_mu += phi_OI * nu[occ[n]] * eta[income[n]];
     log_mu += phi_EI * mu[educ[n]] * eta[income[n]];
@@ -1212,12 +1188,18 @@ generated quantities {
 mod8 <- cmdstan_model(write_stan_file(stan_model8))
 fit8_mle <- mod8$optimize(data = stan_data, seed = 123, algorithm = "lbfgs", iter = 50000)
 
-cat("\n=== Model 8 (全スコア一貫): Stan MLE ===\n")
-cat("L² =", round(fit8_mle$summary("G2")$estimate, 2), "\n")
-cat("本のTable 5.5: L² = 177264.57\n")
-cat("\nφ_EO =", round(fit8_mle$summary("phi_EO")$estimate, 4), "\n")
-cat("φ_OI =", round(fit8_mle$summary("phi_OI")$estimate, 4), "\n")
-cat("φ_EI =", round(fit8_mle$summary("phi_EI")$estimate, 4), "\n")
+tibble(
+  統計量 = c("L² (Stan)", "L² (本)", "φ_EO", "φ_OI", "φ_EI"),
+  値 = c(
+    fit8_mle$summary("G2")$estimate,
+    177264.57,
+    fit8_mle$summary("phi_EO")$estimate,
+    fit8_mle$summary("phi_OI")$estimate,
+    fit8_mle$summary("phi_EI")$estimate
+  )
+) |>
+  mutate(値 = round(値, 4)) |>
+  knitr::kable(caption = "Model 8（全スコア一貫）: Stan MLE")
 ```
 
 ## 結果のまとめ
@@ -1298,64 +1280,72 @@ results |>
 ```{r}
 #| label: model5-comparison
 
-cat("=== Model 5 vs Model 5' ===\n")
-cat("Model 5 (gnm式, φ共通):\n")
-cat("  L² =", round(fit5_mle$summary("G2")$estimate, 2), "\n")
-cat("  φ =", round(fit5_mle$summary("phi")$estimate, 4), "\n")
-
-cat("\nModel 5' (φ別々):\n")
-cat("  L² =", round(fit5p_mle$summary("G2")$estimate, 2), "\n")
-cat("  φ_EO =", round(fit5p_mle$summary("phi_EO")$estimate, 4), "\n")
-cat("  φ_OI =", round(fit5p_mle$summary("phi_OI")$estimate, 4), "\n")
-
-cat("\nL²の差:", round(fit5_mle$summary("G2")$estimate - fit5p_mle$summary("G2")$estimate, 2), "\n")
-cat("（φ共通の制約による適合度の悪化）\n")
+tibble(
+  Model = c("Model 5 (gnm式, φ共通)", "Model 5' (φ別々)"),
+  `L²` = c(
+    fit5_mle$summary("G2")$estimate,
+    fit5p_mle$summary("G2")$estimate
+  ),
+  `φ` = c(fit5_mle$summary("phi")$estimate, NA),
+  `φ_EO` = c(NA, fit5p_mle$summary("phi_EO")$estimate),
+  `φ_OI` = c(NA, fit5p_mle$summary("phi_OI")$estimate)
+) |>
+  mutate(across(where(is.numeric), \(x) round(x, 4))) |>
+  knitr::kable(caption = "Model 5 vs Model 5'")
 ```
+
+L²の差は`r round(fit5_mle$summary("G2")$estimate - fit5p_mle$summary("G2")$estimate, 2)`（φ共通の制約による適合度の悪化）。
 
 ### Model 7とModel 7'の比較
 
 ```{r}
 #| label: model7-comparison
 
-cat("=== Model 7 vs Model 7' ===\n")
-cat("Model 7 (gnm式, φ共通):\n")
-cat("  L² =", round(fit7_mle$summary("G2")$estimate, 2), "\n")
-cat("  φ =", round(fit7_mle$summary("phi")$estimate, 4), "\n")
-cat("  φ_EI =", round(fit7_mle$summary("phi_EI")$estimate, 4), "\n")
+tibble(
+  Model = c("Model 7 (gnm式, φ共通)", "Model 7' (φ別々)"),
+  `L²` = c(
+    fit7_mle$summary("G2")$estimate,
+    fit7p_mle$summary("G2")$estimate
+  ),
+  `φ (E-O, O-I共通)` = c(fit7_mle$summary("phi")$estimate, NA),
+  `φ_EO` = c(NA, fit7p_mle$summary("phi_EO")$estimate),
+  `φ_OI` = c(NA, fit7p_mle$summary("phi_OI")$estimate),
+  `φ_EI` = c(fit7_mle$summary("phi_EI")$estimate, fit7p_mle$summary("phi_EI")$estimate)
+) |>
+  mutate(across(where(is.numeric), \(x) round(x, 4))) |>
+  knitr::kable(caption = "Model 7 vs Model 7'")
+```
 
-cat("\nModel 7' (φ別々):\n")
-cat("  L² =", round(fit7p_mle$summary("G2")$estimate, 2), "\n")
-cat("  φ_EO =", round(fit7p_mle$summary("phi_EO")$estimate, 4), "\n")
-cat("  φ_OI =", round(fit7p_mle$summary("phi_OI")$estimate, 4), "\n")
-cat("  φ_EI =", round(fit7p_mle$summary("phi_EI")$estimate, 4), "\n")
+L²の差は`r round(fit7_mle$summary("G2")$estimate - fit7p_mle$summary("G2")$estimate, 2)`（φ共通の制約による適合度の悪化）。
 
-cat("\nL²の差:", round(fit7_mle$summary("G2")$estimate - fit7p_mle$summary("G2")$estimate, 2), "\n")
-cat("（φ共通の制約による適合度の悪化）\n")
+### φの符号調整と解釈
 
-# スコアの符号調整
+```{r}
+#| label: phi-adjustment
+
+# スコアの符号調整（高い方がプラスになるよう）
 nu <- fit7p_mle$summary("nu")$estimate
 mu1 <- fit7p_mle$summary("mu1")$estimate
 eta1 <- fit7p_mle$summary("eta1")$estimate
 phi_EO <- fit7p_mle$summary("phi_EO")$estimate
 phi_OI <- fit7p_mle$summary("phi_OI")$estimate
 
-# 高い方がプラスになるよう調整
-sign_nu <- sign(nu[1])  # 専門職
+sign_nu <- sign(nu[1])   # 専門職
 sign_mu <- sign(mu1[4])  # 高教育
-sign_eta <- sign(eta1[4])  # 高収入
+sign_eta <- sign(eta1[4]) # 高収入
 
-nu_adj <- nu * sign_nu
-mu1_adj <- mu1 * sign_mu
-eta1_adj <- eta1 * sign_eta
 phi_EO_adj <- phi_EO * sign_nu * sign_mu
 phi_OI_adj <- phi_OI * sign_nu * sign_eta
 
-cat("\n=== 調整後のφ（高い方=プラス）===\n")
-cat("φ_EO =", round(phi_EO_adj, 4), "（教育-職業連関）\n")
-cat("φ_OI =", round(phi_OI_adj, 4), "（職業-収入連関）\n")
-cat("比率:", round(phi_EO_adj / phi_OI_adj, 2), "\n")
-cat("→ 教育-職業連関は職業-収入連関の約", round(abs(phi_EO_adj / phi_OI_adj), 1), "倍強い\n")
+tibble(
+  連関 = c("φ_EO（教育-職業）", "φ_OI（職業-収入）"),
+  `調整後φ` = c(phi_EO_adj, phi_OI_adj)
+) |>
+  mutate(`調整後φ` = round(`調整後φ`, 4)) |>
+  knitr::kable(caption = "調整後のφ（高い方=プラス）")
 ```
+
+φの比率: `r round(phi_EO_adj / phi_OI_adj, 2)` → 教育-職業連関は職業-収入連関の約`r round(abs(phi_EO_adj / phi_OI_adj), 1)`倍強い。
 
 ## gnmの暗黙的制約について
 
@@ -1409,29 +1399,29 @@ gnmは単純な式を使用するが，$\sum \mu = \sum Y$ が満たされてい
 
 ### Stanでの総カウント制約の実装
 
-以下のようにα₀を計算することで，総カウント制約を満たすことができる：
+以下のようにλ₀を計算することで，総カウント制約を満たすことができる：
 
 ```stan
 transformed parameters {
-  real alpha0;
+  real lambda0;
   {
     real sum_exp = 0;
     for (n in 1:N) {
       real lm = 0;
-      // α₀以外のすべてのパラメータを加算
-      if (occ[n] > 1) lm += alpha_occ[occ[n] - 1];
-      if (educ[n] > 1) lm += alpha_educ[educ[n] - 1];
-      if (income[n] > 1) lm += alpha_income[income[n] - 1];
+      // λ₀以外のすべてのパラメータを加算
+      if (educ[n] > 1) lm += lambda_educ[educ[n] - 1];
+      if (occ[n] > 1) lm += lambda_occ[occ[n] - 1];
+      if (income[n] > 1) lm += lambda_income[income[n] - 1];
       // ... 他のパラメータも同様
       sum_exp += exp(lm);
     }
-    // α₀ = log(ΣY) - log(Σexp(他のパラメータ))
-    alpha0 = log(total_Y) - log(sum_exp);
+    // λ₀ = log(ΣY) - log(Σexp(他のパラメータ))
+    lambda0 = log(total_Y) - log(sum_exp);
   }
 }
 ```
 
-この制約により，$\exp(\alpha_0) \cdot \sum_n \exp(\text{他のパラメータ}_n) = \sum_n Y_n$ が成立し，gnmと同等の結果が得られる．
+この制約により，$\exp(\lambda_0) \cdot \sum_n \exp(\text{他のパラメータ}_n) = \sum_n Y_n$ が成立し，gnmと同等の結果が得られる．
 
 ### gnmでは推定できないモデル
 
@@ -1460,7 +1450,7 @@ if (Y[n] > 0) {
 }
 ```
 
-この方法により，α₀を自由パラメータとして推定しながら，gnmと同等のL²が得られる．
+この方法により，λ₀を自由パラメータとして推定しながら，gnmと同等のL²が得られる．
 
 ### 結果の一致確認
 
