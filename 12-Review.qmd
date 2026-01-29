@@ -52,7 +52,7 @@ SHDモデルは、Sobel、Hout、Duncanの3者の貢献を統合したもので�
 ### Unidiff（Uniform Difference）モデル
 
 - @erikson1992：国際比較研究において、国による職業移動パターンの違いを分析するUnidiffモデルを適用した。このモデルは、異なる国の移動表が同じ「形」の連関パターンを持ちながら、その「強さ」だけが異なるという仮説を検証する。
-- @xie1992：Unidiffモデルの統計的性質を詳細に検討し、識別条件や推定方法について論じた。
+- @xie1992：同時期にAmerican Sociological Reviewにて「log-multiplicative layer effects model」として発表された。Unidiffモデルの統計的性質を詳細に検討し、識別条件や推定方法について論じた。
 
 Unidiffモデルは、国際比較や時系列比較において、連関パターンの変化を定量的に評価するための強力なツールとなっている。
 
