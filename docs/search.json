@@ -704,7 +704,7 @@
     "href": "10-R.html",
     "title": "RとRStudioのインストールと基本的な操作方法",
     "section": "",
-    "text": "RとRStudioのインストール",
+    "text": "Rのインストール",
     "crumbs": [
       "RとRStudioのインストールと基本的な操作方法"
     ]
@@ -927,6 +927,86 @@
     "text": "参考文献\n\n\n\n\n\n\nErikson, Robert, John H. Goldthorpe, and Lucienne Portocarero. 1982. “Social Fluidity in Industrial Nations: England, France and Sweden.” The British Journal of Sociology 33 (1): 1–34. https://doi.org/10.2307/589335.\n\n\nGoodman, Leo A., Michael Hout, Yu Xie, and Kazuo Yamaguchi. 1998. “Statistical Methods and Graphical Displays for Analyzing How the Association Between Two Qualitative Variables Differs Among Countries, Among Groups, or over Time: A Modified Regression-Type Approach / Comments / Rejoinder.” Sociological Methodology 28: 175.\n\n\nHauser, Robert M. 1980. “Some Exploratory Methods for Modeling Mobility Tables and Other Cross-Classified Data.” Sociological Methodology 11: 413. https://doi.org/10.2307/270871.\n\n\n———. 1984. “Vertical Class Mobility in England, France, and Sweden.” Acta Sociologica (Taylor & Francis Ltd) 27 (2): 87–110. https://doi.org/10.1177/000169938402700201.\n\n\nXie, Yu. 1992. “The Log-Multiplicative Layer Effect Model for Comparing Mobility Tables.” American Sociological Review 57 (3): 380–95. https://doi.org/10.2307/2096242.\n\n\nYamaguchi, Kazuo. 1987. “Models for Comparing Mobility Tables: Toward Parsimony and Substance.” American Sociological Review 52 (4): 482–94. https://doi.org/10.2307/2095293.",
     "crumbs": [
       "クロス表"
+    ]
+  },
+  {
+    "objectID": "10-R.html#rのインストール",
+    "href": "10-R.html#rのインストール",
+    "title": "RとRStudioのインストールと基本的な操作方法",
+    "section": "",
+    "text": "CRAN（The Comprehensive R Archive Network） にアクセス\n自分のOSに合ったリンクをクリック\n\nWindows：「Download R for Windows」→「base」→「Download R-x.x.x for Windows」\nMac：「Download R for macOS」→ 自分のMacに合ったパッケージを選択\n\nApple Silicon Mac（M1/M2/M3）：arm64版を選択\nIntel Mac：x86_64版を選択\n\n\nダウンロードしたファイルを実行してインストール",
+    "crumbs": [
+      "RとRStudioのインストールと基本的な操作方法"
+    ]
+  },
+  {
+    "objectID": "10-R.html#rstudioのインストール",
+    "href": "10-R.html#rstudioのインストール",
+    "title": "RとRStudioのインストールと基本的な操作方法",
+    "section": "RStudioのインストール",
+    "text": "RStudioのインストール\n\nPosit社のダウンロードページ にアクセス\n「2: Install RStudio」のセクションで、自分のOSに合ったインストーラをダウンロード\nダウンロードしたファイルを実行してインストール",
+    "crumbs": [
+      "RとRStudioのインストールと基本的な操作方法"
+    ]
+  },
+  {
+    "objectID": "10-R.html#rstudioの起動と画面構成",
+    "href": "10-R.html#rstudioの起動と画面構成",
+    "title": "RとRStudioのインストールと基本的な操作方法",
+    "section": "RStudioの起動と画面構成",
+    "text": "RStudioの起動と画面構成\nRStudioを起動すると、4つの領域（ペイン）が表示される：\n\n左上（Source）：スクリプトを編集する場所\n左下（Console）：コードを実行し、結果が表示される場所\n右上（Environment）：作成したオブジェクトを確認する場所\n右下（Output）：ファイル、プロット、ヘルプなどが表示される場所\n\n\n\n\n\n\n\nペインの配置変更\n\n\n\nRStudioの「Tools」→「Global Options」→「Pane Layout」からペインの配置を変更できる。好みに応じて設定してください。",
+    "crumbs": [
+      "RとRStudioのインストールと基本的な操作方法"
+    ]
+  },
+  {
+    "objectID": "10-R.html#プロジェクトの作成",
+    "href": "10-R.html#プロジェクトの作成",
+    "title": "RとRStudioのインストールと基本的な操作方法",
+    "section": "プロジェクトの作成",
+    "text": "プロジェクトの作成\nRStudioではプロジェクトを使ってファイルを管理することを推奨する。\n\nRStudioのメニューから「File」→「New Project…」を選択\n「New Directory」→「New Project」を選択\n以下を設定：\n\nDirectory name：プロジェクト名（例：association_models）\nCreate project as subdirectory of：保存先を選択\n\n「Create Project」をクリック",
+    "crumbs": [
+      "RとRStudioのインストールと基本的な操作方法"
+    ]
+  },
+  {
+    "objectID": "10-R.html#パッケージのインストール",
+    "href": "10-R.html#パッケージのインストール",
+    "title": "RとRStudioのインストールと基本的な操作方法",
+    "section": "パッケージのインストール",
+    "text": "パッケージのインストール\n本書で使用する主要なパッケージをインストールする。以下のコードをRStudioのコンソールに貼り付けて実行する：\n\n# 本書で使用するパッケージのインストール\ninstall.packages(c(\n  \"tidyverse\",    # データ操作・可視化\n  \"gnm\",          # 一般化非線形モデル（連関モデル）\n  \"vcd\",          # カテゴリカルデータの可視化\n  \"vcdExtra\",     # vcdの拡張\n  \"broom\",        # モデル結果の整形\n  \"MASS\",         # 統計関数\n  \"knitr\",        # レポート生成\n  \"logmult\"       # 対数乗法モデル\n))\n\n\n\n\n\n\n\nインストールに時間がかかる場合\n\n\n\n初めてのインストールでは数分〜10分程度かかることがある。「パッケージをソースからインストールしますか？（Do you want to install from sources …）」と聞かれたら「No」を選択してください。\n\n\nインストールが完了したら、以下のコードでパッケージが正しく読み込めるか確認する：\n\n# パッケージの読み込みテスト\nlibrary(tidyverse)\nlibrary(gnm)\nlibrary(vcd)\n\nエラーが出なければ成功である。",
+    "crumbs": [
+      "RとRStudioのインストールと基本的な操作方法"
+    ]
+  },
+  {
+    "objectID": "10-R.html#rの基本操作",
+    "href": "10-R.html#rの基本操作",
+    "title": "RとRStudioのインストールと基本的な操作方法",
+    "section": "Rの基本操作",
+    "text": "Rの基本操作\n\nスクリプトの作成\n「File」→「New File」→「R Script」でスクリプトファイルを新規作成できる。スクリプトにコードを入力し、「Ctrl + Enter」（Macは「Cmd + Enter」）で実行する。\n\n\n計算の実行\n\n# 基本的な計算\n1 + 1\n\n[1] 2\n\n7 * 8\n\n[1] 56\n\nsqrt(16)\n\n[1] 4\n\n\n\n\nオブジェクトへの代入\nRでは、値や計算結果に名前をつけて保存できる。この「名前をつけた入れ物」をオブジェクトと呼ぶ。&lt;-（代入演算子）を使って、右側の値を左側の名前に代入する。\n\n# xに10を代入\nx &lt;- 10\nx\n\n[1] 10\n\n# ベクトル（複数の値）を代入\ny &lt;- c(1, 2, 3, 4, 5)\ny\n\n[1] 1 2 3 4 5\n\n# 平均を計算\nmean(y)\n\n[1] 3\n\n\n\n\n\n\n\n\nオブジェクトの確認\n\n\n\n作成したオブジェクトは、RStudio右上の「Environment」ペインで確認できる。\n\n\n\n\nデータフレーム\nデータフレームは、行と列からなる表形式のデータ構造である。本書では主にこの形式でデータを扱う。\n\n# データフレームの作成\ndf &lt;- data.frame(\n  name = c(\"Alice\", \"Bob\", \"Carol\"),\n  age = c(25, 30, 35),\n  score = c(80, 90, 85)\n)\ndf\n\n   name age score\n1 Alice  25    80\n2   Bob  30    90\n3 Carol  35    85\n\n# 行数と列数\ndim(df)\n\n[1] 3 3\n\n# 構造の確認\nstr(df)\n\n'data.frame':   3 obs. of  3 variables:\n $ name : chr  \"Alice\" \"Bob\" \"Carol\"\n $ age  : num  25 30 35\n $ score: num  80 90 85\n\n\n\n\n分割表（クロス表）の作成\n本書で扱う連関モデルでは、分割表（クロス集計表）が基本的なデータ形式となる。\n\n# 度数からクロス表を作成\nfreq &lt;- c(1275, 364, 274, 272,\n          1055, 597, 394, 443,\n          1043, 587, 1045, 951,\n          1159, 791, 1323, 2046)\n\n# 行列形式に変換\ntab &lt;- matrix(freq, nrow = 4, byrow = TRUE)\nrownames(tab) &lt;- c(\"Upper\", \"Upper-middle\", \"Lower-middle\", \"Lower\")\ncolnames(tab) &lt;- c(\"Upper\", \"Upper-middle\", \"Lower-middle\", \"Lower\")\ntab\n\n             Upper Upper-middle Lower-middle Lower\nUpper         1275          364          274   272\nUpper-middle  1055          597          394   443\nLower-middle  1043          587         1045   951\nLower         1159          791         1323  2046\n\n# クロス表を表示\nas.table(tab)\n\n             Upper Upper-middle Lower-middle Lower\nUpper         1275          364          274   272\nUpper-middle  1055          597          394   443\nLower-middle  1043          587         1045   951\nLower         1159          791         1323  2046\n\n\n\n\nデータフレームから分割表を作成\n\n# サンプルデータの作成\nset.seed(123)\nsample_data &lt;- data.frame(\n  row_var = sample(c(\"A\", \"B\", \"C\"), 100, replace = TRUE),\n  col_var = sample(c(\"X\", \"Y\"), 100, replace = TRUE)\n)\n\n# クロス表の作成\ntable(sample_data$row_var, sample_data$col_var)\n\n   \n     X  Y\n  A 16 17\n  B 11 21\n  C 17 18\n\n# tidyverseを使う場合\nlibrary(tidyverse)\nsample_data |&gt;\n  count(row_var, col_var) |&gt;\n  pivot_wider(names_from = col_var, values_from = n, values_fill = 0)\n\n# A tibble: 3 × 3\n  row_var     X     Y\n  &lt;chr&gt;   &lt;int&gt; &lt;int&gt;\n1 A          16    17\n2 B          11    21\n3 C          17    18",
+    "crumbs": [
+      "RとRStudioのインストールと基本的な操作方法"
+    ]
+  },
+  {
+    "objectID": "10-R.html#困ったときは",
+    "href": "10-R.html#困ったときは",
+    "title": "RとRStudioのインストールと基本的な操作方法",
+    "section": "困ったときは",
+    "text": "困ったときは\n\nパッケージのインストールでエラーが出る\n\n# CRANのミラーを明示的に指定\ninstall.packages(\"gnm\", repos = \"https://cran.rstudio.com/\")\n\n\n\n日本語のファイルパスで問題が起きる\nプロジェクトフォルダは、日本語を含まないパス（例：C:/Users/username/Documents/association_models）に作成することを推奨する。\n\n\nMacで「開発元を確認できない」と表示される\n「システム設定」→「プライバシーとセキュリティ」から、該当するアプリの実行を許可する。",
+    "crumbs": [
+      "RとRStudioのインストールと基本的な操作方法"
+    ]
+  },
+  {
+    "objectID": "10-R.html#参考リンク",
+    "href": "10-R.html#参考リンク",
+    "title": "RとRStudioのインストールと基本的な操作方法",
+    "section": "参考リンク",
+    "text": "参考リンク\n\nR公式サイト\nRStudio公式サイト\nR for Data Science（英語・無料）\ngnmパッケージのドキュメント",
+    "crumbs": [
+      "RとRStudioのインストールと基本的な操作方法"
     ]
   }
 ]
