@@ -22,6 +22,7 @@ book:
     - 12-Review.qmd
     - 13-Crosstabs.qmd
     # - 14-Bayes.qmd  # 未公開
+    - 16-LEM.qmd
 
 execute:
   warning: false

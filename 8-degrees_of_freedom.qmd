@@ -92,7 +92,7 @@ df &=  \overbrace{I^2}^{セルの数} - [\overbrace{1}^{\lambda} + \overbrace{(I
 df &= \overbrace{IJ}^{セルの数} - [\overbrace{1}^{\lambda} + \overbrace{(I - 1)}^{\lambda_i^A} + \overbrace{(J - 1)}^{\lambda_j^B} +  \overbrace{1}^{\phi} + 
 \overbrace{(I - 2)}^{\mu_i} + \overbrace{(J - 2)}^{\nu_j}]\\
  &= IJ - 2I -2J + 4 \\
- &= (I - 2)(I - 2)
+ &= (I - 2)(J - 2)
 \end{align}
 
 

@@ -273,6 +273,12 @@ window.Quarto = {
  <span class="menu-text">クロス表</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16-LEM.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LEMによる連関モデル</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -384,11 +390,11 @@ SES well mild moderate impaired
 <ul>
 <li>行カテゴリと列カテゴリの数は<span class="math inline">\(I\)</span>や<span class="math inline">\(J\)</span>となっている．</li>
 <li><code>I</code>を使いたいが，Rの関数にすでに用意されているので別の名前を考える．ここでは<code>NI</code>と<code>NJ</code>とする．</li>
-<li>例のデータでは，行カテゴリ数<span class="math inline">\(I = 4\)</span>，列カテゴリ数<span class="math inline">\(J = 5\)</span>である．</li>
+<li>例のデータでは，行カテゴリ数<span class="math inline">\(I = 6\)</span>，列カテゴリ数<span class="math inline">\(J = 4\)</span>である．</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>NI <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>NJ <span class="ot">&lt;-</span> <span class="dv">6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>NI <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>NJ <span class="ot">&lt;-</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>では，<code>Freq</code>に対応する行カテゴリと列カテゴリを並べてみる．先程の入力のルールにしたがうと，行については1行1列から1行4列までの数字を入力しているので<code>1,1,1,1</code>となり，次に<code>2,2,2,2</code>となる．これを繰り返し最後は<code>6,6,6,6</code>となる．列については，<code>1,2,3,4</code>が6回繰り返される．</li>
@@ -3662,11 +3668,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb276-58"><a href="#cb276-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-59"><a href="#cb276-59" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>行カテゴリと列カテゴリの数は$I$や$J$となっている．</span>
 <span id="cb276-60"><a href="#cb276-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`I`</span>を使いたいが，Rの関数にすでに用意されているので別の名前を考える．ここでは<span class="in">`NI`</span>と<span class="in">`NJ`</span>とする．</span>
-<span id="cb276-61"><a href="#cb276-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>例のデータでは，行カテゴリ数$I = 4$，列カテゴリ数$J = 5$である．</span>
+<span id="cb276-61"><a href="#cb276-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>例のデータでは，行カテゴリ数$I = 6$，列カテゴリ数$J = 4$である．</span>
 <span id="cb276-62"><a href="#cb276-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-65"><a href="#cb276-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb276-66"><a href="#cb276-66" aria-hidden="true" tabindex="-1"></a>NI <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb276-67"><a href="#cb276-67" aria-hidden="true" tabindex="-1"></a>NJ <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb276-66"><a href="#cb276-66" aria-hidden="true" tabindex="-1"></a>NI <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb276-67"><a href="#cb276-67" aria-hidden="true" tabindex="-1"></a>NJ <span class="ot">&lt;-</span> <span class="dv">4</span></span>
 <span id="cb276-68"><a href="#cb276-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb276-69"><a href="#cb276-69" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-70"><a href="#cb276-70" aria-hidden="true" tabindex="-1"></a></span>

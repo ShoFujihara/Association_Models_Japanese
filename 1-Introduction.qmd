@@ -130,44 +130,54 @@ assocstats(tab)
 chisq.test(tab) |> names()
 ```
 
-せっかくなので全部確認してみたい．
+`chisq.test()`の出力には以下の要素が含まれる：
+
+- `statistic`: カイ2乗統計量
+- `parameter`: 自由度
+- `p.value`: p値
+- `method`: 検定方法
+- `data.name`: データ名
+- `observed`: 観測度数
+- `expected`: 期待度数
+- `residuals`: ピアソンの残差 $(o_{ij} - e_{ij}) / \sqrt{e_{ij}}$
+- `stdres`: 標準化残差 $(o_{ij} - e_{ij}) / \sqrt{V_{ij}}$
+
+各要素には`$`演算子でアクセスできる．例えば期待度数は`result$expected`で取得できる．これを`tab_expected`というオブジェクトとして保存する．
 
 ```{r}
-# カイ2乗統計量
-chisq.test(tab)$statistic
-# 自由度
-chisq.test(tab)$parameter
-# p値
-chisq.test(tab)$p.value
-# 方法
-chisq.test(tab)$method
-# データ名
-chisq.test(tab)$data.name
-# 観測度数
-chisq.test(tab)$observed
-# 期待度数
-chisq.test(tab)$expected
-# ピアソンの残差 (observed - expected) / sqrt(expected)
-chisq.test(tab)$residuals
-# 標準化残差 (observed - expected) / sqrt(V)
-chisq.test(tab)$stdres
-```
-
-
-期待度数は`chisq.test(tab)$expected`とすればよい．これを`tab_expected`というオブジェクトとする．
-
-```{r}
-# ixページの期待度数
-tab_expected <- chisq.test(tab)$expected |> as.table()
+result <- chisq.test(tab)
+tab_expected <- result$expected |> as.table()
 tab_expected
 ```
 
+せっかくなので全部確認してみたい．`unclass()`はオブジェクトのクラスを外し，全要素をリストとして出力する（`result[names(result)]`と同じ効果）．
+
+```{r}
+unclass(result)
+```
+
 なお，`DescTools::ExpFreq(tab)`でも同様の期待度数を求めることができる．
+
+`Margins()`で期待度数の周辺分布を確認する．これは元の観測度数の周辺分布と一致する．
 
 ```{r}
 Margins(tab_expected)
 ```
 
+::: {.callout-note}
+## どの度数が一致するのか？（十分統計量）
+
+対数線形モデルでは，ある効果の自由度を使い切ると，対応する度数が観測値と期待値で完全に一致する．これは「十分統計量（sufficient statistic）の性質」として知られ，最尤推定において対応する周辺度数が一致するようにパラメータが決まることを意味する．
+
+| 効果 | 自由度 | 使い切ると |
+|------|--------|-----------|
+| 全体平均 | 1 | 総度数が一致 |
+| 行の主効果 | $I-1$ | 行周辺が一致 |
+| 列の主効果 | $J-1$ | 列周辺が一致 |
+| 行×列の交互作用 | $(I-1)(J-1)$ | 全セルが一致（飽和） |
+
+独立モデルや一様連関モデルは行・列の主効果を含むため，周辺分布は自動的に保持される．一方，一様連関の$\phi u_i v_j$は1自由度しか使わないため，セル度数は完全には一致しない．
+:::
 
 ixページの数式用いて，実際に計算することでピアソンの$\chi^2$統計量と尤度比統計量$L^2$を求める（英語版のテキストは式に間違いがあるので注意）．
 
