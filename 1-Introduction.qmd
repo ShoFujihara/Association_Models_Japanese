@@ -139,8 +139,8 @@ chisq.test(tab) |> names()
 - `data.name`: データ名
 - `observed`: 観測度数
 - `expected`: 期待度数
-- `residuals`: ピアソンの残差 $(o_{ij} - e_{ij}) / \sqrt{e_{ij}}$
-- `stdres`: 標準化残差 $(o_{ij} - e_{ij}) / \sqrt{V_{ij}}$
+- `residuals`: ピアソン残差 $(f_{ij} - F_{ij}) / \sqrt{F_{ij}}$
+- `stdres`: 標準化残差 $(f_{ij} - F_{ij}) / \sqrt{V_{ij}}$，ここで$V_{ij} = F_{ij}(1 - p_{i+})(1 - p_{+j})$（$p_{i+}$, $p_{+j}$は周辺比率）
 
 各要素には`$`演算子でアクセスできる．例えば期待度数は`result$expected`で取得できる．これを`tab_expected`というオブジェクトとして保存する．
 

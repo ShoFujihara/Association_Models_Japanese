@@ -507,8 +507,8 @@ Cramer's V        : 0.096 </code></pre>
 <li><code>data.name</code>: データ名</li>
 <li><code>observed</code>: 観測度数</li>
 <li><code>expected</code>: 期待度数</li>
-<li><code>residuals</code>: ピアソンの残差 <span class="math inline">\((o_{ij} - e_{ij}) / \sqrt{e_{ij}}\)</span></li>
-<li><code>stdres</code>: 標準化残差 <span class="math inline">\((o_{ij} - e_{ij}) / \sqrt{V_{ij}}\)</span></li>
+<li><code>residuals</code>: ピアソン残差 <span class="math inline">\((f_{ij} - F_{ij}) / \sqrt{F_{ij}}\)</span></li>
+<li><code>stdres</code>: 標準化残差 <span class="math inline">\((f_{ij} - F_{ij}) / \sqrt{V_{ij}}\)</span>，ここで<span class="math inline">\(V_{ij} = F_{ij}(1 - p_{i+})(1 - p_{+j})\)</span>（<span class="math inline">\(p_{i+}\)</span>, <span class="math inline">\(p_{+j}\)</span>は周辺比率）</li>
 </ul>
 <p>各要素には<code>$</code>演算子でアクセスできる．例えば期待度数は<code>result$expected</code>で取得できる．これを<code>tab_expected</code>というオブジェクトとして保存する．</p>
 <div class="cell">
@@ -2614,8 +2614,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb134-162"><a href="#cb134-162" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`data.name`</span>: データ名</span>
 <span id="cb134-163"><a href="#cb134-163" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`observed`</span>: 観測度数</span>
 <span id="cb134-164"><a href="#cb134-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`expected`</span>: 期待度数</span>
-<span id="cb134-165"><a href="#cb134-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`residuals`</span>: ピアソンの残差 $(o_{ij} - e_{ij}) / \sqrt{e_{ij}}$</span>
-<span id="cb134-166"><a href="#cb134-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`stdres`</span>: 標準化残差 $(o_{ij} - e_{ij}) / \sqrt{V_{ij}}$</span>
+<span id="cb134-165"><a href="#cb134-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`residuals`</span>: ピアソン残差 $(f_{ij} - F_{ij}) / \sqrt{F_{ij}}$</span>
+<span id="cb134-166"><a href="#cb134-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`stdres`</span>: 標準化残差 $(f_{ij} - F_{ij}) / \sqrt{V_{ij}}$，ここで$V_{ij} = F_{ij}(1 - p_{i+})(1 - p_{+j})$（$p_{i+}$, $p_{+j}$は周辺比率）</span>
 <span id="cb134-167"><a href="#cb134-167" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb134-168"><a href="#cb134-168" aria-hidden="true" tabindex="-1"></a>各要素には<span class="in">`$`</span>演算子でアクセスできる．例えば期待度数は<span class="in">`result$expected`</span>で取得できる．これを<span class="in">`tab_expected`</span>というオブジェクトとして保存する．</span>
 <span id="cb134-169"><a href="#cb134-169" aria-hidden="true" tabindex="-1"></a></span>
