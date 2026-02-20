@@ -197,23 +197,244 @@ L² = 30.94, df = 20, p = .056
 
 ## gnm・Stanとの結果比較
 
-同じモデルを3つの手法で推定した結果：
+同じUnidiffモデルをgnmとStanでも推定し、LEMの結果と比較する。
+
+### データの準備（R）
+
+```{r}
+#| eval: false
+library(tidyverse)
+library(gnm)
+
+Freq_yamaguchi <- c(
+  1275, 364, 274, 272, 17, 1055, 597, 394, 443, 31,
+  1043, 587, 1045, 951, 47, 1159, 791, 1323, 2046, 52,
+  666, 496, 1031, 1632, 646, 474, 129, 87, 124, 11,
+  300, 218, 171, 220, 8, 438, 254, 669, 703, 16,
+  601, 388, 932, 1789, 37, 76, 56, 125, 295, 191,
+  127, 101, 24, 30, 12, 86, 207, 64, 61, 13,
+  43, 73, 122, 60, 13, 35, 51, 62, 66, 11,
+  109, 206, 184, 253, 325)
+
+d_xie <- tibble(
+  O = gl(5, k = 5, length = 75),
+  D = gl(5, k = 1, length = 75),
+  C = gl(3, k = 25, length = 75),
+  Freq = Freq_yamaguchi
+) |>
+  mutate(
+    Diag = case_when(O == D ~ O, .default = "0") |> factor()
+  )
+```
+
+### gnmによる推定
+
+```{r}
+#| eval: false
+set.seed(12345)
+fit_gnm <- gnm(Freq ~ O*C + D*C + Diag*C + Mult(Exp(C), O*D),
+               family = poisson, data = d_xie, tolerance = 1e-12)
+
+# スケーリングパラメータの取り出し
+coef_gnm <- coef(fit_gnm)
+exp_c_coefs <- coef_gnm[grep("^Mult.*Exp.*\\.C", names(coef_gnm))]
+gnm_beta <- exp(exp_c_coefs - exp_c_coefs[1])
+names(gnm_beta) <- c("US", "Britain", "Japan")
+gnm_beta
+#>       US  Britain    Japan
+#>   1.0000   1.0398   0.7991
+```
+
+`Mult(Exp(C), O*D)` がUnidiff項であり、`Diag*C` は対角セルの飽和を表す。
+
+### Stanによる推定
+
+対角セルを完全飽和（`alpha_diag`：15セル）させ、非対角セルにのみUnidiff構造（`beta[k] * psi[ij]`）を適用する。
+
+```{r}
+#| eval: false
+library(cmdstanr)
+
+stan_code <- "
+data {
+  int<lower=1> N; int<lower=1> I; int<lower=1> J; int<lower=1> K;
+  int<lower=1> IJ; int<lower=1> N_diag;
+  array[N] int<lower=1> row_idx; array[N] int<lower=1> col_idx;
+  array[N] int<lower=1> layer_idx; array[N] int<lower=1> cell_idx;
+  array[N] int<lower=0, upper=N_diag> diag_cell_idx;
+  array[N] int<lower=0> y;
+}
+parameters {
+  real alpha;
+  vector[I-1] alpha_row_raw; vector[J-1] alpha_col_raw;
+  vector[K-1] alpha_layer_raw;
+  matrix[I-1, K-1] alpha_row_layer_raw;
+  matrix[J-1, K-1] alpha_col_layer_raw;
+  vector[N_diag-1] alpha_diag_raw;
+  vector[IJ-1] psi_raw;
+  vector[K-1] beta_raw;
+}
+transformed parameters {
+  vector[I] alpha_row; vector[J] alpha_col; vector[K] alpha_layer;
+  matrix[I, K] alpha_row_layer; matrix[J, K] alpha_col_layer;
+  vector[N_diag] alpha_diag; vector[IJ] psi; vector[K] beta;
+  vector[N] log_mu;
+
+  // コーナー制約
+  alpha_row[1]=0; alpha_col[1]=0; alpha_layer[1]=0;
+  for(i in 2:I) alpha_row[i] = alpha_row_raw[i-1];
+  for(j in 2:J) alpha_col[j] = alpha_col_raw[j-1];
+  for(k in 2:K) alpha_layer[k] = alpha_layer_raw[k-1];
+
+  // 交互作用
+  for(k in 1:K) { alpha_row_layer[1,k]=0; alpha_col_layer[1,k]=0; }
+  for(i in 1:I) alpha_row_layer[i,1] = 0;
+  for(j in 1:J) alpha_col_layer[j,1] = 0;
+  for(i in 2:I) for(k in 2:K)
+    alpha_row_layer[i,k] = alpha_row_layer_raw[i-1,k-1];
+  for(j in 2:J) for(k in 2:K)
+    alpha_col_layer[j,k] = alpha_col_layer_raw[j-1,k-1];
+
+  // 対角セルの完全飽和（15セル, 14自由パラメータ）
+  alpha_diag[1] = 0;
+  for(d in 2:N_diag) alpha_diag[d] = alpha_diag_raw[d-1];
+
+  // OD連関パターン
+  psi[1] = 0;
+  for(ij in 2:IJ) psi[ij] = psi_raw[ij-1];
+
+  // Unidiffスケーリング（beta[1]=1に固定）
+  beta[1] = 1;
+  for(k in 2:K) beta[k] = exp(beta_raw[k-1]);
+
+  // 期待度数
+  for(n in 1:N) {
+    log_mu[n] = alpha + alpha_row[row_idx[n]] + alpha_col[col_idx[n]]
+                + alpha_layer[layer_idx[n]]
+                + alpha_row_layer[row_idx[n], layer_idx[n]]
+                + alpha_col_layer[col_idx[n], layer_idx[n]];
+    if(diag_cell_idx[n] > 0)
+      log_mu[n] += alpha_diag[diag_cell_idx[n]];
+    else
+      log_mu[n] += beta[layer_idx[n]] * psi[cell_idx[n]];
+  }
+}
+model {
+  y ~ poisson_log(log_mu);
+}
+generated quantities {
+  vector[N] expected;
+  for(n in 1:N) expected[n] = exp(log_mu[n]);
+}
+"
+
+# データの準備
+d_xie_stan <- d_xie |>
+  mutate(
+    i_O = as.integer(O), i_D = as.integer(D), i_C = as.integer(C),
+    cell_OD = (i_O - 1) * 5 + i_D,
+    diag_cell_idx = if_else(O == D, (i_C - 1) * 5 + as.integer(O), 0L)
+  )
+
+stan_data <- list(
+  N = 75, I = 5, J = 5, K = 3, IJ = 25, N_diag = 15,
+  row_idx = d_xie_stan$i_O, col_idx = d_xie_stan$i_D,
+  layer_idx = d_xie_stan$i_C, cell_idx = d_xie_stan$cell_OD,
+  diag_cell_idx = d_xie_stan$diag_cell_idx, y = d_xie_stan$Freq
+)
+
+# MLE推定
+model <- cmdstan_model(write_stan_file(stan_code))
+fit_mle <- model$optimize(data = stan_data, seed = 123,
+                          algorithm = "lbfgs",
+                          iter = 10000, tol_rel_grad = 1e-12)
+
+# スケーリングパラメータ
+mle_summary <- fit_mle$summary()
+beta_stan <- mle_summary |>
+  filter(grepl("^beta\\[", variable)) |> pull(estimate)
+#> US=1.0000, Britain=1.0399, Japan=0.7991
+```
+
+### 結果の比較
 
 | 手法 | US | Britain | Japan | L² |
 |------|-----|---------|-------|-----|
 | gnm | 1.0000 | 1.0398 | 0.7991 | 30.94 |
 | LEM | 1.0000 | 1.0398 | 0.7989 | 30.94 |
-| Stan | 1.0000 | 1.0399 | 0.7991 | 31.00 |
+| Stan (MLE) | 1.0000 | 1.0399 | 0.7991 | 31.00 |
 
-3つの手法で結果がほぼ一致することが確認できる。
+3つの手法で結果がほぼ一致する。期待度数の相関は r = 1.0000 である。
 
-### gnmでの実装
+
+## RからLEMを繰り返し実行する
+
+macOSではWineの実行完了後に「Close the log window?」というダイアログが表示され、手動で閉じるまでプロセスが終了しない。以下の関数は、LEMをバックグラウンドで起動し、出力ファイルの完成を待ってWineプロセスを自動終了させる。
 
 ```{r}
 #| eval: false
-# gnmによるUnidiffモデル
-gnm(Freq ~ O*C + D*C + Diag*C + Mult(Exp(C), O*D),
-    family = poisson, data = d_xie)
+run_lem <- function(inp_path, out_path, lem_exe, label = "") {
+  if (file.exists(out_path)) file.remove(out_path)
+
+  if (Sys.info()["sysname"] == "Windows") {
+    system(paste(shQuote(lem_exe), shQuote(inp_path), shQuote(out_path)))
+  } else {
+    cmd <- paste("wine", shQuote(lem_exe), shQuote(inp_path), shQuote(out_path))
+    system(paste(cmd, "2>/dev/null &"))
+
+    for (i in 1:600) {
+      Sys.sleep(1)
+      if (file.exists(out_path) && file.size(out_path) > 0) {
+        old_size <- file.size(out_path)
+        Sys.sleep(2)
+        if (file.size(out_path) == old_size) break
+      }
+    }
+    system("wineserver -k 2>/dev/null")
+    Sys.sleep(1)
+  }
+
+  if (file.exists(out_path) && file.size(out_path) > 0) {
+    message(label, " completed: ", out_path)
+  } else {
+    warning(label, " may have failed")
+  }
+}
+```
+
+仕組みは以下の通りである。
+
+1. `&` によりWineをバックグラウンドで起動する。`shQuote()` でパスの空白に対応している。
+2. 出力ファイルのサイズを1秒ごとに確認し、2秒間変化しなければ書き込み完了と判断する。
+3. `wineserver -k` でWineプロセスを一括終了し、ダイアログを自動的に閉じる。他のWineアプリケーションも終了するため注意が必要である。
+
+### 複数モデルの一括実行
+
+モデル式をリストとして定義し、ループで一時的な `.inp` ファイルを生成して実行する。
+
+```{r}
+#| eval: false
+lem_exe <- "path/to/LEM95.EXE"
+lem_dir <- "path/to/lem_directory"
+
+models <- list(
+  M1 = "mod {AB AC}",
+  M2 = "mod {AB AC BC}",
+  M3 = "mod {AB AC spe(BC,1a,A,b)}"
+)
+
+header <- c("man 3", "dim 3 5 5", "lab A B C")
+footer <- c("des [0 1 2]", "dat mydata.dat")
+
+for (name in names(models)) {
+  inp_lines <- c(header, models[[name]], footer)
+  inp_path  <- file.path(lem_dir, paste0("temp_", name, ".inp"))
+  out_path  <- file.path(lem_dir, paste0(name, ".out"))
+
+  writeLines(inp_lines, inp_path)
+  run_lem(inp_path, out_path, lem_exe, label = name)
+  file.remove(inp_path)
+}
 ```
 
 
