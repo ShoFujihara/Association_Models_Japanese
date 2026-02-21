@@ -1,0 +1,26 @@
+* Unidiff model (Xie 1992)
+* data: Xie ASR 1992 / Yamaguchi ASR 1987
+* A = Country (1=US, 2=Britain, 3=Japan)
+* B = Origin (Father's occupation, 5 categories)
+* C = Destination (Son's occupation, 5 categories)
+
+man 3
+dim 3 5 5
+mod {AB AC spe(BC,A,1a,b)}
+des [0 1 2]
+dat [
+1275  364  274  272   17
+1055  597  394  443   31
+1043  587 1045  951   47
+1159  791 1323 2046   52
+ 666  496 1031 1632  646
+ 474  129   87  124   11
+ 300  218  171  220    8
+ 438  254  669  703   16
+ 601  388  932 1789   37
+  76   56  125  295  191
+ 127  101   24   30   12
+  86  207   64   61   13
+  43   73  122   60   13
+  35   51   62   66   11
+ 109  206  184  253  325]

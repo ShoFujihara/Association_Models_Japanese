@@ -15,5 +15,11 @@ _archive/
 # Quarto intermediate files
 *_files/
 
+# Build artifacts
+*.html
+*.knit.md
+*.rmarkdown
+!docs/*.html
+
 # Unpublished chapters
 14-Bayes.qmd
