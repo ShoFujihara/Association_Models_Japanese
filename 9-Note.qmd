@@ -789,13 +789,23 @@ anova(fit_O, fit_Common_Pattern, fit_Common)
 
 ## 連関モデルと正準相関分析
 
-RC連関モデルと正準相関分析には密接な関係がある．@goodman1981 は，周辺重みづけ正規化（$\sum_i p_{i+}\mu_i = 0$，$\sum_i p_{i+}\mu_i^2 = 1$，$\sum_j p_{+j}\nu_j = 0$，$\sum_j p_{+j}\nu_j^2 = 1$）のもとで得られる内的連関パラメータ$\phi$から，正準相関係数$\rho$を導出できることを示した．
+RC連関モデルと正準相関分析には密接な関係がある．RC(1)モデルの2元交互作用は $\phi\mu_i\nu_j$ と表されるが，$\mu_i$を$a$倍して$\phi$を$1/a$倍しても同じモデルとなるため，スコアに正規化制約を課す必要がある（本章「正規化」を参照）．
+
+正準相関との対応を得るには，**周辺重みづけ正規化**を用いる必要がある．すなわち，周辺確率 $p_{i+} = n_{i+}/n_{++}$，$p_{+j} = n_{+j}/n_{++}$ を重みとして
+
+$$
+\sum_i p_{i+}\mu_i = 0, \quad \sum_i p_{i+}\mu_i^2 = 1, \quad \sum_j p_{+j}\nu_j = 0, \quad \sum_j p_{+j}\nu_j^2 = 1
+$$
+
+という制約のもとでスコアを正規化する．この正規化のもとで得られる$\phi$が**内的連関パラメータ**（intrinsic association parameter）である．@goodman1981 は，この$\phi$から正準相関係数$\rho$を導出できることを示した．
 
 $$
 \rho = \frac{-1 + \sqrt{1 + 4\phi^2}}{2\phi}
 $$
 
-逆に$\rho$から$\phi$を求めると$\phi = \rho/(1 - \rho^2)$である．$\phi$は$(-\infty, +\infty)$の範囲をとり，$\phi = 0$が独立に対応する．$\rho$は通常の相関係数と同じ$(-1, 1)$の範囲をとる．この関係により，連関モデルはクロス表に対する正準相関分析の確率モデル版と見なすことができる．以下では @goodman1981 のTable 1のデータを用いて，様々な連関モデルを比較する．
+逆に$\rho$から$\phi$を求めると $\phi = \rho/(1 - \rho^2)$ である．$\phi$は$(-\infty, +\infty)$の範囲をとり，$\phi = 0$が独立（無連関）に対応する．$|\phi|$が大きいほど連関が強い．$\rho$は通常の相関係数と同じ$(-1, 1)$の範囲をとる．単位正規化（重みなしで$\sum\mu_i^2 = 1$とする方法）で得られる$\phi$は値が異なり，上の公式は成立しない点に注意が必要である．
+
+この関係により，RC連関モデルはクロス表に対する正準相関分析の確率モデル版と見なすことができる．以下では @goodman1981 のTable 1のデータを用いて，様々な連関モデルを比較する．
 
 ```{r}
 library(tidyverse)
@@ -869,15 +879,21 @@ list(O, U, R, C, RC, UplusRC, RplusRC, CplusRC, RplusCplusRC, RplusC) |>
 
 
 
+RC(1)モデルを推定し，周辺重みづけ正規化を行う．`getContrasts()`の`ref`，`scaleRef`，`scaleWeights`にそれぞれ周辺確率を指定することで，$\sum_i p_{i+}\mu_i = 0$，$\sum_i p_{i+}\mu_i^2 = 1$（列スコアも同様）の制約が課される．
+
 ```{r}
+# RC(1)モデルの推定
 fit <-
   gnm(Freq ~ Row + Col + Mult(1, Row, Col),
       family = poisson,
       data = d)
 summary(fit)
 
+# 周辺確率の計算
 rowProbs <- with(d, tapply(Freq, Row, sum) / sum(Freq))
 colProbs <- with(d, tapply(Freq, Col, sum) / sum(Freq))
+
+# 周辺重みづけ正規化によるスコアの取得
 mu <- getContrasts(
   fit,
   pickCoef(fit, "[.]Row"),
@@ -892,6 +908,14 @@ nu <- getContrasts(
   scaleRef = colProbs,
   scaleWeights = colProbs
 )
+
+# 正規化制約を確認
+all.equal(sum(mu$qvframe[, 1] * rowProbs), 0)     # 重みつき平均 = 0
+all.equal(sum(mu$qvframe[, 1]^2 * rowProbs), 1)    # 重みつき分散 = 1
+all.equal(sum(nu$qvframe[, 1] * colProbs), 0)
+all.equal(sum(nu$qvframe[, 1]^2 * colProbs), 1)
+
+# 正規化されたスコアで制約つき再推定
 fit <-
   gnm(
     Freq ~ Row + Col + Mult(1, Row, Col),
@@ -900,52 +924,63 @@ fit <-
     constrain = 9:16,
     constrainTo = c(mu$qvframe[, 1], -1 * nu$qvframe[, 1])
   )
+summary(fit)
+```
 
+周辺重みづけ正規化のもとで得られた内的連関パラメータ$\phi$から，正準相関係数$\rho$を求める．
+
+```{r}
+# 内的連関パラメータ phi（周辺重みづけ正規化のもと）
+phi <- fit$coefficients["Mult(., Row, Col)."] |> abs()
+phi
+
+# phi から rho への変換
+rho <- (-1 + sqrt(1 + 4 * phi ^ 2)) / (2 * phi)
+rho
+
+# 逆変換の確認: rho から phi を復元
+all.equal(phi, rho / (1 - rho^2))
+```
+
+正規化された行スコアと列スコアの度数重みつきPearson相関が$\rho$と一致することを確認する．
+
+```{r}
 mu_score <- rep(mu$qvframe[, 1], each = 4)
 nu_score <- rep(nu$qvframe[, 1], 4)
-d <- d |>  mutate(mu = mu_score,
-              nu = nu_score)
+d <- d |> mutate(mu = mu_score, nu = nu_score)
 
-# Canonical correlation
+# 度数で重みづけしたスコア間のPearson相関
 library(wCorr)
-with(d, weightedCorr(mu, x = nu, weights = Freq, method = "Pearson"))
-with(d, weightedCorr(U, x = V, weights = Freq, method = "Polychoric"))
+rho_weighted <- with(d, weightedCorr(mu, x = nu, weights = Freq, method = "Pearson"))
+rho_weighted
+all.equal(as.numeric(rho), as.numeric(rho_weighted))
+```
 
-library(polycor)
+参考として，多分相関係数（polychoric correlation）との比較を示す．
+
+```{r}
+# 多分相関係数
+with(d, weightedCorr(U, x = V, weights = Freq, method = "Polychoric"))
 
 library(vcdExtra)
 d_ind <- expand.dft(d, dreq = "Freq")
-d_ind
 library(DescTools)
 CorPolychor(d_ind$U, d_ind$V, ML = TRUE)
+```
 
+`logmult`パッケージの`rc()`でも同じ結果が得られる．`weighting = "marginal"`は周辺重みづけ正規化に対応する．
 
-# 
-summary(fit)
-phi <- fit$coefficients["Mult(., Row, Col)."] |> abs()
-rho <- (-1 + sqrt(1 + 4 * phi ^ 2)) / (2 * phi)
-eta <- (2 * phi) ^ (-1)
-tau <- (1 + eta ^ 2) ^ (1 / 2) - eta
-mu
-nu
-phi
-rho
-tau
-delta_mu <- abs((-1.3354658 - 1.1376491) / (1 - 4))
-delta_nu <- abs((-0.8513968 - 1.0822644) / (1 - 4))
-# Adjusted
-tau * ((1 - delta_mu / 12) * (1 - delta_nu / 12)) ^ (-1 / 2)
-
+```{r}
 library(logmult)
 tab <- matrix(Freq,
               nrow = 4,
               ncol = 4,
               byrow = TRUE)
-rc2 <- rc(tab,
+rc1 <- rc(tab,
           nd = 1,
           weighting = "marginal",
           se = "bootstrap")
-summary(rc2)
-assoc(rc2)
+summary(rc1)
+assoc(rc1)
 ```
 

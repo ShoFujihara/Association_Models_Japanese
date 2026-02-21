@@ -2580,7 +2580,7 @@ Number of iterations: 5</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations...........................
+Running main iterations...............................
 Done</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb212"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb212-1"><a href="#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 結果</span></span>
@@ -2597,35 +2597,35 @@ Deviance Residuals:
 
 Coefficients:
                              Estimate Std. Error z value Pr(&gt;|z|)
-(Intercept)                  2.905834         NA      NA       NA
-polviews2                    1.391282         NA      NA       NA
-polviews3                    1.428862         NA      NA       NA
-polviews4                    2.589838         NA      NA       NA
-polviews5                    1.689879         NA      NA       NA
-polviews6                    1.631947         NA      NA       NA
-polviews7                   -0.106287         NA      NA       NA
-fefam2                       0.883785         NA      NA       NA
-fefam3                       0.404631         NA      NA       NA
-fefam4                      -0.779075         NA      NA       NA
-Mult(., polviews, fefam).   -3.024485         NA      NA       NA
-Mult(1, ., fefam).polviews1  0.516578         NA      NA       NA
-Mult(1, ., fefam).polviews2  0.398144         NA      NA       NA
-Mult(1, ., fefam).polviews3  0.239982         NA      NA       NA
-Mult(1, ., fefam).polviews4 -0.004046         NA      NA       NA
-Mult(1, ., fefam).polviews5 -0.108995         NA      NA       NA
-Mult(1, ., fefam).polviews6 -0.452198         NA      NA       NA
-Mult(1, ., fefam).polviews7 -0.745564         NA      NA       NA
-Mult(1, polviews, .).fefam1 -0.492547         NA      NA       NA
-Mult(1, polviews, .).fefam2 -0.066715         NA      NA       NA
-Mult(1, polviews, .).fefam3  0.265222         NA      NA       NA
-Mult(1, polviews, .).fefam4  0.422685         NA      NA       NA
+(Intercept)                  2.905187         NA      NA       NA
+polviews2                    1.391132         NA      NA       NA
+polviews3                    1.428513         NA      NA       NA
+polviews4                    2.589182         NA      NA       NA
+polviews5                    1.689091         NA      NA       NA
+polviews6                    1.630727         NA      NA       NA
+polviews7                   -0.107877         NA      NA       NA
+fefam2                       0.884908         NA      NA       NA
+fefam3                       0.406631         NA      NA       NA
+fefam4                      -0.776661         NA      NA       NA
+Mult(., polviews, fefam).   -4.336642         NA      NA       NA
+Mult(1, ., fefam).polviews1 -0.452800         NA      NA       NA
+Mult(1, ., fefam).polviews2 -0.349163         NA      NA       NA
+Mult(1, ., fefam).polviews3 -0.210762         NA      NA       NA
+Mult(1, ., fefam).polviews4  0.002778         NA      NA       NA
+Mult(1, ., fefam).polviews5  0.094614         NA      NA       NA
+Mult(1, ., fefam).polviews6  0.394937         NA      NA       NA
+Mult(1, ., fefam).polviews7  0.651650         NA      NA       NA
+Mult(1, polviews, .).fefam1  0.392229         NA      NA       NA
+Mult(1, polviews, .).fefam2  0.052840         NA      NA       NA
+Mult(1, polviews, .).fefam3 -0.211715         NA      NA       NA
+Mult(1, polviews, .).fefam4 -0.337213         NA      NA       NA
 
 Std. Error is NA where coefficient has been constrained or is unidentified
 
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 27</code></pre>
+Number of iterations: 31</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb214"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb214-1"><a href="#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="co"># モデル適合度</span></span>
 <span id="cb214-2"><a href="#cb214-2" aria-hidden="true" tabindex="-1"></a><span class="fu">model.summary</span>(RC.un)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2677,7 +2677,7 @@ $`2乗和`
 <span id="cb218-15"><a href="#cb218-15" aria-hidden="true" tabindex="-1"></a>     <span class="st">"2乗和"</span> <span class="ot">=</span> <span class="fu">sum</span>(nu<span class="sc">$</span>qvframe[,<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$和
-[1] 0
+[1] -2.220446e-16
 
 $`2乗和`
 [1] 1</code></pre>
@@ -2699,7 +2699,7 @@ $`2乗和`
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations......................................
+Running main iterations........................
 Done</code></pre>
 </div>
 </div>
@@ -2753,7 +2753,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 38</code></pre>
+Number of iterations: 24</code></pre>
 </div>
 </div>
 <p>先ほどの単位標準化した解と推定の結果が一致しているのかを確認する．</p>
@@ -2791,7 +2791,7 @@ Mult(1, polviews, .).fefam4  0.5568002 0.04821776</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb231"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb231-1"><a href="#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(nu<span class="sc">$</span>qvframe[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
+<pre><code>[1] -2.220446e-16</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb233"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb233-1"><a href="#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(nu<span class="sc">$</span>qvframe[,<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2886,7 +2886,7 @@ Strongly conservative
 <div class="cell-output cell-output-stdout">
 <pre><code>Initialising
 Running start-up iterations..
-Running main iterations.................................
+Running main iterations...........................................
 Done</code></pre>
 </div>
 </div>
@@ -2938,7 +2938,7 @@ Std. Error is NA where coefficient has been constrained or is unidentified
 Residual deviance: 8.0718 on 10 degrees of freedom
 AIC: 215.43
 
-Number of iterations: 33</code></pre>
+Number of iterations: 43</code></pre>
 </div>
 </div>
 <p>内的連関パラメータ<span class="math inline">\(\phi\)</span>が0.25673となっている．場合によっては符号が逆となる．</p>
