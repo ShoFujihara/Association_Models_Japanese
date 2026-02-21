@@ -273,10 +273,19 @@ RC連関モデルでは，行スコア$\mu_i$と列スコア$\nu_j$，連関パ�
 
 一般的な正規化制約は以下の通りである．
 
-- 平均ゼロ：$\sum_i \mu_i = 0$，$\sum_j \nu_j = 0$
-- 分散1：$\sum_i \mu_i^2 = 1$，$\sum_j \nu_j^2 = 1$
+**単位正規化**（unit normalization）では重みなしの制約を課す．
 
-周辺度数で重み付けした正規化も可能である．`gnm`パッケージでは`getContrasts()`関数を使って正規化された推定値と標準誤差を得ることができる．
+- $\sum_i \mu_i = 0$，$\sum_j \nu_j = 0$
+- $\sum_i \mu_i^2 = 1$，$\sum_j \nu_j^2 = 1$
+
+**周辺重みづけ正規化**（marginal-weighted normalization）では周辺確率 $p_{i+} = n_{i+}/n_{++}$，$p_{+j} = n_{+j}/n_{++}$ を重みとして用いる．
+
+- $\sum_i p_{i+}\mu_i = 0$，$\sum_j p_{+j}\nu_j = 0$
+- $\sum_i p_{i+}\mu_i^2 = 1$，$\sum_j p_{+j}\nu_j^2 = 1$
+
+周辺重みづけ正規化のもとで得られる$\phi$は**内的連関パラメータ**（intrinsic association parameter）と呼ばれ，正準相関係数$\rho$との間に $\phi = \rho/(1 - \rho^2)$ という一対一の関係がある（@goodman1981 ; 本章「連関モデルと正準相関分析」を参照）．$\phi$の範囲は$(-\infty, +\infty)$であり，$\phi = 0$が独立に対応する．単位正規化のもとでは$\phi$の値が異なり，正準相関との対応関係は成立しない．
+
+`gnm`パッケージでは`getContrasts()`関数を使って正規化された推定値と標準誤差を得ることができる．
 
 ### ヘルパー関数の準備
 
@@ -385,14 +394,6 @@ RC1 <- gnm(
 )
 summary(RC1)
 
-# intrinsic association parameter
-phi <- summary(RC1)$coefficients["Mult(., SES, MHS).", 1]
-rho <- (-1 + sqrt(1 + 4 * phi ^ 2)) / (2 * phi)
-eta <- (2 * phi) ^ (-1)
-tau <- (1 + eta ^ 2) ^ (1 / 2) - eta
-list(phi, rho, eta, tau)
-all.equal(rho, tau)
-
 ## Marginal weighted solution
 rowProbs <- with(mentalHealth, tapply(count, SES, sum) / sum(count))
 colProbs <- with(mentalHealth, tapply(count, MHS, sum) / sum(count))
@@ -432,6 +433,14 @@ RC1 <- gnm(
 )
 summary(RC1)
 tidy(RC1)
+
+# 周辺重みづけ正規化のもとでの内的連関パラメータ
+phi <- summary(RC1)$coefficients["Mult(., SES, MHS).", 1]
+rho <- (-1 + sqrt(1 + 4 * phi ^ 2)) / (2 * phi)
+eta <- (2 * phi) ^ (-1)
+tau <- (1 + eta ^ 2) ^ (1 / 2) - eta
+list(phi = phi, rho = rho, eta = eta, tau = tau)
+all.equal(rho, tau)
 ```
 
 
@@ -780,13 +789,13 @@ anova(fit_O, fit_Common_Pattern, fit_Common)
 
 ## 連関モデルと正準相関分析
 
-RC連関モデルと正準相関分析には密接な関係がある．@goodman1981 は，RC(1)モデルの連関パラメータ$\phi$から正準相関係数$\rho$を導出できることを示した．
+RC連関モデルと正準相関分析には密接な関係がある．@goodman1981 は，周辺重みづけ正規化（$\sum_i p_{i+}\mu_i = 0$，$\sum_i p_{i+}\mu_i^2 = 1$，$\sum_j p_{+j}\nu_j = 0$，$\sum_j p_{+j}\nu_j^2 = 1$）のもとで得られる内的連関パラメータ$\phi$から，正準相関係数$\rho$を導出できることを示した．
 
 $$
 \rho = \frac{-1 + \sqrt{1 + 4\phi^2}}{2\phi}
 $$
 
-この関係により，連関モデルはクロス表に対する正準相関分析の確率モデル版と見なすことができる．以下では @goodman1981 のTable 1のデータを用いて，様々な連関モデルを比較する．
+逆に$\rho$から$\phi$を求めると$\phi = \rho/(1 - \rho^2)$である．$\phi$は$(-\infty, +\infty)$の範囲をとり，$\phi = 0$が独立に対応する．$\rho$は通常の相関係数と同じ$(-1, 1)$の範囲をとる．この関係により，連関モデルはクロス表に対する正準相関分析の確率モデル版と見なすことができる．以下では @goodman1981 のTable 1のデータを用いて，様々な連関モデルを比較する．
 
 ```{r}
 library(tidyverse)
