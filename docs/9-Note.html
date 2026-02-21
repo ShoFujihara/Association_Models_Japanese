@@ -949,7 +949,7 @@ SES well mild moderate impaired
 </tr>
 </tbody>
 </table>
-<p>ここで<span class="math inline">\(f_{ij}\)</span>は観測度数，<span class="math inline">\(F_{ij}\)</span>は期待度数である．標準化残差の<span class="math inline">\(V_{ij}\)</span>は次のように定義される：</p>
+<p>ここで<span class="math inline">\(f_{ij}\)</span>は観測度数，<span class="math inline">\(F_{ij}\)</span>は期待度数である．標準化残差の<span class="math inline">\(V_{ij}\)</span>は次のように定義される．</p>
 <p><span class="math display">\[
 V_{ij} = F_{ij}(1 - p_{i+})(1 - p_{+j})
 \]</span></p>
@@ -959,7 +959,7 @@ V_{ij} = F_{ij}(1 - p_{i+})(1 - p_{+j})
 <section id="正規化" class="level2">
 <h2 class="anchored" data-anchor-id="正規化">正規化</h2>
 <p>RC連関モデルでは，行スコア<span class="math inline">\(\mu_i\)</span>と列スコア<span class="math inline">\(\nu_j\)</span>，連関パラメータ<span class="math inline">\(\phi\)</span>の間に識別の問題がある．例えば，<span class="math inline">\(\mu_i\)</span>を2倍にして<span class="math inline">\(\phi\)</span>を半分にしても同じモデルになる．この問題を解決するため，スコアに<strong>正規化制約</strong>を課す．</p>
-<p>一般的な正規化制約は：</p>
+<p>一般的な正規化制約は以下の通りである．</p>
 <ul>
 <li>平均ゼロ：<span class="math inline">\(\sum_i \mu_i = 0\)</span>，<span class="math inline">\(\sum_j \nu_j = 0\)</span></li>
 <li>分散1：<span class="math inline">\(\sum_i \mu_i^2 = 1\)</span>，<span class="math inline">\(\sum_j \nu_j^2 = 1\)</span></li>
@@ -2258,7 +2258,7 @@ RC(3)    -0.0000000000001   -0.0000000000001    -0.6 -2</code></pre>
 <section id="位相モデル" class="level2">
 <h2 class="anchored" data-anchor-id="位相モデル">位相モデル</h2>
 <p><strong>位相モデル（topological model）</strong>は，クロス表の特定のセル（通常は対角セル）に特別なパラメータを割り当てるモデルである．社会移動表の分析では，対角セルは「非移動（immobility）」を表し，特別な扱いが必要な場合がある．</p>
-<p>代表的な位相モデル：</p>
+<p>代表的な位相モデルとして以下がある．</p>
 <ul>
 <li><strong>準独立モデル（QI: Quasi-Independence）</strong>：対角セルを飽和させ，非対角セルに独立モデルを適用</li>
 <li><strong>一様連関＋対角（U+Diag）</strong>：一様連関モデルに対角効果を追加</li>
@@ -2766,7 +2766,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </section>
 <section id="連関モデルと正準相関分析" class="level2">
 <h2 class="anchored" data-anchor-id="連関モデルと正準相関分析">連関モデルと正準相関分析</h2>
-<p>RC連関モデルと正準相関分析には密接な関係がある．<span class="citation" data-cites="goodman1981">Leo A. Goodman (<a href="#ref-goodman1981" role="doc-biblioref">1981</a>)</span> は，RC(1)モデルの連関パラメータ<span class="math inline">\(\phi\)</span>から正準相関係数<span class="math inline">\(\rho\)</span>を導出できることを示した：</p>
+<p>RC連関モデルと正準相関分析には密接な関係がある．<span class="citation" data-cites="goodman1981">Leo A. Goodman (<a href="#ref-goodman1981" role="doc-biblioref">1981</a>)</span> は，RC(1)モデルの連関パラメータ<span class="math inline">\(\phi\)</span>から正準相関係数<span class="math inline">\(\rho\)</span>を導出できることを示した．</p>
 <p><span class="math display">\[
 \rho = \frac{-1 + \sqrt{1 + 4\phi^2}}{2\phi}
 \]</span></p>
@@ -3958,7 +3958,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb276-303"><a href="#cb276-303" aria-hidden="true" tabindex="-1"></a>| ピアソン残差 | $(f_{ij} - F_{ij}) / \sqrt{F_{ij}}$ | 期待度数の平方根で標準化 |</span>
 <span id="cb276-304"><a href="#cb276-304" aria-hidden="true" tabindex="-1"></a>| 標準化残差 | $(f_{ij} - F_{ij}) / \sqrt{V_{ij}}$ | 分散$V_{ij}$で標準化 |</span>
 <span id="cb276-305"><a href="#cb276-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb276-306"><a href="#cb276-306" aria-hidden="true" tabindex="-1"></a>ここで$f_{ij}$は観測度数，$F_{ij}$は期待度数である．標準化残差の$V_{ij}$は次のように定義される：</span>
+<span id="cb276-306"><a href="#cb276-306" aria-hidden="true" tabindex="-1"></a>ここで$f_{ij}$は観測度数，$F_{ij}$は期待度数である．標準化残差の$V_{ij}$は次のように定義される．</span>
 <span id="cb276-307"><a href="#cb276-307" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-308"><a href="#cb276-308" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb276-309"><a href="#cb276-309" aria-hidden="true" tabindex="-1"></a>V_{ij} = F_{ij}(1 - p_{i+})(1 - p_{+j})</span>
@@ -3971,7 +3971,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb276-316"><a href="#cb276-316" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-317"><a href="#cb276-317" aria-hidden="true" tabindex="-1"></a>RC連関モデルでは，行スコア$\mu_i$と列スコア$\nu_j$，連関パラメータ$\phi$の間に識別の問題がある．例えば，$\mu_i$を2倍にして$\phi$を半分にしても同じモデルになる．この問題を解決するため，スコアに**正規化制約**を課す．</span>
 <span id="cb276-318"><a href="#cb276-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb276-319"><a href="#cb276-319" aria-hidden="true" tabindex="-1"></a>一般的な正規化制約は：</span>
+<span id="cb276-319"><a href="#cb276-319" aria-hidden="true" tabindex="-1"></a>一般的な正規化制約は以下の通りである．</span>
 <span id="cb276-320"><a href="#cb276-320" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-321"><a href="#cb276-321" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>平均ゼロ：$\sum_i \mu_i = 0$，$\sum_j \nu_j = 0$</span>
 <span id="cb276-322"><a href="#cb276-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>分散1：$\sum_i \mu_i^2 = 1$，$\sum_j \nu_j^2 = 1$</span>
@@ -4338,7 +4338,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb276-693"><a href="#cb276-693" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-694"><a href="#cb276-694" aria-hidden="true" tabindex="-1"></a>**位相モデル（topological model）**は，クロス表の特定のセル（通常は対角セル）に特別なパラメータを割り当てるモデルである．社会移動表の分析では，対角セルは「非移動（immobility）」を表し，特別な扱いが必要な場合がある．</span>
 <span id="cb276-695"><a href="#cb276-695" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb276-696"><a href="#cb276-696" aria-hidden="true" tabindex="-1"></a>代表的な位相モデル：</span>
+<span id="cb276-696"><a href="#cb276-696" aria-hidden="true" tabindex="-1"></a>代表的な位相モデルとして以下がある．</span>
 <span id="cb276-697"><a href="#cb276-697" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-698"><a href="#cb276-698" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**準独立モデル（QI: Quasi-Independence）**：対角セルを飽和させ，非対角セルに独立モデルを適用</span>
 <span id="cb276-699"><a href="#cb276-699" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**一様連関＋対角（U+Diag）**：一様連関モデルに対角効果を追加</span>
@@ -4480,7 +4480,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb276-839"><a href="#cb276-839" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-840"><a href="#cb276-840" aria-hidden="true" tabindex="-1"></a><span class="fu">## 連関モデルと正準相関分析</span></span>
 <span id="cb276-841"><a href="#cb276-841" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb276-842"><a href="#cb276-842" aria-hidden="true" tabindex="-1"></a>RC連関モデルと正準相関分析には密接な関係がある．@goodman1981 は，RC(1)モデルの連関パラメータ$\phi$から正準相関係数$\rho$を導出できることを示した：</span>
+<span id="cb276-842"><a href="#cb276-842" aria-hidden="true" tabindex="-1"></a>RC連関モデルと正準相関分析には密接な関係がある．@goodman1981 は，RC(1)モデルの連関パラメータ$\phi$から正準相関係数$\rho$を導出できることを示した．</span>
 <span id="cb276-843"><a href="#cb276-843" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb276-844"><a href="#cb276-844" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb276-845"><a href="#cb276-845" aria-hidden="true" tabindex="-1"></a>\rho = \frac{-1 + \sqrt{1 + 4\phi^2}}{2\phi}</span>
